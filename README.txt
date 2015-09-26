@@ -22,11 +22,8 @@ Mock Server
         .respond(
                 response()
                         .withStatusCode(302)
-                        .withCookie(
-                                "sessionId", "2By8LOhBmaW5nZXJwcmludCIlMDAzMW"
-                        )
                         .withHeader(
-                                "Location", "https://www.mock-server.com"
+                                "Location", "https://www.wso2.com"
                         )
                         .withBody("{ message: 'hello emulator'}")
         )
