@@ -18,7 +18,7 @@
  *
  */
 
-package org.kasun.disruptor.test.orderproc;
+package test.http.test.orderproc;
 
 public class Order {
 

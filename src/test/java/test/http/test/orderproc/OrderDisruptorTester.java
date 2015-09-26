@@ -18,39 +18,34 @@
  *
  */
 
-package org.kasun.disruptor.test.eventproc;
+package test.http.test.orderproc;
 
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 
-import java.nio.ByteBuffer;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public class DisruptorTester {
+public class OrderDisruptorTester {
 
-    public static void main(String[] args) throws Exception{
 
+    public static void main(String[] args) throws Exception {
 
         Executor executor = Executors.newCachedThreadPool();
-        MessageEventFactory messageEventFactory = new MessageEventFactory();
 
         int bufferSize = 1024;
-        Disruptor<MessageEvent> disruptor = new Disruptor<MessageEvent>(messageEventFactory, bufferSize, executor);
+        OrderFactory factory = new OrderFactory();
+        Disruptor<Order> orderDisruptor = new Disruptor<Order>(factory, bufferSize, executor);
 
+        orderDisruptor.handleEventsWith(new OrderConsumer());
+        orderDisruptor.start();
 
-        disruptor.handleEventsWith(new MessageEventHandler());
+        RingBuffer<Order> ringBuffer = orderDisruptor.getRingBuffer();
+        OrderProducer producer = new OrderProducer(ringBuffer);
 
-        disruptor.start();
-
-        RingBuffer<MessageEvent> ringBuffer = disruptor.getRingBuffer();
-        MessageEventProducer producer = new MessageEventProducer(ringBuffer);
-
-        ByteBuffer bb = ByteBuffer.allocate(1024);
-        for (long l = 0; true; l++)
-        {
-            bb.put(("Foo" + l).getBytes());
-            producer.onData(bb);
+        for (int i = 0; i < 20; i++) {
+            producer.produce("order_" + i, "Order Content : " + i, 10 + i);
+            System.out.println("Ring Buf cursor : " + ringBuffer.getCursor());
             Thread.sleep(1000);
         }
     }

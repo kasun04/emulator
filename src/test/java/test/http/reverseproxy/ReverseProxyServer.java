@@ -1,18 +1,13 @@
-package org.wso2.esb.emulator.http.reverseproxy;
+package test.http.reverseproxy;
 
 
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
-import io.netty.handler.ssl.SslContext;
-import io.netty.handler.ssl.SslContextBuilder;
-import io.netty.handler.ssl.util.SelfSignedCertificate;
-import org.wso2.esb.emulator.http.HTTPEmulatorHandler;
 
 
 public final class ReverseProxyServer {

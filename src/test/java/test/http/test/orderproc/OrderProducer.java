@@ -18,12 +18,37 @@
  *
  */
 
-package org.kasun.disruptor.test.eventproc;
+package test.http.test.orderproc;
 
-public class MessageEvent {
-    private String msg;
+import com.lmax.disruptor.RingBuffer;
 
-    public void setMsg(String msg) {
-        this.msg = msg;
+
+public class OrderProducer {
+
+    private final RingBuffer<Order> ringBuffer;
+
+
+    public OrderProducer(
+            RingBuffer<Order> ringBuffer) {
+        this.ringBuffer = ringBuffer;
     }
+
+
+    public void produce(String orderId, String orderContent, int orderQuantity) {
+        long seq = ringBuffer.next();
+        try {
+            Order order = ringBuffer.get(seq);
+            order.setOrderId(orderId);
+            order.setOrderContent(orderContent);
+            order.setOrderQuantity(orderQuantity);
+        } finally {
+            ringBuffer.publish(seq);
+        }
+
+
+    }
+
+
+
+
 }

@@ -1,4 +1,4 @@
-package org.wso2.esb.emulator.http;
+package test.http;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;

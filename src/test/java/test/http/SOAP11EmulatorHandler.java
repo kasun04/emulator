@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.esb.emulator.http;
+package test.http;
 
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;

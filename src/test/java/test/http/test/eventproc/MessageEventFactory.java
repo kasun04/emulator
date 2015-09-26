@@ -18,7 +18,7 @@
  *
  */
 
-package org.kasun.disruptor.test.eventproc;
+package test.http.test.eventproc;
 
 import com.lmax.disruptor.EventFactory;
 
