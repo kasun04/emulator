@@ -21,11 +21,18 @@
 package org.wso2.gw.emulator.http;
 
 import org.wso2.gw.emulator.AbstractProtocolEmulator;
+import org.wso2.gw.emulator.http.consumer.HTTPConsumer;
+import org.wso2.gw.emulator.http.producer.HTTPProducer;
 
 public class HTTPProtocolEmulator extends AbstractProtocolEmulator {
     @Override
     public HTTPProtocolEmulator consumer() {
-        return this;
+        return new HTTPProducer();
+    }
+
+    @Override
+    public AbstractProtocolEmulator producer() {
+        return new HTTPProducer();
     }
 
     @Override

@@ -24,6 +24,8 @@ public abstract class AbstractProtocolEmulator {
 
     public abstract AbstractProtocolEmulator consumer();
 
+    public abstract AbstractProtocolEmulator producer();
+
     public abstract AbstractProtocolEmulator host(String host);
 
     public abstract AbstractProtocolEmulator port(int port);
