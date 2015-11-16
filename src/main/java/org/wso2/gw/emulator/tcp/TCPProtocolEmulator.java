@@ -20,10 +20,8 @@
 
 package org.wso2.gw.emulator.tcp;
 
-import org.wso2.gw.emulator.AbstractProtocolEmulator;
-
-public class TCPProtocolEmulator extends AbstractProtocolEmulator {
-    @Override
+public class TCPProtocolEmulator /*extends AbstractProtocolEmulator*/ {
+    /*@Override
     public AbstractProtocolEmulator consumer() {
         return null;
     }
@@ -33,7 +31,7 @@ public class TCPProtocolEmulator extends AbstractProtocolEmulator {
         return null;
     }
 
-    @Override
+   *//* @Overr
     public AbstractProtocolEmulator host(String host) {
         return null;
     }
@@ -46,7 +44,7 @@ public class TCPProtocolEmulator extends AbstractProtocolEmulator {
     @Override
     public AbstractProtocolEmulator start() {
         return null;
-    }
+    }*/
 
 
 }

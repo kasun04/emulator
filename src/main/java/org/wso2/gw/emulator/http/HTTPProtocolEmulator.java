@@ -20,22 +20,33 @@
 
 package org.wso2.gw.emulator.http;
 
-import org.wso2.gw.emulator.AbstractProtocolEmulator;
-import org.wso2.gw.emulator.http.consumer.HTTPConsumer;
-import org.wso2.gw.emulator.http.producer.HTTPProducer;
+import org.wso2.gw.emulator.core.AbstractProtocolEmulator;
+import org.wso2.gw.emulator.core.EmulatorContext;
+import org.wso2.gw.emulator.http.dsl.dto.HttpTransportInformation;
 
 public class HTTPProtocolEmulator extends AbstractProtocolEmulator {
-    @Override
-    public HTTPProtocolEmulator consumer() {
-        return new HTTPProducer();
+
+    private EmulatorContext emulatorContext;
+
+    public HTTPProtocolEmulator(EmulatorContext emulatorContext) {
+        this.emulatorContext = emulatorContext;
     }
 
     @Override
-    public AbstractProtocolEmulator producer() {
-        return new HTTPProducer();
+    public HttpTransportInformation consumer() {
+        HttpTransportInformation transportInformation = new HttpTransportInformation();
+        emulatorContext.setHttpTransportInformation(transportInformation);
+        return transportInformation;
     }
 
     @Override
+    public HttpTransportInformation producer() {
+        HttpTransportInformation transportInformation = new HttpTransportInformation();
+        emulatorContext.setHttpTransportInformation(transportInformation);
+        return transportInformation;
+    }
+
+   /* @Override
     public AbstractProtocolEmulator host(String host) {
         return this;
     }
@@ -48,5 +59,5 @@ public class HTTPProtocolEmulator extends AbstractProtocolEmulator {
     @Override
     public AbstractProtocolEmulator start() {
         return this;
-    }
+    }*/
 }

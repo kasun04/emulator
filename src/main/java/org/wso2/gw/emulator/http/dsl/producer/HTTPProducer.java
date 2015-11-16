@@ -18,13 +18,14 @@
  *
  */
 
-package org.wso2.gw.emulator.http.consumer;
+package org.wso2.gw.emulator.http.dsl.producer;
 
+import org.wso2.gw.emulator.core.EmulatorContext;
 import org.wso2.gw.emulator.http.HTTPProtocolEmulator;
 
-/*HTTP Mock server impl*/
+public class HTTPProducer extends HTTPProtocolEmulator {
 
-
-public class HTTPConsumer extends HTTPProtocolEmulator {
-
+    public HTTPProducer(EmulatorContext emulatorContext) {
+        super(emulatorContext);
+    }
 }

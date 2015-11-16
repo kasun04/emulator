@@ -18,19 +18,21 @@
  *
  */
 
-package org.wso2.gw.emulator;
+package org.wso2.gw.emulator.core;
+
+import org.wso2.gw.emulator.http.dsl.dto.HttpTransportInformation;
 
 public abstract class AbstractProtocolEmulator {
 
-    public abstract AbstractProtocolEmulator consumer();
+    public abstract HttpTransportInformation consumer();
 
-    public abstract AbstractProtocolEmulator producer();
-
+    public abstract HttpTransportInformation producer();
+/*
     public abstract AbstractProtocolEmulator host(String host);
 
     public abstract AbstractProtocolEmulator port(int port);
 
-    public abstract AbstractProtocolEmulator start();
+    public abstract AbstractProtocolEmulator start();*/
 
     /*...*/
 

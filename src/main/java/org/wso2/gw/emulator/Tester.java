@@ -20,12 +20,18 @@
 
 package org.wso2.gw.emulator;
 
+import org.wso2.gw.emulator.core.Emulator;
+
+import static org.wso2.gw.emulator.http.dsl.dto.Incoming.request;
+import static org.wso2.gw.emulator.http.dsl.dto.Outgoing.response;
+
 public class Tester {
     public static void main(String[] args) {
         Emulator.getProtocolEmulator("http")
-        .consumer()
-        .host("120.0.0.1")
-        .port(6060)
-        .start();
+                .consumer()
+                .host("127.0.0.1").context("/prabath")
+                .port(6065).when(request())
+                .respond(response().withBody("prabath ariyarathna"))
+                .start();
     }
 }
