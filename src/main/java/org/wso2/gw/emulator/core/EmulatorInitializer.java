@@ -1,26 +1,38 @@
+/*
+ * *
+ *  * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *  *
+ *  * WSO2 Inc. licenses this file to you under the Apache License,
+ *  * Version 2.0 (the "License"); you may not use this file except
+ *  * in compliance with the License.
+ *  * You may obtain a copy of the License at
+ *  *
+ *  * http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing,
+ *  * software distributed under the License is distributed on an
+ *  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  * KIND, either express or implied.  See the License for the
+ *  * specific language governing permissions and limitations
+ *  * under the License.
+ *
+ */
+
 package org.wso2.gw.emulator.core;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
-import io.netty.handler.codec.http.HttpRequestDecoder;
-import io.netty.handler.codec.http.HttpResponseEncoder;
-import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.ssl.SslContext;
-import org.wso2.gw.emulator.core.handlers.ReadingDelayHandler;
-import org.wso2.gw.emulator.core.handlers.RequestFilterHandler;
-import org.wso2.gw.emulator.core.handlers.RequestInfoPopulateHandler;
-import org.wso2.gw.emulator.core.handlers.ResponseHandler;
-import org.wso2.gw.emulator.core.handlers.WaitingDelayHandler;
 
 public class EmulatorInitializer extends ChannelInitializer<SocketChannel> {
 
-    private final SslContext sslCtx;
-    private final EmulatorContext emulatorContext;
+    private SslContext sslCtx;
+    private EmulatorType emulatorType;
 
-    public EmulatorInitializer(final EmulatorContext emulatorContext, SslContext sslCtx) {
+    public EmulatorInitializer(EmulatorType emulatorType, SslContext sslCtx) {
+        this.emulatorType = emulatorType;
         this.sslCtx = sslCtx;
-        this.emulatorContext = emulatorContext;
     }
 
     @Override
@@ -29,17 +41,6 @@ public class EmulatorInitializer extends ChannelInitializer<SocketChannel> {
         if (sslCtx != null) {
             pipeline.addLast("sslHandler", sslCtx.newHandler(ch.alloc()));
         }
-        pipeline.addLast(new HttpServerCodec());
-        pipeline.addLast("decoder", new HttpRequestDecoder());
-        pipeline.addLast("encoder", new HttpResponseEncoder());
-        // pipeline.addLast("requestFilterHandler", new RequestFilterHandler(emulatorContext));
-        //pipeline.addLast("readDelayHandler", new ReadingDelayHandler(emulatorContext));
-        //pipeline.addLast("requestInfoPopulateHandler", new RequestInfoPopulateHandler(emulatorContext));
-        if (emulatorContext.getHttpTransportInformation().getLogicHandler() != null) {
-            pipeline.addLast("logicHandler", emulatorContext.getHttpTransportInformation().getLogicHandler());
-        }
-        //pipeline.addLast("waitingHandler", new WaitingDelayHandler(emulatorContext));
-        pipeline.addLast("responseHandler", new ResponseHandler(emulatorContext));
-
+        new ChannelPipeLineInitializer().initialize(emulatorType, pipeline);
     }
 }

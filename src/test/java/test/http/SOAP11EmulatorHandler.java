@@ -22,7 +22,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.*;
 import io.netty.handler.codec.http.multipart.HttpPostStandardRequestDecoder;
 
-import static io.netty.handler.codec.http.HttpHeaderNames.*;
+//import static io.netty.handler.codec.http.HttpHeaderNames.*;
 import static io.netty.handler.codec.http.HttpResponseStatus.CONTINUE;
 import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
@@ -60,15 +60,15 @@ public class SOAP11EmulatorHandler extends ChannelHandlerAdapter {
 
 
 
-    @Override
+   // @Override
     public void channelReadComplete(ChannelHandlerContext ctx) {
         ctx.flush();
     }
 
-    @Override
+   // @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
 
-        if (msg instanceof HttpRequest) {
+       /* if (msg instanceof HttpRequest) {
             HttpRequest req = (HttpRequest) msg;
 
             System.out.println("REQ : " + req.toString() );
@@ -92,7 +92,7 @@ public class SOAP11EmulatorHandler extends ChannelHandlerAdapter {
 
             System.out.println("Body : " +
                     httpContent.content().toString());
-        }
+        }*/
     }
 
     @Override

@@ -21,43 +21,29 @@
 package org.wso2.gw.emulator.http;
 
 import org.wso2.gw.emulator.core.AbstractProtocolEmulator;
-import org.wso2.gw.emulator.core.EmulatorContext;
-import org.wso2.gw.emulator.http.dsl.dto.HttpTransportInformation;
+import org.wso2.gw.emulator.core.Emulator;
+import org.wso2.gw.emulator.core.EmulatorType;
+import org.wso2.gw.emulator.http.dsl.HttpConsumerContext;
+import org.wso2.gw.emulator.http.dsl.HttpProducerContext;
 
 public class HTTPProtocolEmulator extends AbstractProtocolEmulator {
 
-    private EmulatorContext emulatorContext;
-
-    public HTTPProtocolEmulator(EmulatorContext emulatorContext) {
-        this.emulatorContext = emulatorContext;
+    public HTTPProtocolEmulator(Emulator emulator) {
+        super(emulator);
     }
 
     @Override
-    public HttpTransportInformation consumer() {
-        HttpTransportInformation transportInformation = new HttpTransportInformation();
-        emulatorContext.setHttpTransportInformation(transportInformation);
-        return transportInformation;
+    public HttpConsumerContext consumer() {
+        HttpConsumerContext consumerContext = new HttpConsumerContext(this);
+        setEmulatorType(EmulatorType.HTTP_CONSUMER);
+        return consumerContext;
     }
 
     @Override
-    public HttpTransportInformation producer() {
-        HttpTransportInformation transportInformation = new HttpTransportInformation();
-        emulatorContext.setHttpTransportInformation(transportInformation);
-        return transportInformation;
+    public HttpProducerContext producer() {
+        HttpProducerContext httpProducerContext = new HttpProducerContext();
+        setEmulatorType(EmulatorType.HTTP_PRODUCER);
+        return httpProducerContext;
     }
 
-   /* @Override
-    public AbstractProtocolEmulator host(String host) {
-        return this;
-    }
-
-    @Override
-    public AbstractProtocolEmulator port(int port) {
-        return this;
-    }
-
-    @Override
-    public AbstractProtocolEmulator start() {
-        return this;
-    }*/
 }

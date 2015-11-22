@@ -8,9 +8,9 @@ import io.netty.handler.codec.http.HttpRequest;
 /**
  * Created by kasun on 7/1/15.
  */
-public class SimpleHTTPHandler extends SimpleChannelInboundHandler {
+public class SimpleHTTPHandler { /*extends SimpleChannelInboundHandler {
     @Override
     protected void messageReceived(ChannelHandlerContext channelHandlerContext, Object o) throws Exception {
         System.out.println("ok");
-    }
+    }*/
 }

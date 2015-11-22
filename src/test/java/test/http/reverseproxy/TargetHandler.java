@@ -18,7 +18,7 @@ public class TargetHandler extends ChannelHandlerAdapter {
     }
 
 
-    @Override
+   // @Override
     public void channelActive(ChannelHandlerContext ctx) {
         ctx.read();
         ctx.write(Unpooled.EMPTY_BUFFER);
@@ -36,7 +36,7 @@ public class TargetHandler extends ChannelHandlerAdapter {
         });
     }
 
-    @Override
+    //@Override
     public void channelInactive(ChannelHandlerContext ctx) {
         SourceHandler.closeOnFlush(inboundChannel);
     }

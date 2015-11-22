@@ -20,21 +20,40 @@
 
 package org.wso2.gw.emulator.core;
 
-import org.wso2.gw.emulator.http.dsl.dto.HttpTransportInformation;
+import org.apache.log4j.Logger;
 
 public abstract class AbstractProtocolEmulator {
 
-    public abstract HttpTransportInformation consumer();
+    private Emulator emulator;
+    private EmulatorType emulatorType;
+    private static final Logger log = Logger.getLogger(AbstractProtocolEmulator.class);
 
-    public abstract HttpTransportInformation producer();
-/*
-    public abstract AbstractProtocolEmulator host(String host);
+    public AbstractProtocolEmulator(Emulator emulator) {
+        this.emulator = emulator;
+    }
 
-    public abstract AbstractProtocolEmulator port(int port);
+    public abstract AbstractEmulatorContext consumer();
 
-    public abstract AbstractProtocolEmulator start();*/
+    public abstract AbstractEmulatorContext producer();
 
-    /*...*/
+    public AbstractProtocolEmulator start() {
+        try {
+            emulator.initialize(emulatorType);
+        } catch (Exception e) {
+            log.error("Exception occurred while initialize the emulator", e);
+        }
+        return this;
+    }
 
+    public void shutdown() {
+        try {
+            emulator.shutdown();
+        } catch (Exception e) {
+            log.error("Exception occurred while shutdown the emulator", e);
+        }
+    }
 
+    public void setEmulatorType(EmulatorType emulatorType) {
+        this.emulatorType = emulatorType;
+    }
 }
