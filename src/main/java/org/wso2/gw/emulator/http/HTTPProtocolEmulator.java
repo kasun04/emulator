@@ -28,8 +28,11 @@ import org.wso2.gw.emulator.http.dsl.HttpProducerContext;
 
 public class HTTPProtocolEmulator extends AbstractProtocolEmulator {
 
+    private HttpEmulatorInitializer httpEmulatorInitializer;
+
     public HTTPProtocolEmulator(Emulator emulator) {
         super(emulator);
+        httpEmulatorInitializer = new HttpEmulatorInitializer();
     }
 
     @Override
@@ -46,4 +49,7 @@ public class HTTPProtocolEmulator extends AbstractProtocolEmulator {
         return httpProducerContext;
     }
 
+    public HttpEmulatorInitializer getHttpEmulatorInitializer() {
+        return httpEmulatorInitializer;
+    }
 }

@@ -18,22 +18,33 @@
  *
  */
 
-package org.wso2.gw.emulator.core;
+package org.wso2.gw.emulator.http;
 
+import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
+import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpServerCodec;
-import org.wso2.gw.emulator.core.handlers.HttpResponseProcessHandler;
+import io.netty.handler.ssl.SslContext;
 import org.wso2.gw.emulator.http.dsl.HttpConsumerContext;
 
-public class ChannelPipeLineInitializer {
+public class ChannelPipelineInitializer extends ChannelInitializer<SocketChannel> {
 
-    public void initialize(EmulatorType emulatorType, ChannelPipeline pipeline) {
-        if (emulatorType.equals(EmulatorType.HTTP_CONSUMER)) {
-            pipeline.addLast(new HttpServerCodec());
-            if (HttpConsumerContext.getLogicHandler() != null) {
-                pipeline.addLast("logicHandler", HttpConsumerContext.getLogicHandler());
-            }
-            pipeline.addLast("httpResponseHandler", new HttpResponseProcessHandler());
+    private SslContext sslCtx;
+
+    public ChannelPipelineInitializer(SslContext sslCtx) {
+        this.sslCtx = sslCtx;
+    }
+
+    @Override
+    public void initChannel(SocketChannel ch) {
+        ChannelPipeline pipeline = ch.pipeline();
+        if (sslCtx != null) {
+            pipeline.addLast("sslHandler", sslCtx.newHandler(ch.alloc()));
         }
+        pipeline.addLast(new HttpServerCodec());
+        if (HttpConsumerContext.getLogicHandler() != null) {
+            pipeline.addLast("logicHandler", HttpConsumerContext.getLogicHandler());
+        }
+        pipeline.addLast("httpResponseHandler", new HttpResponseProcessHandler());
     }
 }

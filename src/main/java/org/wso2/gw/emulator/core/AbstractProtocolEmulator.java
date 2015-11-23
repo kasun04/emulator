@@ -47,7 +47,7 @@ public abstract class AbstractProtocolEmulator {
 
     public void shutdown() {
         try {
-            emulator.shutdown();
+            emulator.shutdown(emulatorType);
         } catch (Exception e) {
             log.error("Exception occurred while shutdown the emulator", e);
         }
