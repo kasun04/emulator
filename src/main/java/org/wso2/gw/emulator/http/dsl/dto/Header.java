@@ -18,21 +18,31 @@
  *
  */
 
-package org.wso2.gw.emulator;
+package org.wso2.gw.emulator.http.dsl.dto;
 
-public abstract class AbstractProtocolEmulator {
+public class Header {
 
-    public abstract AbstractProtocolEmulator consumer();
+    private String name;
+    private String value;
 
-    public abstract AbstractProtocolEmulator producer();
+    public Header(String name, String value) {
+        this.name = name;
+        this.value = value;
+    }
 
-    public abstract AbstractProtocolEmulator host(String host);
+    public String getName() {
+        return name;
+    }
 
-    public abstract AbstractProtocolEmulator port(int port);
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public abstract AbstractProtocolEmulator start();
+    public String getValue() {
+        return value;
+    }
 
-    /*...*/
-
-
+    public void setValue(String value) {
+        this.value = value;
+    }
 }

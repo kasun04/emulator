@@ -18,25 +18,9 @@
  *
  */
 
-package org.wso2.gw.emulator.tcp;
+package org.wso2.gw.emulator.http.dsl;
 
 import org.wso2.gw.emulator.core.AbstractEmulatorContext;
-import org.wso2.gw.emulator.core.AbstractProtocolEmulator;
-import org.wso2.gw.emulator.core.Emulator;
 
-public class TCPProtocolEmulator extends AbstractProtocolEmulator {
-
-    public TCPProtocolEmulator(Emulator emulator) {
-        super(emulator);
-    }
-
-    @Override
-    public AbstractEmulatorContext consumer() {
-        return null;
-    }
-
-    @Override
-    public AbstractEmulatorContext producer() {
-        return null;
-    }
+public class HttpProducerContext extends AbstractEmulatorContext {
 }

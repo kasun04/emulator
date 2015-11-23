@@ -20,12 +20,28 @@
 
 package org.wso2.gw.emulator;
 
+import io.netty.handler.codec.http.HttpMethod;
+import io.netty.handler.codec.http.HttpResponseStatus;
+import org.wso2.gw.emulator.core.Emulator;
+
+import static org.wso2.gw.emulator.http.dsl.dto.IncomingMessage.request;
+import static org.wso2.gw.emulator.http.dsl.dto.OutgoingMessage.response;
+
 public class Tester {
     public static void main(String[] args) {
-        Emulator.getProtocolEmulator("http")
-        .consumer()
-        .host("120.0.0.1")
-        .port(6060)
-        .start();
+        Emulator.getHttpEmulator()
+                .consumer()
+                .host("127.0.0.1")
+                .port(6065)
+                .writingDelay(4000)
+                .context("/user")
+                .when(request().withMethod(HttpMethod.POST).withBody("TestRequest").withHeader("header1",
+                                                                                               "headerValue").
+                        withQueryParameter("test", "123"))
+                .respond(response().withBody("Test Response1").withStatusCode(HttpResponseStatus.OK))
+                .when(request().withPath("/name"))
+                .respond(response().withBody("Test response2").withStatusCode(HttpResponseStatus.FORBIDDEN))
+                .operations().start();
+
     }
 }

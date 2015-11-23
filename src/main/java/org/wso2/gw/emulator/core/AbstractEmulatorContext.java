@@ -18,13 +18,28 @@
  *
  */
 
-package org.wso2.gw.emulator.http.consumer;
+package org.wso2.gw.emulator.core;
 
-import org.wso2.gw.emulator.http.HTTPProtocolEmulator;
+public class AbstractEmulatorContext {
 
-/*HTTP Mock server impl*/
+    private static String host;
+    private static Integer port;
 
+    public AbstractEmulatorContext host(String host) {
+        this.host = host;
+        return this;
+    }
 
-public class HTTPConsumer extends HTTPProtocolEmulator {
+    public AbstractEmulatorContext port(int port) {
+        this.port = port;
+        return this;
+    }
 
+    public static String getHost() {
+        return host;
+    }
+
+    public static Integer getPort() {
+        return port;
+    }
 }

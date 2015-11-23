@@ -18,17 +18,31 @@
  *
  */
 
-package org.wso2.gw.emulator;
+package org.wso2.gw.emulator.http.dsl.dto;
 
-import org.wso2.gw.emulator.http.HTTPProtocolEmulator;
+public class Cookie {
 
-public class Emulator {
+    private String name;
+    private String value;
 
-    public static AbstractProtocolEmulator getProtocolEmulator(String protocol) {
-        if ("http".equals(protocol)) {
-            return new HTTPProtocolEmulator();
-        }
-        return null;
+    public Cookie(String name, String value) {
+        this.name = name;
+        this.value = value;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
 }

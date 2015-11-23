@@ -18,9 +18,31 @@
  *
  */
 
-package org.wso2.gw.emulator.http.producer;
+package org.wso2.gw.emulator.http.dsl.dto;
 
-import org.wso2.gw.emulator.http.HTTPProtocolEmulator;
+public class QueryParameter {
 
-public class HTTPProducer extends HTTPProtocolEmulator {
+    public QueryParameter(String name, String value) {
+        this.name = name;
+        this.value = value;
+    }
+
+    private String name;
+    private String value;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
 }
