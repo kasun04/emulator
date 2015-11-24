@@ -18,7 +18,7 @@
  *
  */
 
-package org.wso2.gw.emulator.core.handlers;
+package org.wso2.gw.emulator.http;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -30,9 +30,6 @@ import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.LastHttpContent;
 import org.apache.log4j.Logger;
-import org.wso2.gw.emulator.http.HttpRequestContext;
-import org.wso2.gw.emulator.http.HttpRequestInformationProcessor;
-import org.wso2.gw.emulator.http.HttpResponseProcessor;
 import org.wso2.gw.emulator.http.dsl.HttpConsumerContext;
 
 import static io.netty.handler.codec.http.HttpResponseStatus.CONTINUE;
@@ -119,6 +116,4 @@ public class HttpResponseProcessHandler extends ChannelInboundHandlerAdapter {
             log.error("Exception occurred while processing the waiting delay", e);
         }
     }
-
-
 }

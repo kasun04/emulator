@@ -45,7 +45,6 @@ public class HttpResponseProcessor {
 
     public void process(HttpRequestContext requestContext, ChannelHandlerContext ctx) {
         OutgoingMessage outgoing = getMatchResource(requestContext);
-
         if (outgoing == null) {
             if (!write404NotFoundResponse(requestContext, ctx)) {
                 ctx.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
@@ -99,7 +98,6 @@ public class HttpResponseProcessor {
     }
 
     private boolean write404NotFoundResponse(HttpRequestContext requestContext, ChannelHandlerContext ctx) {
-
         boolean keepAlive = requestContext.isKeepAlive();
         HttpVersion httpVersion = HttpConsumerContext.getHttpVersion();
         FullHttpResponse response = new DefaultFullHttpResponse(
