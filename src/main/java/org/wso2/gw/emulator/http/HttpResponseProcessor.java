@@ -42,6 +42,11 @@ import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 
 
 public class HttpResponseProcessor {
+    private HttpConsumerContext consumerContext;
+
+    public HttpResponseProcessor(HttpConsumerContext consumerContext) {
+        this.consumerContext = consumerContext;
+    }
 
     public void process(HttpRequestContext requestContext, ChannelHandlerContext ctx) {
         OutgoingMessage outgoing = getMatchResource(requestContext);
@@ -60,7 +65,7 @@ public class HttpResponseProcessor {
             ctx) {
         boolean keepAlive = requestContext.isKeepAlive();
 
-        HttpVersion httpVersion = HttpConsumerContext.getHttpVersion();
+        HttpVersion httpVersion = consumerContext.getHttpVersion();
         HttpResponseStatus httpResponseStatus = outgoing.getStatusCode();
         FullHttpResponse response = new DefaultFullHttpResponse(
                 httpVersion, httpResponseStatus,
@@ -99,7 +104,7 @@ public class HttpResponseProcessor {
 
     private boolean write404NotFoundResponse(HttpRequestContext requestContext, ChannelHandlerContext ctx) {
         boolean keepAlive = requestContext.isKeepAlive();
-        HttpVersion httpVersion = HttpConsumerContext.getHttpVersion();
+        HttpVersion httpVersion = consumerContext.getHttpVersion();
         FullHttpResponse response = new DefaultFullHttpResponse(
                 httpVersion, NOT_FOUND);
         response.headers().set(HttpHeaders.Names.CONTENT_TYPE, "text/plain; charset=UTF-8");
@@ -115,7 +120,7 @@ public class HttpResponseProcessor {
     }
 
     private OutgoingMessage getMatchResource(HttpRequestContext requestContext) {
-        for (Map.Entry<IncomingMessage, OutgoingMessage> entry : HttpConsumerContext.getInOutCorrelation().entrySet()) {
+        for (Map.Entry<IncomingMessage, OutgoingMessage> entry : consumerContext.getInOutCorrelation().entrySet()) {
             if (entry.getKey().isMatch(requestContext)) {
                 return entry.getValue();
             }

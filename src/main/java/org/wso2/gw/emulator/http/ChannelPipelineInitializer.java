@@ -30,9 +30,11 @@ import org.wso2.gw.emulator.http.dsl.HttpConsumerContext;
 public class ChannelPipelineInitializer extends ChannelInitializer<SocketChannel> {
 
     private SslContext sslCtx;
+    private HttpConsumerContext consumerContext;
 
-    public ChannelPipelineInitializer(SslContext sslCtx) {
+    public ChannelPipelineInitializer(SslContext sslCtx, HttpConsumerContext consumerContext) {
         this.sslCtx = sslCtx;
+        this.consumerContext = consumerContext;
     }
 
     @Override
@@ -42,9 +44,9 @@ public class ChannelPipelineInitializer extends ChannelInitializer<SocketChannel
             pipeline.addLast("sslHandler", sslCtx.newHandler(ch.alloc()));
         }
         pipeline.addLast(new HttpServerCodec());
-        if (HttpConsumerContext.getLogicHandler() != null) {
-            pipeline.addLast("logicHandler", HttpConsumerContext.getLogicHandler());
+        if (consumerContext.getLogicHandler() != null) {
+            pipeline.addLast("logicHandler", consumerContext.getLogicHandler());
         }
-        pipeline.addLast("httpResponseHandler", new HttpResponseProcessHandler());
+        pipeline.addLast("httpResponseHandler", new HttpResponseProcessHandler(consumerContext));
     }
 }

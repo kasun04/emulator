@@ -17,29 +17,27 @@
  *  * under the License.
  *
  */
+package org.wso2.gw.emulator.sampletcp.dsl;
 
-package org.wso2.gw.emulator.core;
+public class IncomingMessage {
+    private String body;
+    private static IncomingMessage incoming;
 
-public class AbstractEmulatorContext {
+    private static IncomingMessage getInstance() {
+        incoming = new IncomingMessage();
+        return incoming;
+    }
 
-    private String host;
-    private Integer port;
+    public static IncomingMessage request() {
+        return getInstance();
+    }
 
-    public AbstractEmulatorContext host(String host) {
-        this.host = host;
+    public IncomingMessage withBody(String body) {
+        this.body = body;
         return this;
     }
 
-    public AbstractEmulatorContext port(int port) {
-        this.port = port;
-        return this;
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public Integer getPort() {
-        return port;
+    public String getBody() {
+        return body;
     }
 }

@@ -17,29 +17,19 @@
  *  * under the License.
  *
  */
+package org.wso2.gw.emulator.sampletcp;
 
-package org.wso2.gw.emulator.core;
+import org.wso2.gw.emulator.sampletcp.dsl.dao.TcpConsumerContext;
+import java.io.DataOutputStream;
 
-public class AbstractEmulatorContext {
+public class TcpResponseProcessor {
 
-    private String host;
-    private Integer port;
-
-    public AbstractEmulatorContext host(String host) {
-        this.host = host;
-        return this;
-    }
-
-    public AbstractEmulatorContext port(int port) {
-        this.port = port;
-        return this;
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public Integer getPort() {
-        return port;
+    public void process(DataOutputStream out, TcpConsumerContext consumerContext, TcpRequestContext requestContext)
+            throws Exception {
+        if (requestContext.getRequestBody().equalsIgnoreCase(consumerContext.getIncoming().getBody())) {
+            out.writeBytes(consumerContext.getOutgoingMessage().getBody());
+        } else {
+            out.writeBytes("wrong message");
+        }
     }
 }

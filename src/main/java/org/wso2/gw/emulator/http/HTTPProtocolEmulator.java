@@ -28,28 +28,38 @@ import org.wso2.gw.emulator.http.dsl.HttpProducerContext;
 
 public class HTTPProtocolEmulator extends AbstractProtocolEmulator {
 
-    private HttpEmulatorInitializer httpEmulatorInitializer;
+    private HttpEmulatorConsumerInitializer httpEmulatorInitializer;
+    private HttpConsumerContext consumerContext;
+    private HttpProducerContext httpProducerContext;
 
     public HTTPProtocolEmulator(Emulator emulator) {
         super(emulator);
-        httpEmulatorInitializer = new HttpEmulatorInitializer();
     }
 
     @Override
     public HttpConsumerContext consumer() {
-        HttpConsumerContext consumerContext = new HttpConsumerContext(this);
+        consumerContext = new HttpConsumerContext(this);
         setEmulatorType(EmulatorType.HTTP_CONSUMER);
+        httpEmulatorInitializer = new HttpEmulatorConsumerInitializer(consumerContext);
         return consumerContext;
     }
 
     @Override
     public HttpProducerContext producer() {
-        HttpProducerContext httpProducerContext = new HttpProducerContext();
+        httpProducerContext = new HttpProducerContext();
         setEmulatorType(EmulatorType.HTTP_PRODUCER);
         return httpProducerContext;
     }
 
-    public HttpEmulatorInitializer getHttpEmulatorInitializer() {
+    public HttpEmulatorConsumerInitializer getEmulatorInitializer() {
         return httpEmulatorInitializer;
+    }
+
+    public HttpConsumerContext getConsumerContext() {
+        return consumerContext;
+    }
+
+    public HttpProducerContext getHttpProducerContext() {
+        return httpProducerContext;
     }
 }

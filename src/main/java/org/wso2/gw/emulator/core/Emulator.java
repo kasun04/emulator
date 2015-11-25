@@ -22,34 +22,55 @@ package org.wso2.gw.emulator.core;
 
 import org.apache.log4j.Logger;
 import org.wso2.gw.emulator.http.HTTPProtocolEmulator;
+import org.wso2.gw.emulator.sampletcp.TCPProtocolEmulator;
 
-public class Emulator {
+public class Emulator extends Thread {
     private static final Logger log = Logger.getLogger(Emulator.class);
     private static HTTPProtocolEmulator httpProtocolEmulator;
+    private static TCPProtocolEmulator tcpProtocolEmulator;
+    private EmulatorType emulatorType;
 
     public static HTTPProtocolEmulator getHttpEmulator() {
         httpProtocolEmulator = new HTTPProtocolEmulator(new Emulator());
         return httpProtocolEmulator;
     }
 
-    public void initialize(EmulatorType emulatorType) throws Exception {
-        validateInput();
-        if(EmulatorType.HTTP_CONSUMER.equals(emulatorType)) {
-            httpProtocolEmulator.getHttpEmulatorInitializer().initialize();
+    public static TCPProtocolEmulator getTCPEmulator() {
+        tcpProtocolEmulator = new TCPProtocolEmulator(new Emulator());
+        return tcpProtocolEmulator;
+    }
+
+    public void run(){
+        try {
+            if (EmulatorType.HTTP_CONSUMER.equals(emulatorType)) {
+                validateInput(httpProtocolEmulator.getConsumerContext());
+                httpProtocolEmulator.getEmulatorInitializer().initialize();
+            } else if (EmulatorType.TCP_CONSUMER.equals(emulatorType)) {
+                validateInput(tcpProtocolEmulator.getTcpConsumerContext());
+                tcpProtocolEmulator.getEmulatorInitializer().initialize();
+            }
+        }catch (Exception e) {
+            log.error("Exception occurred while initialize the Emulator", e);
         }
     }
 
     public void shutdown(EmulatorType emulatorType) {
         if(EmulatorType.HTTP_CONSUMER.equals(emulatorType)) {
-            httpProtocolEmulator.getHttpEmulatorInitializer().shutdown();;
+            httpProtocolEmulator.getEmulatorInitializer().shutdown();;
+        } else if(EmulatorType.TCP_CONSUMER.equals(emulatorType)) {
+            tcpProtocolEmulator.getEmulatorInitializer().shutdown();
         }
         log.info("Emulator shutdown successfully.......");
     }
 
-    private void validateInput() {
-        if(AbstractEmulatorContext.getHost() == null || AbstractEmulatorContext.getPort() == null) {
-           log.error("Invalid host [" +AbstractEmulatorContext.getHost() +"] and port [" +AbstractEmulatorContext
+    private void validateInput(AbstractEmulatorContext abstractEmulatorContext) {
+        if(abstractEmulatorContext.getHost() == null || abstractEmulatorContext.getPort() == null) {
+           log.error("Invalid host [" +abstractEmulatorContext.getHost() +"] and port [" +abstractEmulatorContext
                    .getPort() +"]");
         }
+    }
+
+    public void setEmulatorType(EmulatorType emulatorType) {
+        this.emulatorType = emulatorType;
     }
 }

@@ -36,13 +36,16 @@ import static io.netty.handler.codec.http.HttpResponseStatus.CONTINUE;
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
 public class HttpResponseProcessHandler extends ChannelInboundHandlerAdapter {
-
-
     private HttpRequest httpRequest;
     private HttpRequestContext httpRequestContext;
     private HttpRequestInformationProcessor httpRequestInformationProcessor;
     private HttpResponseProcessor httpResponseProcessor;
     private static final Logger log = Logger.getLogger(HttpResponseProcessHandler.class);
+    private HttpConsumerContext consumerContext;
+
+    public HttpResponseProcessHandler(HttpConsumerContext consumerContext) {
+        this.consumerContext = consumerContext;
+    }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -51,11 +54,11 @@ public class HttpResponseProcessHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         if (msg instanceof HttpRequest) {
-            readingDelay(HttpConsumerContext.getReadingDelay());
+            readingDelay(consumerContext.getReadingDelay());
             this.httpRequestContext = new HttpRequestContext();
             this.httpRequestInformationProcessor = new HttpRequestInformationProcessor();
             this.httpRequestInformationProcessor = new HttpRequestInformationProcessor();
-            this.httpResponseProcessor = new HttpResponseProcessor();
+            this.httpResponseProcessor = new HttpResponseProcessor(consumerContext);
             this.httpRequest = (HttpRequest) msg;
 
             if (HttpHeaders.is100ContinueExpected(httpRequest)) {
@@ -80,7 +83,7 @@ public class HttpResponseProcessHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) {
         if (httpResponseProcessor != null) {
-            waitingDelay(HttpConsumerContext.getWritingDelay());
+            waitingDelay(consumerContext.getWritingDelay());
             this.httpResponseProcessor.process(httpRequestContext, ctx);
         }
         ctx.flush();

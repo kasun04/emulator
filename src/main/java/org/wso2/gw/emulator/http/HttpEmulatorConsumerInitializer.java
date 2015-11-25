@@ -10,11 +10,17 @@ import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslContext;
 import org.wso2.gw.emulator.core.AbstractEmulatorContext;
+import org.wso2.gw.emulator.http.dsl.HttpConsumerContext;
 
-public class HttpEmulatorInitializer {
+public class HttpEmulatorConsumerInitializer {
     private static final boolean SSL = System.getProperty("ssl") != null;
     private EventLoopGroup bossGroup;
     private EventLoopGroup workerGroup;
+    private HttpConsumerContext consumerContext;
+
+    public HttpEmulatorConsumerInitializer(HttpConsumerContext consumerContext) {
+        this.consumerContext = consumerContext;
+    }
 
     public void initialize() throws Exception {
         final SslContext sslCtx = null;
@@ -33,8 +39,8 @@ public class HttpEmulatorInitializer {
                     .channel(NioServerSocketChannel.class)
                     .option(ChannelOption.SO_BACKLOG, 100)
                     .handler(new LoggingHandler(LogLevel.INFO))
-                    .childHandler(new ChannelPipelineInitializer(sslCtx));
-            ChannelFuture f = b.bind(AbstractEmulatorContext.getHost(), AbstractEmulatorContext.getPort())
+                    .childHandler(new ChannelPipelineInitializer(sslCtx, consumerContext));
+            ChannelFuture f = b.bind(consumerContext.getHost(), consumerContext.getPort())
                     .sync();
             f.channel().closeFuture().sync();
         } finally {
