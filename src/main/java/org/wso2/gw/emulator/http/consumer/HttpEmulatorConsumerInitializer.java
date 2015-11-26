@@ -32,19 +32,19 @@ public class HttpEmulatorConsumerInitializer {
             sslCtx = null;
         }*/
         // Configure the server.
-        bossGroup = new NioEventLoopGroup(1);
+        bossGroup = new NioEventLoopGroup(getCPUCoreSize());
         workerGroup = new NioEventLoopGroup();
         try {
-            ServerBootstrap b = new ServerBootstrap();
+            ServerBootstrap serverBootstrap = new ServerBootstrap();
             ChannelPipelineInitializer channelPipelineInitializer = new ChannelPipelineInitializer(sslCtx,
-                                                                                                   EmulatorType.TCP_CONSUMER);
+                                                                                                   EmulatorType.HTTP_CONSUMER);
             channelPipelineInitializer.setConsumerContext(consumerContext);
-            b.group(bossGroup, workerGroup)
+            serverBootstrap.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
                     .option(ChannelOption.SO_BACKLOG, 100)
                     .handler(new LoggingHandler(LogLevel.INFO))
                     .childHandler(channelPipelineInitializer);
-            ChannelFuture f = b.bind(consumerContext.getHost(), consumerContext.getPort())
+            ChannelFuture f = serverBootstrap.bind(consumerContext.getHost(), consumerContext.getPort())
                     .sync();
             f.channel().closeFuture().sync();
         } finally {
@@ -56,5 +56,9 @@ public class HttpEmulatorConsumerInitializer {
     public void shutdown() {
         bossGroup.shutdownGracefully();
         workerGroup.shutdownGracefully();
+    }
+
+    private int getCPUCoreSize() {
+        return Runtime.getRuntime().availableProcessors();
     }
 }
