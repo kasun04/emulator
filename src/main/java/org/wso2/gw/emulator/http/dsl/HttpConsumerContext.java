@@ -25,8 +25,8 @@ import io.netty.handler.codec.http.HttpVersion;
 import org.wso2.gw.emulator.core.AbstractEmulatorContext;
 import org.wso2.gw.emulator.core.AbstractProtocolEmulator;
 import org.wso2.gw.emulator.http.HTTPProtocolEmulator;
-import org.wso2.gw.emulator.http.dsl.dto.IncomingMessage;
-import org.wso2.gw.emulator.http.dsl.dto.OutgoingMessage;
+import org.wso2.gw.emulator.http.dsl.dto.consumer.IncomingMessage;
+import org.wso2.gw.emulator.http.dsl.dto.consumer.OutgoingMessage;
 
 import java.util.HashMap;
 import java.util.Map;

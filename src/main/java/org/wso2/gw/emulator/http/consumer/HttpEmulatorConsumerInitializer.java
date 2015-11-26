@@ -1,4 +1,4 @@
-package org.wso2.gw.emulator.http;
+package org.wso2.gw.emulator.http.consumer;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -9,7 +9,8 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslContext;
-import org.wso2.gw.emulator.core.AbstractEmulatorContext;
+import org.wso2.gw.emulator.core.EmulatorType;
+import org.wso2.gw.emulator.http.ChannelPipelineInitializer;
 import org.wso2.gw.emulator.http.dsl.HttpConsumerContext;
 
 public class HttpEmulatorConsumerInitializer {
@@ -35,11 +36,14 @@ public class HttpEmulatorConsumerInitializer {
         workerGroup = new NioEventLoopGroup();
         try {
             ServerBootstrap b = new ServerBootstrap();
+            ChannelPipelineInitializer channelPipelineInitializer = new ChannelPipelineInitializer(sslCtx,
+                                                                                                   EmulatorType.TCP_CONSUMER);
+            channelPipelineInitializer.setConsumerContext(consumerContext);
             b.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
                     .option(ChannelOption.SO_BACKLOG, 100)
                     .handler(new LoggingHandler(LogLevel.INFO))
-                    .childHandler(new ChannelPipelineInitializer(sslCtx, consumerContext));
+                    .childHandler(channelPipelineInitializer);
             ChannelFuture f = b.bind(consumerContext.getHost(), consumerContext.getPort())
                     .sync();
             f.channel().closeFuture().sync();

@@ -18,9 +18,10 @@
  *
  */
 
-package org.wso2.gw.emulator.http.dsl.dto;
+package org.wso2.gw.emulator.http.dsl.dto.producer;
 
 import io.netty.handler.codec.http.HttpResponseStatus;
+import org.wso2.gw.emulator.http.dsl.dto.Header;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,8 +30,7 @@ import java.util.List;
 public class OutgoingMessage {
 
     private static OutgoingMessage outgoing;
-    private HttpResponseStatus statusCode = HttpResponseStatus.OK;
-    private List<Cookie> cookies;
+    private HttpResponseStatus statusCode;
     private List<Header> headers;
     private String body;
 
@@ -45,24 +45,6 @@ public class OutgoingMessage {
 
     public OutgoingMessage withStatusCode(HttpResponseStatus statusCode) {
         this.statusCode = statusCode;
-        return this;
-    }
-
-    public OutgoingMessage withCookie(String name, String value) {
-        if (cookies == null) {
-            this.cookies = new ArrayList<Cookie>();
-        }
-        cookies.add(new Cookie(name, value));
-        return this;
-    }
-
-    public OutgoingMessage withCookies(Cookie... cookies) {
-        if (this.cookies == null) {
-            this.cookies = new ArrayList<Cookie>();
-        }
-        if (cookies != null && cookies.length > 0) {
-            this.cookies.addAll(Arrays.asList(cookies));
-        }
         return this;
     }
 
@@ -90,16 +72,8 @@ public class OutgoingMessage {
         return this;
     }
 
-    public OutgoingMessage withEmptyBody() {
-        return this;
-    }
-
     public HttpResponseStatus getStatusCode() {
         return statusCode;
-    }
-
-    public List<Cookie> getCookies() {
-        return cookies;
     }
 
     public List<Header> getHeaders() {

@@ -18,7 +18,7 @@
  *
  */
 
-package org.wso2.gw.emulator.http;
+package org.wso2.gw.emulator.http.consumer;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -36,11 +36,10 @@ import static io.netty.handler.codec.http.HttpResponseStatus.CONTINUE;
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
 public class HttpResponseProcessHandler extends ChannelInboundHandlerAdapter {
-    private HttpRequest httpRequest;
+    private static final Logger log = Logger.getLogger(HttpResponseProcessHandler.class);
     private HttpRequestContext httpRequestContext;
     private HttpRequestInformationProcessor httpRequestInformationProcessor;
     private HttpResponseProcessor httpResponseProcessor;
-    private static final Logger log = Logger.getLogger(HttpResponseProcessHandler.class);
     private HttpConsumerContext consumerContext;
 
     public HttpResponseProcessHandler(HttpConsumerContext consumerContext) {
@@ -57,9 +56,8 @@ public class HttpResponseProcessHandler extends ChannelInboundHandlerAdapter {
             readingDelay(consumerContext.getReadingDelay());
             this.httpRequestContext = new HttpRequestContext();
             this.httpRequestInformationProcessor = new HttpRequestInformationProcessor();
-            this.httpRequestInformationProcessor = new HttpRequestInformationProcessor();
             this.httpResponseProcessor = new HttpResponseProcessor(consumerContext);
-            this.httpRequest = (HttpRequest) msg;
+            HttpRequest httpRequest = (HttpRequest) msg;
 
             if (HttpHeaders.is100ContinueExpected(httpRequest)) {
                 send100Continue(ctx);
@@ -70,7 +68,7 @@ public class HttpResponseProcessHandler extends ChannelInboundHandlerAdapter {
                 HttpContent httpContent = (HttpContent) msg;
                 ByteBuf content = httpContent.content();
                 if (content.isReadable()) {
-                    httpRequestInformationProcessor.appendDecoderResult(httpRequestContext, httpRequest, content);
+                    httpRequestInformationProcessor.appendDecoderResult(httpRequestContext, httpContent, content);
                 }
             }
 

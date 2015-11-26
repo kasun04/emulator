@@ -46,6 +46,16 @@ public abstract class AbstractProtocolEmulator {
         return this;
     }
 
+    public AbstractProtocolEmulator send() {
+        try {
+            emulator.setEmulatorType(emulatorType);
+            emulator.run();
+        } catch (Exception e) {
+            log.error("Exception occurred while initialize the emulator", e);
+        }
+        return this;
+    }
+
     public void shutdown() {
         try {
             emulator.shutdown(emulatorType);

@@ -21,6 +21,54 @@
 package org.wso2.gw.emulator.http.dsl;
 
 import org.wso2.gw.emulator.core.AbstractEmulatorContext;
+import org.wso2.gw.emulator.core.AbstractProtocolEmulator;
+import org.wso2.gw.emulator.http.HTTPProtocolEmulator;
+import org.wso2.gw.emulator.http.dsl.dto.producer.IncomingMessage;
+import org.wso2.gw.emulator.http.dsl.dto.producer.OutgoingMessage;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class HttpProducerContext extends AbstractEmulatorContext {
+
+    private IncomingMessage incoming;
+    private Map<IncomingMessage, OutgoingMessage> inOutCorrelation = new HashMap<IncomingMessage, OutgoingMessage>();
+    private HTTPProtocolEmulator httpProtocolEmulator;
+
+
+    public HttpProducerContext(HTTPProtocolEmulator httpProtocolEmulator) {
+        this.httpProtocolEmulator = httpProtocolEmulator;
+    }
+
+    public HttpProducerContext host(String host) {
+        super.host(host);
+        return this;
+    }
+
+    public HttpProducerContext port(int port) {
+        super.port(port);
+        return this;
+    }
+
+    public HttpProducerContext when(IncomingMessage incoming) {
+        this.incoming = incoming;
+        return this;
+    }
+
+    public HttpProducerContext respond(OutgoingMessage outgoing) {
+        this.inOutCorrelation.put(incoming, outgoing);
+        return this;
+    }
+
+    public AbstractProtocolEmulator operations() {
+        return httpProtocolEmulator;
+    }
+
+    public IncomingMessage getIncoming() {
+        return incoming;
+    }
+
+    public Map<IncomingMessage, OutgoingMessage> getInOutCorrelation() {
+        return inOutCorrelation;
+    }
 }

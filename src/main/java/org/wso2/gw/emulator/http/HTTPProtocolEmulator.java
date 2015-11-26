@@ -23,12 +23,15 @@ package org.wso2.gw.emulator.http;
 import org.wso2.gw.emulator.core.AbstractProtocolEmulator;
 import org.wso2.gw.emulator.core.Emulator;
 import org.wso2.gw.emulator.core.EmulatorType;
+import org.wso2.gw.emulator.http.consumer.HttpEmulatorConsumerInitializer;
 import org.wso2.gw.emulator.http.dsl.HttpConsumerContext;
 import org.wso2.gw.emulator.http.dsl.HttpProducerContext;
+import org.wso2.gw.emulator.http.producer.HttpEmulatorProducerInitializer;
 
 public class HTTPProtocolEmulator extends AbstractProtocolEmulator {
 
-    private HttpEmulatorConsumerInitializer httpEmulatorInitializer;
+    private HttpEmulatorConsumerInitializer httpEmulatorConsumerInitializer;
+    private HttpEmulatorProducerInitializer httpEmulatorProducerInitializer;
     private HttpConsumerContext consumerContext;
     private HttpProducerContext httpProducerContext;
 
@@ -40,19 +43,24 @@ public class HTTPProtocolEmulator extends AbstractProtocolEmulator {
     public HttpConsumerContext consumer() {
         consumerContext = new HttpConsumerContext(this);
         setEmulatorType(EmulatorType.HTTP_CONSUMER);
-        httpEmulatorInitializer = new HttpEmulatorConsumerInitializer(consumerContext);
+        httpEmulatorConsumerInitializer = new HttpEmulatorConsumerInitializer(consumerContext);
         return consumerContext;
     }
 
     @Override
     public HttpProducerContext producer() {
-        httpProducerContext = new HttpProducerContext();
+        httpProducerContext = new HttpProducerContext(this);
         setEmulatorType(EmulatorType.HTTP_PRODUCER);
+        this.httpEmulatorProducerInitializer = new HttpEmulatorProducerInitializer(httpProducerContext);
         return httpProducerContext;
     }
 
-    public HttpEmulatorConsumerInitializer getEmulatorInitializer() {
-        return httpEmulatorInitializer;
+    public HttpEmulatorConsumerInitializer getHttpEmulatorConsumerInitializer() {
+        return httpEmulatorConsumerInitializer;
+    }
+
+    public HttpEmulatorProducerInitializer getHttpEmulatorProducerInitializer() {
+        return httpEmulatorProducerInitializer;
     }
 
     public HttpConsumerContext getConsumerContext() {

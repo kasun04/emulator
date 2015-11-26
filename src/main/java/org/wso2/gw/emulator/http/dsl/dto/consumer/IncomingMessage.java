@@ -18,10 +18,12 @@
  *
  */
 
-package org.wso2.gw.emulator.http.dsl.dto;
+package org.wso2.gw.emulator.http.dsl.dto.consumer;
 
 import io.netty.handler.codec.http.HttpMethod;
-import org.wso2.gw.emulator.http.HttpRequestContext;
+import org.wso2.gw.emulator.http.consumer.HttpRequestContext;
+import org.wso2.gw.emulator.http.dsl.dto.Header;
+import org.wso2.gw.emulator.http.dsl.dto.QueryParameter;
 
 import java.util.List;
 import java.util.Map;

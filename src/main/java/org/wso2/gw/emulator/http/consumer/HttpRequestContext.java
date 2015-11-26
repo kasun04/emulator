@@ -18,7 +18,7 @@
  *
  */
 
-package org.wso2.gw.emulator.http;
+package org.wso2.gw.emulator.http.consumer;
 
 
 import io.netty.handler.codec.http.HttpMethod;

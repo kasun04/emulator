@@ -18,7 +18,7 @@
  *
  */
 
-package org.wso2.gw.emulator.http;
+package org.wso2.gw.emulator.http.consumer;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.DecoderResult;
@@ -27,6 +27,7 @@ import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.QueryStringDecoder;
 import io.netty.util.CharsetUtil;
+import org.wso2.gw.emulator.http.consumer.HttpRequestContext;
 
 import java.util.List;
 import java.util.Map;
@@ -51,7 +52,7 @@ public class HttpRequestInformationProcessor {
         }
     }
 
-    public static void appendDecoderResult(HttpRequestContext requestContext, HttpObject httpObject, ByteBuf content) {
+    public void appendDecoderResult(HttpRequestContext requestContext, HttpObject httpObject, ByteBuf content) {
         requestContext.appendResponseContent(content.toString(CharsetUtil.UTF_8));
         DecoderResult result = httpObject.getDecoderResult();
         if (result.isSuccess()) {

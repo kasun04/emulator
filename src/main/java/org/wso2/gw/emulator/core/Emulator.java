@@ -44,10 +44,13 @@ public class Emulator extends Thread {
         try {
             if (EmulatorType.HTTP_CONSUMER.equals(emulatorType)) {
                 validateInput(httpProtocolEmulator.getConsumerContext());
-                httpProtocolEmulator.getEmulatorInitializer().initialize();
+                httpProtocolEmulator.getHttpEmulatorConsumerInitializer().initialize();
             } else if (EmulatorType.TCP_CONSUMER.equals(emulatorType)) {
                 validateInput(tcpProtocolEmulator.getTcpConsumerContext());
                 tcpProtocolEmulator.getEmulatorInitializer().initialize();
+            } else if(EmulatorType.HTTP_PRODUCER.equals(emulatorType)) {
+                validateInput(httpProtocolEmulator.getHttpProducerContext());
+                httpProtocolEmulator.getHttpEmulatorProducerInitializer().initialize();
             }
         }catch (Exception e) {
             log.error("Exception occurred while initialize the Emulator", e);
@@ -56,9 +59,11 @@ public class Emulator extends Thread {
 
     public void shutdown(EmulatorType emulatorType) {
         if(EmulatorType.HTTP_CONSUMER.equals(emulatorType)) {
-            httpProtocolEmulator.getEmulatorInitializer().shutdown();;
+            httpProtocolEmulator.getHttpEmulatorConsumerInitializer().shutdown();
         } else if(EmulatorType.TCP_CONSUMER.equals(emulatorType)) {
             tcpProtocolEmulator.getEmulatorInitializer().shutdown();
+        } else if(EmulatorType.HTTP_PRODUCER.equals(emulatorType)) {
+            httpProtocolEmulator.getHttpEmulatorProducerInitializer().shutdown();
         }
         log.info("Emulator shutdown successfully.......");
     }
