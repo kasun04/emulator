@@ -38,7 +38,18 @@ public abstract class AbstractProtocolEmulator {
 
     public AbstractProtocolEmulator start() {
         try {
-            emulator.initialize(emulatorType);
+            emulator.setEmulatorType(emulatorType);
+            emulator.start();
+        } catch (Exception e) {
+            log.error("Exception occurred while initialize the emulator", e);
+        }
+        return this;
+    }
+
+    public AbstractProtocolEmulator send() {
+        try {
+            emulator.setEmulatorType(emulatorType);
+            emulator.run();
         } catch (Exception e) {
             log.error("Exception occurred while initialize the emulator", e);
         }

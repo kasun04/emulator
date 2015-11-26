@@ -25,22 +25,22 @@ import io.netty.handler.codec.http.HttpVersion;
 import org.wso2.gw.emulator.core.AbstractEmulatorContext;
 import org.wso2.gw.emulator.core.AbstractProtocolEmulator;
 import org.wso2.gw.emulator.http.HTTPProtocolEmulator;
-import org.wso2.gw.emulator.http.dsl.dto.IncomingMessage;
-import org.wso2.gw.emulator.http.dsl.dto.OutgoingMessage;
+import org.wso2.gw.emulator.http.dsl.dto.consumer.IncomingMessage;
+import org.wso2.gw.emulator.http.dsl.dto.consumer.OutgoingMessage;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class HttpConsumerContext extends AbstractEmulatorContext {
 
-    private static String context;
-    private static int readingDelay;
-    private static int writingDelay;
-    private static boolean randomConnectionClose;
-    private static HttpVersion httpVersion;
-    private static IncomingMessage incoming;
-    private static ChannelInboundHandlerAdapter logicHandler;
-    private static Map<IncomingMessage, OutgoingMessage> inOutCorrelation = new HashMap<IncomingMessage, OutgoingMessage>();
+    private String context;
+    private int readingDelay;
+    private int writingDelay;
+    private boolean randomConnectionClose;
+    private HttpVersion httpVersion;
+    private IncomingMessage incoming;
+    private ChannelInboundHandlerAdapter logicHandler;
+    private Map<IncomingMessage, OutgoingMessage> inOutCorrelation = new HashMap<IncomingMessage, OutgoingMessage>();
     private HTTPProtocolEmulator httpProtocolEmulator;
 
 
@@ -104,35 +104,35 @@ public class HttpConsumerContext extends AbstractEmulatorContext {
         return httpProtocolEmulator;
     }
 
-    public static String getContext() {
+    public String getContext() {
         return context;
     }
 
-    public static int getReadingDelay() {
+    public int getReadingDelay() {
         return readingDelay;
     }
 
-    public static int getWritingDelay() {
+    public int getWritingDelay() {
         return writingDelay;
     }
 
-    public static boolean isRandomConnectionClose() {
+    public boolean isRandomConnectionClose() {
         return randomConnectionClose;
     }
 
-    public static HttpVersion getHttpVersion() {
+    public HttpVersion getHttpVersion() {
         return httpVersion;
     }
 
-    public static ChannelInboundHandlerAdapter getLogicHandler() {
+    public ChannelInboundHandlerAdapter getLogicHandler() {
         return logicHandler;
     }
 
-    public static IncomingMessage getIncoming() {
+    public IncomingMessage getIncoming() {
         return incoming;
     }
 
-    public static Map<IncomingMessage, OutgoingMessage> getInOutCorrelation() {
+    public Map<IncomingMessage, OutgoingMessage> getInOutCorrelation() {
         return inOutCorrelation;
     }
 }

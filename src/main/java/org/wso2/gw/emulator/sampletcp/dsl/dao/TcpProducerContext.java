@@ -17,29 +17,10 @@
  *  * under the License.
  *
  */
+package org.wso2.gw.emulator.sampletcp.dsl.dao;
 
-package org.wso2.gw.emulator.core;
+import org.wso2.gw.emulator.core.AbstractEmulatorContext;
 
-public class AbstractEmulatorContext {
+public class TcpProducerContext extends AbstractEmulatorContext {
 
-    private String host;
-    private Integer port;
-
-    public AbstractEmulatorContext host(String host) {
-        this.host = host;
-        return this;
-    }
-
-    public AbstractEmulatorContext port(int port) {
-        this.port = port;
-        return this;
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public Integer getPort() {
-        return port;
-    }
 }

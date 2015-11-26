@@ -23,25 +23,63 @@ package org.wso2.gw.emulator;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import org.wso2.gw.emulator.core.Emulator;
+import org.wso2.gw.emulator.sampletcp.dsl.IncomingMessage;
+import org.wso2.gw.emulator.sampletcp.dsl.OutgoingMessage;
 
-import static org.wso2.gw.emulator.http.dsl.dto.IncomingMessage.request;
-import static org.wso2.gw.emulator.http.dsl.dto.OutgoingMessage.response;
+import static org.wso2.gw.emulator.http.dsl.dto.consumer.IncomingMessage.request;
+import static org.wso2.gw.emulator.http.dsl.dto.consumer.OutgoingMessage.response;
 
 public class Tester {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+        //startSampleTcpEmulator();
+        startHttpEmulator();
+        // Thread.sleep(1000);
+        //testProducer();
+        //startHttpEmulator1();
+    }
+
+    private static void startHttpEmulator() {
         Emulator.getHttpEmulator()
                 .consumer()
                 .host("127.0.0.1")
                 .port(6065)
                 .writingDelay(4000)
                 .context("/user")
-                .when(request().withMethod(HttpMethod.POST).withBody("TestRequest").withHeader("header1",
-                                                                                               "headerValue").
-                        withQueryParameter("test", "123"))
+                .when(request().withMethod(HttpMethod.POST).withBody("TestRequest"))
                 .respond(response().withBody("Test Response1").withStatusCode(HttpResponseStatus.OK))
                 .when(request().withPath("/name"))
                 .respond(response().withBody("Test response2").withStatusCode(HttpResponseStatus.FORBIDDEN))
                 .operations().start();
+    }
 
+    private static void startHttpEmulator1() {
+        Emulator.getHttpEmulator()
+                .consumer()
+                .host("127.0.0.1")
+                .port(6066)
+                .writingDelay(4000)
+                .context("/user")
+                .when(request().withMethod(HttpMethod.POST).withBody("TestRequest1").
+                        withQueryParameter("test", "123"))
+                .respond(response().withBody("Test Response2").withStatusCode(HttpResponseStatus.OK))
+                .when(request().withPath("/name"))
+                .respond(response().withBody("Test response2").withStatusCode(HttpResponseStatus.FORBIDDEN))
+                .operations().start();
+    }
+
+    private static void startSampleTcpEmulator() {
+        Emulator.getTCPEmulator().consumer().host("127.0.0.1").port(9890)
+                .when(IncomingMessage.request().withBody("Test TCP"))
+                .respond(OutgoingMessage.response().withBody("TCP Response body"))
+                .operations().start();
+
+    }
+
+    private static void testProducer() {
+        Emulator.getHttpEmulator().producer().host("127.0.0.1").port(6065)
+                .when(org.wso2.gw.emulator.http.dsl.dto.producer.IncomingMessage.request().withPath("/user")
+                              .withBody("TestRequest").withMethod(HttpMethod.POST))
+                .respond(org.wso2.gw.emulator.http.dsl.dto.producer.OutgoingMessage.response().withBody("Test Response1"))
+                .operations().start();
     }
 }

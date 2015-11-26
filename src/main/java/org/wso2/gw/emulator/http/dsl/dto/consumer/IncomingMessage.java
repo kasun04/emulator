@@ -18,10 +18,12 @@
  *
  */
 
-package org.wso2.gw.emulator.http.dsl.dto;
+package org.wso2.gw.emulator.http.dsl.dto.consumer;
 
 import io.netty.handler.codec.http.HttpMethod;
-import org.wso2.gw.emulator.http.HttpRequestContext;
+import org.wso2.gw.emulator.http.consumer.HttpRequestContext;
+import org.wso2.gw.emulator.http.dsl.dto.Header;
+import org.wso2.gw.emulator.http.dsl.dto.QueryParameter;
 
 import java.util.List;
 import java.util.Map;
@@ -71,18 +73,6 @@ public class IncomingMessage {
     public IncomingMessage withQueryParameter(String name, String value) {
         this.queryParameter = new QueryParameter(name, value);
         return this;
-    }
-
-    public HttpMethod getMethod() {
-        return method;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public String getBody() {
-        return body;
     }
 
     public boolean isMatch(HttpRequestContext requestContext) {

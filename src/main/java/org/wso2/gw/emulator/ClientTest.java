@@ -18,28 +18,18 @@
  *
  */
 
-package org.wso2.gw.emulator.core;
+package org.wso2.gw.emulator;
 
-public class AbstractEmulatorContext {
+import io.netty.handler.codec.http.HttpMethod;
+import org.wso2.gw.emulator.core.Emulator;
 
-    private String host;
-    private Integer port;
+public class ClientTest {
 
-    public AbstractEmulatorContext host(String host) {
-        this.host = host;
-        return this;
-    }
-
-    public AbstractEmulatorContext port(int port) {
-        this.port = port;
-        return this;
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public Integer getPort() {
-        return port;
+    public static void main(String args[]) {
+        Emulator.getHttpEmulator().producer().host("127.0.0.1").port(6065)
+                .when(org.wso2.gw.emulator.http.dsl.dto.producer.IncomingMessage.request().withPath("/user")
+                              .withBody("TestRequest").withMethod(HttpMethod.POST))
+                .respond(org.wso2.gw.emulator.http.dsl.dto.producer.OutgoingMessage.response().withBody("Test Response1"))
+                .operations().send();
     }
 }
