@@ -31,7 +31,7 @@ public class HttpResponseAssertProcessor {
 
     private void assertResponseContent(HttpResponseContext responseContext, OutgoingMessage outgoingMessage) {
         if (outgoingMessage.getBody().equalsIgnoreCase(responseContext.getRequestBody())) {
-            System.out.print("Great");
+            System.out.print("Equal");
         } else {
             System.out.print("Wrong");
         }

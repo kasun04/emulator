@@ -107,7 +107,6 @@ public class IncomingMessage {
     }
 
     private boolean isRequestContentMatch(HttpRequestContext requestContext) {
-
         if (body == null || body.isEmpty()) {
             return true;
         }
@@ -196,19 +195,23 @@ public class IncomingMessage {
         if (fullPath.endsWith("/")) {
             fullPath = fullPath.substring(0, fullPath.length() - 1);
         }
-
         return "^" + fullPath + "$";
     }
 
     private String extractContext(String uri) {
-
         if (uri == null || uri.isEmpty()) {
             return null;
         }
-
         if (!uri.contains("?")) {
+            if (!uri.endsWith("/")) {
+                uri = uri + "/";
+            }
             return uri;
         }
-        return uri.split("\\?")[0];
+        uri = uri.split("\\?")[0];
+        if (!uri.endsWith("/")) {
+            uri = uri + "/";
+        }
+        return uri;
     }
 }
