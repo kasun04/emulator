@@ -33,8 +33,8 @@ public class Tester {
     public static void main(String[] args) throws Exception {
         //startSampleTcpEmulator();
         startHttpEmulator();
-        // Thread.sleep(1000);
-        //testProducer();
+         Thread.sleep(1000);
+        testProducer();
         //startHttpEmulator1();
     }
 
@@ -45,7 +45,7 @@ public class Tester {
                 .port(6065)
                 .writingDelay(4000)
                 .context("/user")
-                .when(request().withMethod(HttpMethod.POST).withBody("TestRequest"))
+                .when(request().withMethod(HttpMethod.GET))
                 .respond(response().withBody("Test Response1").withStatusCode(HttpResponseStatus.OK))
                 .when(request().withPath("/name"))
                 .respond(response().withBody("Test response2").withStatusCode(HttpResponseStatus.FORBIDDEN))
@@ -76,9 +76,9 @@ public class Tester {
     }
 
     private static void testProducer() {
-        Emulator.getHttpEmulator().producer().host("127.0.0.1").port(6065)
+        Emulator.getHttpEmulator().producer().host("http://127.0.0.1").port(6065)
                 .when(org.wso2.gw.emulator.http.dsl.dto.producer.IncomingMessage.request().withPath("/user")
-                              .withBody("TestRequest").withMethod(HttpMethod.POST))
+                              .withMethod(HttpMethod.GET))
                 .respond(org.wso2.gw.emulator.http.dsl.dto.producer.OutgoingMessage.response().withBody("Test Response1"))
                 .operations().start();
     }

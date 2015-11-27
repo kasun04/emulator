@@ -64,8 +64,8 @@ public class HttpEmulatorProducerInitializer {
         } else {
             sslCtx = null;
         }
-        HttpRequest httpRequest = new HttpRequestInformationProcessor().populateHttpRequest(producerContext.getHost()
-                , producerContext.getPort(), incomingMessage);
+        HttpRequest httpRequest = new HttpRequestInformationProcessor().populateHttpRequest(producerContext,
+                                                                                            incomingMessage);
         group = new NioEventLoopGroup();
         try {
             Bootstrap b = new Bootstrap();

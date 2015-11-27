@@ -26,26 +26,29 @@ import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpVersion;
 import io.netty.handler.codec.http.cookie.ClientCookieEncoder;
 import io.netty.handler.codec.http.cookie.DefaultCookie;
+import org.wso2.gw.emulator.http.dsl.HttpProducerContext;
 import org.wso2.gw.emulator.http.dsl.dto.Cookie;
 import org.wso2.gw.emulator.http.dsl.dto.Header;
 import org.wso2.gw.emulator.http.dsl.dto.producer.IncomingMessage;
 
+import java.net.URI;
+
 public class HttpRequestInformationProcessor {
 
-    public HttpRequest populateHttpRequest(String host, int port, IncomingMessage incomingMessage) throws Exception {
+    public HttpRequest populateHttpRequest(HttpProducerContext producerContext, IncomingMessage incomingMessage) throws Exception {
 
-        String uri = getURI(host, port, incomingMessage);
-        /*URI requestUri = new URI(uri);
+        String uri = getURI(producerContext.getHost(), producerContext.getPort(), incomingMessage);
+        URI requestUri = new URI(uri);
+        producerContext.host(requestUri.getHost());
         String scheme = requestUri.getScheme();
 
         if (!"http".equalsIgnoreCase(scheme) && !"https".equalsIgnoreCase(scheme)) {
             System.err.println("Only HTTP(S) is supported.");
             //Need to log
-        }*/
-
+        }
         HttpRequest request = new DefaultFullHttpRequest(
-                HttpVersion.HTTP_1_1, incomingMessage.getMethod(), uri);
-        populateHeader(request, host, incomingMessage);
+                HttpVersion.HTTP_1_1, incomingMessage.getMethod(), requestUri.getRawPath());
+        populateHeader(request, requestUri.getHost(), incomingMessage);
         populateCookies(request, incomingMessage);
         populateQueryParameters(request, incomingMessage);
         return request;
