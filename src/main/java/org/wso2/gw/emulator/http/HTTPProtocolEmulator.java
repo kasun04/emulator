@@ -24,32 +24,32 @@ import org.wso2.gw.emulator.core.AbstractProtocolEmulator;
 import org.wso2.gw.emulator.core.Emulator;
 import org.wso2.gw.emulator.core.EmulatorType;
 import org.wso2.gw.emulator.http.consumer.HttpEmulatorConsumerInitializer;
-import org.wso2.gw.emulator.http.dsl.HttpConsumerContext;
-import org.wso2.gw.emulator.http.dsl.HttpProducerContext;
+import org.wso2.gw.emulator.http.dsl.consumer.HttpServerBuilde;
+import org.wso2.gw.emulator.http.dsl.producer.HttpClientBuilder;
 import org.wso2.gw.emulator.http.producer.HttpEmulatorProducerInitializer;
 
 public class HTTPProtocolEmulator extends AbstractProtocolEmulator {
 
     private HttpEmulatorConsumerInitializer httpEmulatorConsumerInitializer;
     private HttpEmulatorProducerInitializer httpEmulatorProducerInitializer;
-    private HttpConsumerContext consumerContext;
-    private HttpProducerContext httpProducerContext;
+    private HttpServerBuilde consumerContext;
+    private HttpClientBuilder httpProducerContext;
 
     public HTTPProtocolEmulator(Emulator emulator) {
         super(emulator);
     }
 
     @Override
-    public HttpConsumerContext consumer() {
-        consumerContext = new HttpConsumerContext(this);
+    public HttpServerBuilde server() {
+        consumerContext = new HttpServerBuilde(this);
         setEmulatorType(EmulatorType.HTTP_CONSUMER);
         httpEmulatorConsumerInitializer = new HttpEmulatorConsumerInitializer(consumerContext);
         return consumerContext;
     }
 
     @Override
-    public HttpProducerContext producer() {
-        httpProducerContext = new HttpProducerContext(this);
+    public HttpClientBuilder client() {
+        httpProducerContext = new HttpClientBuilder(this);
         setEmulatorType(EmulatorType.HTTP_PRODUCER);
         this.httpEmulatorProducerInitializer = new HttpEmulatorProducerInitializer(httpProducerContext);
         return httpProducerContext;
@@ -63,11 +63,11 @@ public class HTTPProtocolEmulator extends AbstractProtocolEmulator {
         return httpEmulatorProducerInitializer;
     }
 
-    public HttpConsumerContext getConsumerContext() {
+    public HttpServerBuilde getConsumerContext() {
         return consumerContext;
     }
 
-    public HttpProducerContext getHttpProducerContext() {
+    public HttpClientBuilder getHttpProducerContext() {
         return httpProducerContext;
     }
 }

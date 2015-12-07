@@ -31,12 +31,12 @@ public class TCPProtocolEmulator extends AbstractProtocolEmulator {
     }
 
     @Override
-    public AbstractEmulatorContext consumer() {
+    public AbstractEmulatorContext server() {
         return null;
     }
 
     @Override
-    public AbstractEmulatorContext producer() {
+    public AbstractEmulatorContext client() {
         return null;
     }
 }

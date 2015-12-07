@@ -30,11 +30,11 @@ import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpVersion;
 import io.netty.handler.codec.http.ServerCookieEncoder;
 import io.netty.util.CharsetUtil;
-import org.wso2.gw.emulator.http.dsl.HttpConsumerContext;
-import org.wso2.gw.emulator.http.dsl.dto.Cookie;
-import org.wso2.gw.emulator.http.dsl.dto.Header;
-import org.wso2.gw.emulator.http.dsl.dto.consumer.IncomingMessage;
-import org.wso2.gw.emulator.http.dsl.dto.consumer.OutgoingMessage;
+import org.wso2.gw.emulator.http.dsl.consumer.HttpServerBuilde;
+import org.wso2.gw.emulator.http.dsl.params.Cookie;
+import org.wso2.gw.emulator.http.dsl.params.Header;
+import org.wso2.gw.emulator.http.dsl.consumer.IncomingMessage;
+import org.wso2.gw.emulator.http.dsl.consumer.OutgoingMessage;
 
 import java.util.Map;
 
@@ -42,9 +42,9 @@ import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 
 
 public class HttpResponseProcessor {
-    private HttpConsumerContext consumerContext;
+    private HttpServerBuilde consumerContext;
 
-    public HttpResponseProcessor(HttpConsumerContext consumerContext) {
+    public HttpResponseProcessor(HttpServerBuilde consumerContext) {
         this.consumerContext = consumerContext;
     }
 

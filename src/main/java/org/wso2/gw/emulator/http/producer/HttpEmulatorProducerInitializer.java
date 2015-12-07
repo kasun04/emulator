@@ -31,18 +31,18 @@ import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import org.wso2.gw.emulator.core.EmulatorType;
 import org.wso2.gw.emulator.http.ChannelPipelineInitializer;
-import org.wso2.gw.emulator.http.dsl.HttpProducerContext;
-import org.wso2.gw.emulator.http.dsl.dto.producer.IncomingMessage;
-import org.wso2.gw.emulator.http.dsl.dto.producer.OutgoingMessage;
+import org.wso2.gw.emulator.http.dsl.producer.HttpClientBuilder;
+import org.wso2.gw.emulator.http.dsl.producer.IncomingMessage;
+import org.wso2.gw.emulator.http.dsl.producer.OutgoingMessage;
 
 import java.util.Map;
 
 public class HttpEmulatorProducerInitializer {
 
-    private HttpProducerContext producerContext;
+    private HttpClientBuilder producerContext;
     private EventLoopGroup group;
 
-    public HttpEmulatorProducerInitializer(HttpProducerContext producerContext) {
+    public HttpEmulatorProducerInitializer(HttpClientBuilder producerContext) {
         this.producerContext = producerContext;
     }
 

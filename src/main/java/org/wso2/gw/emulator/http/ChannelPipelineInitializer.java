@@ -29,13 +29,13 @@ import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.ssl.SslContext;
 import org.wso2.gw.emulator.core.EmulatorType;
 import org.wso2.gw.emulator.http.consumer.HttpResponseProcessHandler;
-import org.wso2.gw.emulator.http.dsl.HttpConsumerContext;
-import org.wso2.gw.emulator.http.dsl.dto.producer.OutgoingMessage;
+import org.wso2.gw.emulator.http.dsl.consumer.HttpServerBuilde;
+import org.wso2.gw.emulator.http.dsl.producer.OutgoingMessage;
 
 public class ChannelPipelineInitializer extends ChannelInitializer<SocketChannel> {
 
     private SslContext sslCtx;
-    private HttpConsumerContext consumerContext;
+    private HttpServerBuilde consumerContext;
     private OutgoingMessage producerOutgoingMessage;
     private EmulatorType emulatorType;
 
@@ -80,7 +80,7 @@ public class ChannelPipelineInitializer extends ChannelInitializer<SocketChannel
         this.producerOutgoingMessage = producerOutgoingMessage;
     }
 
-    public void setConsumerContext(HttpConsumerContext consumerContext) {
+    public void setConsumerContext(HttpServerBuilde consumerContext) {
         this.consumerContext = consumerContext;
     }
 }

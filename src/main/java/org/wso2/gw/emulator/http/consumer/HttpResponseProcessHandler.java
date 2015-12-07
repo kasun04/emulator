@@ -30,7 +30,7 @@ import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.LastHttpContent;
 import org.apache.log4j.Logger;
-import org.wso2.gw.emulator.http.dsl.HttpConsumerContext;
+import org.wso2.gw.emulator.http.dsl.consumer.HttpServerBuilde;
 
 import static io.netty.handler.codec.http.HttpResponseStatus.CONTINUE;
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
@@ -40,9 +40,9 @@ public class HttpResponseProcessHandler extends ChannelInboundHandlerAdapter {
     private HttpRequestContext httpRequestContext;
     private HttpRequestInformationProcessor httpRequestInformationProcessor;
     private HttpResponseProcessor httpResponseProcessor;
-    private HttpConsumerContext consumerContext;
+    private HttpServerBuilde consumerContext;
 
-    public HttpResponseProcessHandler(HttpConsumerContext consumerContext) {
+    public HttpResponseProcessHandler(HttpServerBuilde consumerContext) {
         this.consumerContext = consumerContext;
     }
 

@@ -26,16 +26,16 @@ import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpVersion;
 import io.netty.handler.codec.http.cookie.ClientCookieEncoder;
 import io.netty.handler.codec.http.cookie.DefaultCookie;
-import org.wso2.gw.emulator.http.dsl.HttpProducerContext;
-import org.wso2.gw.emulator.http.dsl.dto.Cookie;
-import org.wso2.gw.emulator.http.dsl.dto.Header;
-import org.wso2.gw.emulator.http.dsl.dto.producer.IncomingMessage;
+import org.wso2.gw.emulator.http.dsl.producer.HttpClientBuilder;
+import org.wso2.gw.emulator.http.dsl.params.Cookie;
+import org.wso2.gw.emulator.http.dsl.params.Header;
+import org.wso2.gw.emulator.http.dsl.producer.IncomingMessage;
 
 import java.net.URI;
 
 public class HttpRequestInformationProcessor {
 
-    public HttpRequest populateHttpRequest(HttpProducerContext producerContext, IncomingMessage incomingMessage) throws Exception {
+    public HttpRequest populateHttpRequest(HttpClientBuilder producerContext, IncomingMessage incomingMessage) throws Exception {
 
         String uri = getURI(producerContext.getHost(), producerContext.getPort(), incomingMessage);
         URI requestUri = new URI(uri);

@@ -11,15 +11,15 @@ import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslContext;
 import org.wso2.gw.emulator.core.EmulatorType;
 import org.wso2.gw.emulator.http.ChannelPipelineInitializer;
-import org.wso2.gw.emulator.http.dsl.HttpConsumerContext;
+import org.wso2.gw.emulator.http.dsl.consumer.HttpServerBuilde;
 
 public class HttpEmulatorConsumerInitializer {
     private static final boolean SSL = System.getProperty("ssl") != null;
     private EventLoopGroup bossGroup;
     private EventLoopGroup workerGroup;
-    private HttpConsumerContext consumerContext;
+    private HttpServerBuilde consumerContext;
 
-    public HttpEmulatorConsumerInitializer(HttpConsumerContext consumerContext) {
+    public HttpEmulatorConsumerInitializer(HttpServerBuilde consumerContext) {
         this.consumerContext = consumerContext;
     }
 

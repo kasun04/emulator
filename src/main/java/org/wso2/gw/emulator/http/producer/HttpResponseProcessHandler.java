@@ -26,7 +26,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.HttpContent;
 import io.netty.handler.codec.http.HttpResponse;
 import io.netty.handler.codec.http.LastHttpContent;
-import org.wso2.gw.emulator.http.dsl.dto.producer.OutgoingMessage;
+import org.wso2.gw.emulator.http.dsl.producer.OutgoingMessage;
 
 public class HttpResponseProcessHandler extends ChannelInboundHandlerAdapter {
     private HttpResponseContext responseContext;

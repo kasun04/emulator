@@ -20,7 +20,7 @@
 
 package org.wso2.gw.emulator.http.producer;
 
-import org.wso2.gw.emulator.http.dsl.dto.producer.OutgoingMessage;
+import org.wso2.gw.emulator.http.dsl.producer.OutgoingMessage;
 
 public class HttpResponseAssertProcessor {
 

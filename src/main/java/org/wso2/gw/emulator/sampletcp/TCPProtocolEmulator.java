@@ -34,7 +34,7 @@ public class TCPProtocolEmulator extends AbstractProtocolEmulator {
     }
 
     @Override
-    public TcpConsumerContext consumer() {
+    public TcpConsumerContext server() {
         tcpConsumerContext = new TcpConsumerContext(this);
         setEmulatorType(EmulatorType.TCP_CONSUMER);
         tcpEmulatorInitializer = new TcpEmulatorConsumerInitializer(tcpConsumerContext);
@@ -42,7 +42,7 @@ public class TCPProtocolEmulator extends AbstractProtocolEmulator {
     }
 
     @Override
-    public TcpProducerContext producer() {
+    public TcpProducerContext client() {
         TcpProducerContext tcpProducerContext = new TcpProducerContext();
         setEmulatorType(EmulatorType.TCP_PRODUCER);
         return tcpProducerContext;

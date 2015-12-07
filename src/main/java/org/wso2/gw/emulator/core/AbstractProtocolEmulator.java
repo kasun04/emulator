@@ -32,9 +32,9 @@ public abstract class AbstractProtocolEmulator {
         this.emulator = emulator;
     }
 
-    public abstract AbstractEmulatorContext consumer();
+    public abstract AbstractEmulatorContext server();
 
-    public abstract AbstractEmulatorContext producer();
+    public abstract AbstractEmulatorContext client();
 
     public AbstractProtocolEmulator start() {
         try {
