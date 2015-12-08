@@ -24,6 +24,7 @@ import io.netty.handler.codec.http.HttpMethod;
 import org.wso2.gw.emulator.http.server.HttpRequestContext;
 import org.wso2.gw.emulator.http.dsl.params.Header;
 import org.wso2.gw.emulator.http.dsl.params.QueryParameter;
+import org.wso2.gw.emulator.http.server.HttpRequestContext;
 
 import java.util.List;
 import java.util.Map;

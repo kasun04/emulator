@@ -1,27 +1,16 @@
 package org.wso2.gw.emulator.http.client;
 
 import org.wso2.gw.emulator.core.AbstractRequestBuilderContext;
-import org.wso2.gw.emulator.core.AbstractThenBuilderContext;
 import org.wso2.gw.emulator.core.AbstractWhenBuilderContext;
-import org.wso2.gw.emulator.core.OperationType;
 
 /**
  * Created by chamile on 12/7/15.
  */
-public class HttpClientWhenBuilderContext extends AbstractWhenBuilderContext<HttpClientRequestBuilderContext>{
-    private HttpClientThenBuilderContext clientThenBuilderContext;
+public abstract class HttpClientWhenBuilderContext extends AbstractWhenBuilderContext<HttpClientRequsetBuilderContext> {
 
     @Override
-    public HttpClientThenBuilderContext when(HttpClientRequestBuilderContext requestContext) {
+    public HttpClientThenBuilderContext when(HttpClientRequsetBuilderContext requestContextBuilder) {
 
-        clientThenBuilderContext = new HttpClientThenBuilderContext();
-        return clientThenBuilderContext;
+        return null;
     }
-
-    @Override
-    public void operation(OperationType operationType) {
-
-    }
-
-
 }

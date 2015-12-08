@@ -28,14 +28,15 @@ import io.netty.handler.codec.http.HttpContentDecompressor;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.ssl.SslContext;
 import org.wso2.gw.emulator.core.EmulatorType;
-import org.wso2.gw.emulator.http.server.HttpResponseProcessHandler;
+import org.wso2.gw.emulator.http.consumer.HttpResponseProcessHandler;
+import org.wso2.gw.emulator.http.dsl.consumer.HttpServerBuilde;
 import org.wso2.gw.emulator.http.dsl.consumer.HttpServerBuilderContext;
 import org.wso2.gw.emulator.http.dsl.producer.OutgoingMessage;
 
 public class ChannelPipelineInitializer extends ChannelInitializer<SocketChannel> {
 
     private SslContext sslCtx;
-    private HttpServerBuilderContext consumerContext;
+    private HttpServerBuilde consumerContext;
     private OutgoingMessage producerOutgoingMessage;
     private EmulatorType emulatorType;
 
@@ -73,7 +74,7 @@ public class ChannelPipelineInitializer extends ChannelInitializer<SocketChannel
         }
         pipeline.addLast(new HttpClientCodec());
         pipeline.addLast(new HttpContentDecompressor());
-        pipeline.addLast(new org.wso2.gw.emulator.http.client.HttpResponseProcessHandler(producerOutgoingMessage));
+        pipeline.addLast(new org.wso2.gw.emulator.http.producer.HttpResponseProcessHandler(producerOutgoingMessage));
     }
 
     public void setProducerOutgoingMessage(OutgoingMessage producerOutgoingMessage) {
