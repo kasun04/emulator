@@ -23,6 +23,7 @@ package org.wso2.gw.emulator;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import org.wso2.gw.emulator.core.Emulator;
+import org.wso2.gw.emulator.core.OperationType;
 import org.wso2.gw.emulator.sampletcp.dsl.IncomingMessage;
 import org.wso2.gw.emulator.sampletcp.dsl.OutgoingMessage;
 
@@ -59,7 +60,7 @@ public class Tester {
                 .then(response()
                         .withBody("Test response2")
                         .withStatusCode(HttpResponseStatus.FORBIDDEN))
-                //.operation().start();
+                .operation(OperationType.START);
     }
 
     /*private static void startHttpEmulator1() {
@@ -78,15 +79,15 @@ public class Tester {
     }*/
 
     private static void startSampleTcpEmulator() {
-        Emulator.getTCPEmulator().server().host("127.0.0.1").port(9890)
+        /*Emulator.getTCPEmulator().server().host("127.0.0.1").port(9890)
                 .when(IncomingMessage.request().withBody("Test TCP"))
                 .respond(OutgoingMessage.response().withBody("TCP Response body"))
                 .operations().start();
-
+*/
     }
 
     private static void testProducer() {
-        Emulator.getHttpEmulator()
+/*        Emulator.getHttpEmulator()
                 .client()
                     .host("http://127.0.0.1")
                     .port(6067)
@@ -96,5 +97,5 @@ public class Tester {
                 .respond(org.wso2.gw.emulator.http.dsl.producer.OutgoingMessage.response()
                         .withBody("Test Response1"))
                 .operations().start();
-    }
+    */}
 }

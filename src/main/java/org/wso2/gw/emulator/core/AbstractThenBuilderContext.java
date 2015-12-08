@@ -9,6 +9,5 @@ public abstract class AbstractThenBuilderContext<T extends AbstractResponseBuild
 
     public abstract AbstractWhenBuilderContext then(T responseContext);
 
-    public abstract void operation(OperationType operationType);
 
 }

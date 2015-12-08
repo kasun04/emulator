@@ -6,4 +6,7 @@ package org.wso2.gw.emulator.core;
 public abstract class AbstractWhenBuilderContext<T extends AbstractRequestBuilderContext> {
 
     public abstract AbstractThenBuilderContext when(T requestContext);
+
+    public abstract void operation(OperationType operationType);
+
 }

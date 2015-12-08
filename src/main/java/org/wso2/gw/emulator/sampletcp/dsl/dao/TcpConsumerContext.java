@@ -64,6 +64,7 @@ public class TcpConsumerContext extends AbstractBuilderContext {
     }
 
     public AbstractProtocolEmulator operations() {
-        return tcpProtocolEmulator;
+       // return tcpProtocolEmulator;
+        return null;
     }
 }

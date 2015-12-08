@@ -35,15 +35,15 @@ public class Emulator extends Thread {
         return httpProtocolEmulator;
     }
 
-    public static TCPProtocolEmulator getTCPEmulator() {
+   /* public static TCPProtocolEmulator getTCPEmulator() {
         tcpProtocolEmulator = new TCPProtocolEmulator(new Emulator());
         return tcpProtocolEmulator;
     }
-
+*/
     public void run(){
         try {
             if (EmulatorType.HTTP_CONSUMER.equals(emulatorType)) {
-                validateInput(httpProtocolEmulator.getServerContext());
+                //validateInput(httpProtocolEmulator.getServerContext());
                 httpProtocolEmulator.getHttpEmulatorConsumerInitializer().initialize();
             } else if (EmulatorType.TCP_CONSUMER.equals(emulatorType)) {
                 validateInput(tcpProtocolEmulator.getTcpConsumerContext());

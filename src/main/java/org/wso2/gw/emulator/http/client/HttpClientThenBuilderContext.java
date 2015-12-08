@@ -19,8 +19,5 @@ public class HttpClientThenBuilderContext extends AbstractThenBuilderContext<Htt
         return clientWhenBuilderContext;
     }
 
-    @Override
-    public void operation(OperationType operationType) {
 
-    }
 }
