@@ -19,13 +19,13 @@
  */
 package org.wso2.gw.emulator.sampletcp.dsl.dao;
 
-import org.wso2.gw.emulator.core.AbstractEmulatorContext;
+import org.wso2.gw.emulator.core.AbstractBuilderContext;
 import org.wso2.gw.emulator.core.AbstractProtocolEmulator;
 import org.wso2.gw.emulator.sampletcp.TCPProtocolEmulator;
 import org.wso2.gw.emulator.sampletcp.dsl.IncomingMessage;
 import org.wso2.gw.emulator.sampletcp.dsl.OutgoingMessage;
 
-public class TcpConsumerContext extends AbstractEmulatorContext {
+public class TcpConsumerContext extends AbstractBuilderContext {
 
     private TCPProtocolEmulator tcpProtocolEmulator;
     private IncomingMessage incoming;

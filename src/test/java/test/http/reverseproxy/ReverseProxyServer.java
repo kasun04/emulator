@@ -19,7 +19,7 @@ public final class ReverseProxyServer {
     public static void main(String[] args) throws Exception {
 
 
-        /* Multithreaded event loop that handles I/O operation */
+        /* Multithreaded event loop that handles I/O OperationType */
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);    /* BossGroup - Accepts the incoming connections */
         EventLoopGroup workerGroup = new NioEventLoopGroup();   /* WorkerGroup - Handles the IO traffic of the accepted connections */
 

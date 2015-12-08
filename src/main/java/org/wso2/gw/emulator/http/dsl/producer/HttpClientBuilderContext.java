@@ -20,14 +20,14 @@
 
 package org.wso2.gw.emulator.http.dsl.producer;
 
-import org.wso2.gw.emulator.core.AbstractEmulatorContext;
+import org.wso2.gw.emulator.core.AbstractBuilderContext;
 import org.wso2.gw.emulator.core.AbstractProtocolEmulator;
 import org.wso2.gw.emulator.http.HTTPProtocolEmulator;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class HttpClientBuilderContext extends AbstractEmulatorContext {
+public class HttpClientBuilderContext extends AbstractBuilderContext {
 
     private IncomingMessage incoming;
     private Map<IncomingMessage, OutgoingMessage> inOutCorrelation = new HashMap<IncomingMessage, OutgoingMessage>();

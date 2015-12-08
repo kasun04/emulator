@@ -26,8 +26,9 @@ import org.wso2.gw.emulator.core.Emulator;
 import org.wso2.gw.emulator.sampletcp.dsl.IncomingMessage;
 import org.wso2.gw.emulator.sampletcp.dsl.OutgoingMessage;
 
-import static org.wso2.gw.emulator.http.dsl.consumer.IncomingMessage.request;
-import static org.wso2.gw.emulator.http.dsl.consumer.OutgoingMessage.response;
+import static org.wso2.gw.emulator.http.server.HttpServerResponseBuilderContext.response;
+import static org.wso2.gw.emulator.http.server.HttpServerRequestBuilderContext.request;
+import static org.wso2.gw.emulator.http.server.HttpServerConfigBuilderContext.configure;
 
 public class Tester {
     public static void main(String[] args) throws Exception {
@@ -41,26 +42,27 @@ public class Tester {
     private static void startHttpEmulator() {
         Emulator.getHttpEmulator()
                 .server()
-                //.given(configure()          //httpServerBuilder
+                .given(configure().host("127.0.0.1").port(6067).writingDelay(4000).context("/user"))
+                /*.given(configure()          //httpServerBuilder
                         .host("127.0.0.1")  //
-                        .port(6065)
+                        .port(6067)
                         .writingDelay(4000)
                         .context("/user")
-                //  )
+                  )*/
                 .when(request()
                         .withMethod(HttpMethod.GET))
-                .respond(response()
+                .then(response()
                         .withBody("Test Response1")
                         .withStatusCode(HttpResponseStatus.OK))
                 .when(request()
                         .withPath("/name"))
-                .respond(response()
+                .then(response()
                         .withBody("Test response2")
                         .withStatusCode(HttpResponseStatus.FORBIDDEN))
-                .operations().start();
+                //.operation().start();
     }
 
-    private static void startHttpEmulator1() {
+    /*private static void startHttpEmulator1() {
         Emulator.getHttpEmulator()
                 .server()
                 .host("127.0.0.1")
@@ -73,7 +75,7 @@ public class Tester {
                 .when(request().withPath("/name"))
                 .respond(response().withBody("Test response2").withStatusCode(HttpResponseStatus.FORBIDDEN))
                 .operations().start();
-    }
+    }*/
 
     private static void startSampleTcpEmulator() {
         Emulator.getTCPEmulator().server().host("127.0.0.1").port(9890)
@@ -84,10 +86,15 @@ public class Tester {
     }
 
     private static void testProducer() {
-        Emulator.getHttpEmulator().client().host("http://127.0.0.1").port(6065)
-                .when(org.wso2.gw.emulator.http.dsl.producer.IncomingMessage.request().withPath("/user")
-                              .withMethod(HttpMethod.GET))
-                .respond(org.wso2.gw.emulator.http.dsl.producer.OutgoingMessage.response().withBody("Test Response1"))
+        Emulator.getHttpEmulator()
+                .client()
+                    .host("http://127.0.0.1")
+                    .port(6067)
+                .when(org.wso2.gw.emulator.http.dsl.producer.IncomingMessage.request()
+                        .withPath("/user")
+                        .withMethod(HttpMethod.GET))
+                .respond(org.wso2.gw.emulator.http.dsl.producer.OutgoingMessage.response()
+                        .withBody("Test Response1"))
                 .operations().start();
     }
 }

@@ -22,37 +22,40 @@ package org.wso2.gw.emulator.http;
 
 import org.wso2.gw.emulator.core.AbstractProtocolEmulator;
 import org.wso2.gw.emulator.core.Emulator;
-import org.wso2.gw.emulator.core.EmulatorType;
-import org.wso2.gw.emulator.http.consumer.HttpEmulatorConsumerInitializer;
-import org.wso2.gw.emulator.http.dsl.consumer.HttpServerBuilde;
-import org.wso2.gw.emulator.http.dsl.producer.HttpClientBuilder;
-import org.wso2.gw.emulator.http.producer.HttpEmulatorProducerInitializer;
+import org.wso2.gw.emulator.http.server.HttpEmulatorConsumerInitializer;
+import org.wso2.gw.emulator.http.server.HttpServerGivenBuilderContext;
+import org.wso2.gw.emulator.http.dsl.producer.HttpClientBuilderContext;
+import org.wso2.gw.emulator.http.client.HttpClientGivenBuilderContext;
+import org.wso2.gw.emulator.http.client.HttpEmulatorProducerInitializer;
 
 public class HTTPProtocolEmulator extends AbstractProtocolEmulator {
 
     private HttpEmulatorConsumerInitializer httpEmulatorConsumerInitializer;
     private HttpEmulatorProducerInitializer httpEmulatorProducerInitializer;
-    private HttpServerBuilde consumerContext;
-    private HttpClientBuilder httpProducerContext;
+    private HttpServerGivenBuilderContext serverContext;
+    private HttpClientBuilderContext clientContext;
 
     public HTTPProtocolEmulator(Emulator emulator) {
         super(emulator);
     }
 
     @Override
-    public HttpServerBuilde server() {
-        consumerContext = new HttpServerBuilde(this);
+    public HttpServerGivenBuilderContext server() {
+        /*serverContext = new HttpServerGivenBuilderContext();
         setEmulatorType(EmulatorType.HTTP_CONSUMER);
-        httpEmulatorConsumerInitializer = new HttpEmulatorConsumerInitializer(consumerContext);
-        return consumerContext;
+        httpEmulatorConsumerInitializer = new HttpEmulatorConsumerInitializer(serverContext);
+        return serverContext;*/
+        return null;
+
     }
 
     @Override
-    public HttpClientBuilder client() {
-        httpProducerContext = new HttpClientBuilder(this);
+    public HttpClientGivenBuilderContext client() {
+        /*clientContext = new HttpClientBuilderContext(this);
         setEmulatorType(EmulatorType.HTTP_PRODUCER);
-        this.httpEmulatorProducerInitializer = new HttpEmulatorProducerInitializer(httpProducerContext);
-        return httpProducerContext;
+        this.httpEmulatorProducerInitializer = new HttpEmulatorProducerInitializer(clientContext);
+        return clientContext;*/
+        return null;
     }
 
     public HttpEmulatorConsumerInitializer getHttpEmulatorConsumerInitializer() {
@@ -63,11 +66,11 @@ public class HTTPProtocolEmulator extends AbstractProtocolEmulator {
         return httpEmulatorProducerInitializer;
     }
 
-    public HttpServerBuilde getConsumerContext() {
-        return consumerContext;
+    public HttpServerGivenBuilderContext getServerContext() {
+        return serverContext;
     }
 
-    public HttpClientBuilder getHttpProducerContext() {
-        return httpProducerContext;
+    public HttpClientBuilderContext getClientContext() {
+        return clientContext;
     }
 }

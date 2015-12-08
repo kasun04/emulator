@@ -22,6 +22,7 @@ package org.wso2.gw.emulator.sampletcp;
 import org.wso2.gw.emulator.core.AbstractProtocolEmulator;
 import org.wso2.gw.emulator.core.Emulator;
 import org.wso2.gw.emulator.core.EmulatorType;
+import org.wso2.gw.emulator.http.server.HttpServerGivenBuilderContext;
 import org.wso2.gw.emulator.sampletcp.dsl.dao.TcpConsumerContext;
 import org.wso2.gw.emulator.sampletcp.dsl.dao.TcpProducerContext;
 
@@ -34,7 +35,7 @@ public class TCPProtocolEmulator extends AbstractProtocolEmulator {
     }
 
     @Override
-    public TcpConsumerContext server() {
+    public HttpServerGivenBuilderContext server() {
         tcpConsumerContext = new TcpConsumerContext(this);
         setEmulatorType(EmulatorType.TCP_CONSUMER);
         tcpEmulatorInitializer = new TcpEmulatorConsumerInitializer(tcpConsumerContext);

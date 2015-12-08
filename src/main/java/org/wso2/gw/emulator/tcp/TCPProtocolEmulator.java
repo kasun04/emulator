@@ -20,9 +20,10 @@
 
 package org.wso2.gw.emulator.tcp;
 
-import org.wso2.gw.emulator.core.AbstractEmulatorContext;
+import org.wso2.gw.emulator.core.AbstractBuilderContext;
 import org.wso2.gw.emulator.core.AbstractProtocolEmulator;
 import org.wso2.gw.emulator.core.Emulator;
+import org.wso2.gw.emulator.http.server.HttpServerGivenBuilderContext;
 
 public class TCPProtocolEmulator extends AbstractProtocolEmulator {
 
@@ -31,12 +32,12 @@ public class TCPProtocolEmulator extends AbstractProtocolEmulator {
     }
 
     @Override
-    public AbstractEmulatorContext server() {
+    public HttpServerGivenBuilderContext server() {
         return null;
     }
 
     @Override
-    public AbstractEmulatorContext client() {
+    public AbstractBuilderContext client() {
         return null;
     }
 }

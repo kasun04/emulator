@@ -16,5 +16,9 @@ public class HttpServerEmulatorBuilderContext extends AbstractEmulatorBuilderCon
     private Map<AbstractRequestBuilderContext, AbstractResponseBuilderContext> requestResponseCorelation = new HashMap<AbstractRequestBuilderContext, AbstractResponseBuilderContext>();
     private AbstractConfigurationBuilderContext abstractConfigurationBuilderContext;
 
+    public HttpServerEmulatorBuilderContext mapping(HttpServerRequestBuilderContext requestBuilderContext,HttpServerResponseBuilderContext responseBuilderContext){
+        this.requestResponseCorelation.put(requestBuilderContext,responseBuilderContext);
+        return this;
+    }
 
 }

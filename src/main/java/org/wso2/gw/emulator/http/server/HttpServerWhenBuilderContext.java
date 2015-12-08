@@ -7,9 +7,12 @@ import org.wso2.gw.emulator.core.AbstractWhenBuilderContext;
  */
 public class HttpServerWhenBuilderContext extends AbstractWhenBuilderContext<HttpServerRequestBuilderContext>{
 
+    private HttpServerThenBuilderContext thenBuilderContext;
+
     @Override
     public HttpServerThenBuilderContext when(HttpServerRequestBuilderContext requestContext) {
 
-        return null;
+        thenBuilderContext = new HttpServerThenBuilderContext();
+        return thenBuilderContext;
     }
 }
