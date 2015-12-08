@@ -3,38 +3,18 @@ package org.wso2.gw.emulator.http.server;
 import org.wso2.gw.emulator.core.AbstractConfigurationBuilderContext;
 import org.wso2.gw.emulator.core.AbstractGivenBuilderContext;
 
-import java.util.*;
-
 /**
  * Created by chamile on 12/7/15.
  */
 public class HttpServerGivenBuilderContext extends AbstractGivenBuilderContext<HttpServerConfigBuilderContext>{
 
-
-    private final HttpServerInformationContext httpServerInformationContext;
-    private HttpServerConfigBuilderContext configurationContext;
-    private HttpServerWhenBuilderContext whenBuilderContext;
-    private List<HttpServerWhenBuilderContext> whenBuilderContextList;
-
-    public HttpServerGivenBuilderContext(HttpServerInformationContext httpServerInformationContext){
-        whenBuilderContextList = new ArrayList<HttpServerWhenBuilderContext>();
-        this.httpServerInformationContext = httpServerInformationContext;
-    }
+    private AbstractConfigurationBuilderContext configurationContext;
 
     @Override
-    public HttpServerWhenBuilderContext given(HttpServerConfigBuilderContext configurationContext) {
+    public HttpServerGivenBuilderContext given(HttpServerConfigBuilderContext configurationContext) {
 
-        this.configurationContext = configurationContext;
-        httpServerInformationContext.setConfigBuilderContext(this.configurationContext);
-        whenBuilderContext = new HttpServerWhenBuilderContext(whenBuilderContextList,httpServerInformationContext);
-
-        return whenBuilderContext;
+        return null;
     }
-
-    public HttpServerConfigBuilderContext getConfigurationContext() {
-        return configurationContext;
-    }
-
 
 
 }

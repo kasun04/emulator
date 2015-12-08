@@ -35,21 +35,21 @@ public class Emulator extends Thread {
         return httpProtocolEmulator;
     }
 
-   /* public static TCPProtocolEmulator getTCPEmulator() {
+    public static TCPProtocolEmulator getTCPEmulator() {
         tcpProtocolEmulator = new TCPProtocolEmulator(new Emulator());
         return tcpProtocolEmulator;
     }
-*/
+
     public void run(){
         try {
             if (EmulatorType.HTTP_CONSUMER.equals(emulatorType)) {
-                //validateInput(httpProtocolEmulator.getServerContext());
+                validateInput(httpProtocolEmulator.getConsumerContext());
                 httpProtocolEmulator.getHttpEmulatorConsumerInitializer().initialize();
             } else if (EmulatorType.TCP_CONSUMER.equals(emulatorType)) {
                 validateInput(tcpProtocolEmulator.getTcpConsumerContext());
                 tcpProtocolEmulator.getEmulatorInitializer().initialize();
             } else if(EmulatorType.HTTP_PRODUCER.equals(emulatorType)) {
-                validateInput(httpProtocolEmulator.getClientContext());
+                validateInput(httpProtocolEmulator.getHttpProducerContext());
                 httpProtocolEmulator.getHttpEmulatorProducerInitializer().initialize();
             }
         }catch (Exception e) {
@@ -68,9 +68,9 @@ public class Emulator extends Thread {
         log.info("Emulator shutdown successfully.......");
     }
 
-    private void validateInput(AbstractBuilderContext abstractBuilderContext) {
-        if(abstractBuilderContext.getHost() == null || abstractBuilderContext.getPort() == null) {
-           log.error("Invalid host [" + abstractBuilderContext.getHost() +"] and port [" + abstractBuilderContext
+    private void validateInput(AbstractEmulatorContext abstractEmulatorContext) {
+        if(abstractEmulatorContext.getHost() == null || abstractEmulatorContext.getPort() == null) {
+           log.error("Invalid host [" +abstractEmulatorContext.getHost() +"] and port [" +abstractEmulatorContext
                    .getPort() +"]");
         }
     }

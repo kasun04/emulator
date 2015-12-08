@@ -22,7 +22,8 @@ package org.wso2.gw.emulator.http.dsl.consumer;
 
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.HttpVersion;
-import org.wso2.gw.emulator.core.AbstractBuilderContext;
+import org.wso2.gw.emulator.core.AbstractEmulatorBuilderContext;
+import org.wso2.gw.emulator.core.AbstractEmulatorBuilderContext;
 import org.wso2.gw.emulator.core.AbstractProtocolEmulator;
 import org.wso2.gw.emulator.http.HTTPProtocolEmulator;
 
@@ -30,7 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class HttpServerBuilderContext extends AbstractBuilderContext {
+public class HttpServerBuilderContext extends AbstractEmulatorBuilderContext {
     private String context;
     private int readingDelay;
     private int writingDelay;
@@ -47,7 +48,7 @@ public class HttpServerBuilderContext extends AbstractBuilderContext {
         this.httpVersion = HttpVersion.HTTP_1_1;
     }
 
-    public HttpServerBuilderContext host(String host) {
+    /*public HttpServerBuilderContext host(String host) {
         super.host(host);
         return this;
     }
@@ -80,7 +81,7 @@ public class HttpServerBuilderContext extends AbstractBuilderContext {
     public HttpServerBuilderContext httpVersion(HttpVersion httpVersion) {
         this.httpVersion = httpVersion;
         return this;
-    }
+    }*/
 
     public HttpServerBuilderContext given(testConfig config) {
         return this;

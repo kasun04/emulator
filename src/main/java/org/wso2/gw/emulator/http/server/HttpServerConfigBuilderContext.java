@@ -41,6 +41,17 @@ public class HttpServerConfigBuilderContext extends AbstractConfigurationBuilder
         return getInstance();
     }
 
+    @Override
+    public void host() {
+
+    }
+
+    @Override
+    public void port() {
+
+    }
+
+
     public HttpServerConfigBuilderContext host(String host) {
         this.host=host;
         return this;
@@ -50,6 +61,7 @@ public class HttpServerConfigBuilderContext extends AbstractConfigurationBuilder
         this.port=port;
         return this;
     }
+
 
     public HttpServerConfigBuilderContext context(String context) {
         this.context = context;
@@ -82,6 +94,7 @@ public class HttpServerConfigBuilderContext extends AbstractConfigurationBuilder
         this.logicHandler = logicHandler;
         return this;
     }
+
 
 /*
 
