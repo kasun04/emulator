@@ -9,7 +9,7 @@ import org.wso2.gw.emulator.http.server.HttpServerGivenBuilderContext;
  */
 public class HttpClientGivenBuilderContext extends AbstractGivenBuilderContext{
     @Override
-    public HttpServerGivenBuilderContext given(AbstractConfigurationBuilderContext configurationContext) {
+    public HttpClientWhenBuilderContext given(AbstractConfigurationBuilderContext configurationContext) {
 
         return null;
     }

@@ -13,8 +13,8 @@ import java.util.Map;
  */
 public class HttpServerEmulatorBuilderContext extends AbstractEmulatorBuilderContext {
 
-    private Map<AbstractRequestBuilderContext, AbstractResponseBuilderContext> requestResponseCorelation = new HashMap<AbstractRequestBuilderContext, AbstractResponseBuilderContext>();
-    private AbstractConfigurationBuilderContext abstractConfigurationBuilderContext;
+    private Map<AbstractRequestBuilderContext, AbstractResponseBuilderContext> requestResponseCorrelation = new HashMap<AbstractRequestBuilderContext, AbstractResponseBuilderContext>();
+    private HttpServerConfigBuilderContext configurationBuilderContext;
 
 
 }

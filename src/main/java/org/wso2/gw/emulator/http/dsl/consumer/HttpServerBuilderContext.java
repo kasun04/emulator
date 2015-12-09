@@ -83,7 +83,7 @@ public class HttpServerBuilderContext extends AbstractEmulatorBuilderContext {
         return this;
     }*/
 
-    public HttpServerBuilderContext given(testConfig config) {
+    /*public HttpServerBuilderContext given(testConfig config) {
         return this;
     }
 
@@ -101,7 +101,7 @@ public class HttpServerBuilderContext extends AbstractEmulatorBuilderContext {
     public HttpServerBuilderContext respond(OutgoingMessage outgoing) {
         this.inOutCorrelation.put(incoming, outgoing);
         return this;
-    }
+    }*/
 
     public AbstractProtocolEmulator operations() {
         return httpProtocolEmulator;

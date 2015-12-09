@@ -19,13 +19,13 @@
  */
 package org.wso2.gw.emulator.sampletcp.dsl.dao;
 
-import org.wso2.gw.emulator.core.AbstractEmulatorContext;
+//import org.wso2.gw.emulator.core.AbstractEmulatorContext;
 import org.wso2.gw.emulator.core.AbstractProtocolEmulator;
 import org.wso2.gw.emulator.sampletcp.TCPProtocolEmulator;
 import org.wso2.gw.emulator.sampletcp.dsl.IncomingMessage;
 import org.wso2.gw.emulator.sampletcp.dsl.OutgoingMessage;
 
-public class TcpConsumerContext extends AbstractEmulatorContext {
+public class TcpConsumerContext /*extends AbstractEmulatorContext */{
 
     private TCPProtocolEmulator tcpProtocolEmulator;
     private IncomingMessage incoming;
@@ -35,15 +35,15 @@ public class TcpConsumerContext extends AbstractEmulatorContext {
         this.tcpProtocolEmulator = tcpProtocolEmulator;
     }
 
-    public TcpConsumerContext host(String host) {
+   /* public TcpConsumerContext host(String host) {
         super.host(host);
         return this;
-    }
+    }*/
 
-    public TcpConsumerContext port(int port) {
+    /*public TcpConsumerContext port(int port) {
         super.port(port);
         return this;
-    }
+    }*/
 
     public TcpConsumerContext when(IncomingMessage incoming) {
         this.incoming = incoming;
@@ -64,6 +64,7 @@ public class TcpConsumerContext extends AbstractEmulatorContext {
     }
 
     public AbstractProtocolEmulator operations() {
-        return tcpProtocolEmulator;
+        //return tcpProtocolEmulator;
+        return null;
     }
 }

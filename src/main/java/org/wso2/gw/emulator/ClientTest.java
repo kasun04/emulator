@@ -26,10 +26,11 @@ import org.wso2.gw.emulator.core.Emulator;
 public class ClientTest {
 
     public static void main(String args[]) {
-        Emulator.getHttpEmulator().client().host("127.0.0.1").port(6065)
+        /*Emulator.getHttpEmulator().client()
+                .host("127.0.0.1").port(6065)
                 .when(org.wso2.gw.emulator.http.dsl.producer.IncomingMessage.request().withPath("/user")
                               .withBody("TestRequest").withMethod(HttpMethod.POST))
                 .respond(org.wso2.gw.emulator.http.dsl.producer.OutgoingMessage.response().withBody("Test Response1"))
-                .operations().send();
+                .operations().send();*/
     }
 }

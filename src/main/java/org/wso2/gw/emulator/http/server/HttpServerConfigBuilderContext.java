@@ -13,6 +13,7 @@ import java.util.Map;
  * Created by chamile on 12/7/15.
  */
 public class HttpServerConfigBuilderContext extends AbstractConfigurationBuilderContext {
+
     private static HttpServerConfigBuilderContext config;
     private String host;
     private int port;
@@ -40,17 +41,6 @@ public class HttpServerConfigBuilderContext extends AbstractConfigurationBuilder
     public static HttpServerConfigBuilderContext configure() {
         return getInstance();
     }
-
-    @Override
-    public void host() {
-
-    }
-
-    @Override
-    public void port() {
-
-    }
-
 
     public HttpServerConfigBuilderContext host(String host) {
         this.host=host;

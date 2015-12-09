@@ -19,8 +19,8 @@
  */
 package org.wso2.gw.emulator.sampletcp.dsl.dao;
 
-import org.wso2.gw.emulator.core.AbstractEmulatorContext;
+//import org.wso2.gw.emulator.core.AbstractEmulatorContext;
 
-public class TcpProducerContext extends AbstractEmulatorContext {
+public class TcpProducerContext /*extends AbstractEmulatorContext */{
 
 }

@@ -42,7 +42,7 @@ public class TcpEmulatorConsumerInitializer {
         DataOutputStream out;
         BufferedReader in;
 
-        listener = new ServerSocket(consumerContext.getPort(), 5);
+        //listener = new ServerSocket(consumerContext.getPort(), 5);
         try {
             while (true) {
                 socket = listener.accept();
