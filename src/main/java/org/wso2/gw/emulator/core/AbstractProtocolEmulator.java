@@ -35,7 +35,7 @@ public abstract class AbstractProtocolEmulator {
 
     public abstract AbstractGivenBuilderContext server();
 
-    public abstract AbstractGivenBuilderContext client();
+    //public abstract AbstractGivenBuilderContext client();
 
     public AbstractProtocolEmulator start() {
         try {

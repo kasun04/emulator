@@ -66,6 +66,7 @@ public class HttpResponseProcessor extends AbstractServerProcessor {
             response.headers().set(HttpHeaders.Names.CONTENT_LENGTH, response.content().readableBytes());
             response.headers().set(HttpHeaders.Names.CONNECTION, HttpHeaders.Values.KEEP_ALIVE);
         }
+        processorContext.setFinalResponse(response);
     }
 
     private void populate404NotFoundResponse(HttpServerProcessorContext processorContext) {
@@ -79,6 +80,7 @@ public class HttpResponseProcessor extends AbstractServerProcessor {
             response.headers().set(HttpHeaders.Names.CONTENT_LENGTH, response.content().readableBytes());
             response.headers().set(HttpHeaders.Names.CONNECTION, HttpHeaders.Values.KEEP_ALIVE);
         }
+        processorContext.setFinalResponse(response);
     }
 
     private void populateHttpHeaders(FullHttpResponse response, HttpServerResponseBuilderContext responseContext) {

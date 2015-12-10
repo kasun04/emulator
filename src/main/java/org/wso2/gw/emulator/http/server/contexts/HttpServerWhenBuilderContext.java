@@ -12,6 +12,8 @@ public class HttpServerWhenBuilderContext extends AbstractWhenBuilderContext<Htt
     private HttpServerThenBuilderContext thenBuilderContext;
     private List<HttpServerWhenBuilderContext> whenBuilderContextList;
     private HttpServerRequestBuilderContext requestContext;
+    //private HttpServerOperationBuilderContext httpProtocolEmulator;
+    private HttpServerOperationBuilderContext httpServerOperationBuilderContext;
 
     public HttpServerWhenBuilderContext(List<HttpServerWhenBuilderContext> whenBuilderContextList,HttpServerInformationContext httpServerInformationContext){
         this.httpServerInformationContext =httpServerInformationContext;
@@ -22,15 +24,15 @@ public class HttpServerWhenBuilderContext extends AbstractWhenBuilderContext<Htt
     @Override
     public HttpServerThenBuilderContext when(HttpServerRequestBuilderContext requestContext) {
         this.requestContext = requestContext;
+        this.requestContext.buildPathRegex(httpServerInformationContext.getServerConfigBuilderContext().getContext());
         thenBuilderContext = new HttpServerThenBuilderContext(whenBuilderContextList,requestContext,httpServerInformationContext);
         return thenBuilderContext;
     }
 
     @Override
     public HttpServerOperationBuilderContext operation() {
-        System.out.println("debug point 1");
-        // return httpProtocolEmulator;
-        return null;
+        this.httpServerOperationBuilderContext = new HttpServerOperationBuilderContext(httpServerInformationContext);
+        return httpServerOperationBuilderContext;
     }
 
     public HttpServerRequestBuilderContext getRequestContext() {

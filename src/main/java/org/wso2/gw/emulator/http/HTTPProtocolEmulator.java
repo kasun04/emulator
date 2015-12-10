@@ -22,9 +22,11 @@ package org.wso2.gw.emulator.http;
 
 import org.wso2.gw.emulator.core.AbstractProtocolEmulator;
 import org.wso2.gw.emulator.core.Emulator;
+/*
 import org.wso2.gw.emulator.http.client.HttpClientInitializer;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientGivenBuilderContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientInformationContext;
+*/
 import org.wso2.gw.emulator.http.server.contexts.HttpServerGivenBuilderContext;
 import org.wso2.gw.emulator.http.server.contexts.HttpServerInformationContext;
 import org.wso2.gw.emulator.http.server.HttpServerInitializer;
@@ -57,19 +59,19 @@ public class HTTPProtocolEmulator extends AbstractProtocolEmulator {
 
     }
 
-    @Override
+    /*@Override
     public HttpClientGivenBuilderContext client() {
 
-        /*httpProducerContext = new HttpClientBuilder(this);
+        *//*httpProducerContext = new HttpClientBuilder(this);
         setEmulatorType(EmulatorType.HTTP_PRODUCER);
         this.httpEmulatorProducerInitializer = new HttpEmulatorProducerInitializer(httpProducerContext);
-        return httpProducerContext;*/
+        return httpProducerContext;*//*
         HttpClientInformationContext httpClientInformationContext = new HttpClientInformationContext();
         HttpClientInitializer clientInitializer = new HttpClientInitializer(httpClientInformationContext);
         httpClientInformationContext.setClientInitializer(clientInitializer);
         HttpClientGivenBuilderContext clientGivenBuilderContext = new HttpClientGivenBuilderContext(httpClientInformationContext);
         return null;
-    }
+    }*/
 
     /*public HttpEmulatorConsumerInitializer getHttpEmulatorConsumerInitializer() {
         return httpEmulatorConsumerInitializer;
