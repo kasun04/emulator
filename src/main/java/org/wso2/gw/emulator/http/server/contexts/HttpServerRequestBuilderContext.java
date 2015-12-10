@@ -1,27 +1,7 @@
-/*
- * *
- *  * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
- *  *
- *  * WSO2 Inc. licenses this file to you under the Apache License,
- *  * Version 2.0 (the "License"); you may not use this file except
- *  * in compliance with the License.
- *  * You may obtain a copy of the License at
- *  *
- *  * http://www.apache.org/licenses/LICENSE-2.0
- *  *
- *  * Unless required by applicable law or agreed to in writing,
- *  * software distributed under the License is distributed on an
- *  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- *  * KIND, either express or implied.  See the License for the
- *  * specific language governing permissions and limitations
- *  * under the License.
- *
- */
-
-package org.wso2.gw.emulator.http.dsl.consumer;
+package org.wso2.gw.emulator.http.server.contexts;
 
 import io.netty.handler.codec.http.HttpMethod;
-import org.wso2.gw.emulator.http.server.contexts.HttpRequestContext;
+import org.wso2.gw.emulator.core.contexts.AbstractRequestBuilderContext;
 import org.wso2.gw.emulator.http.dsl.params.Header;
 import org.wso2.gw.emulator.http.dsl.params.QueryParameter;
 
@@ -29,9 +9,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class IncomingMessage {
+/**
+ * Created by chamile on 12/7/15.
+ */
+public class HttpServerRequestBuilderContext extends AbstractRequestBuilderContext {
 
-    private static IncomingMessage incoming;
+    private static HttpServerRequestBuilderContext serverRequest;
     private HttpMethod method;
     private String path;
     private String body;
@@ -41,43 +24,43 @@ public class IncomingMessage {
     private QueryParameter queryParameter;
 
 
-    private static IncomingMessage getInstance() {
-        incoming = new IncomingMessage();
-        return incoming;
+    private static HttpServerRequestBuilderContext getInstance() {
+        serverRequest = new HttpServerRequestBuilderContext();
+        return serverRequest;
     }
 
-    public static IncomingMessage request() {
+    public static HttpServerRequestBuilderContext request() {
         return getInstance();
     }
 
-    public IncomingMessage withMethod(HttpMethod method) {
+    public HttpServerRequestBuilderContext withMethod(HttpMethod method) {
         this.method = method;
         return this;
     }
 
-    public IncomingMessage withPath(String path) {
+    public HttpServerRequestBuilderContext withPath(String path) {
         this.path = path;
         return this;
     }
 
-    public IncomingMessage withBody(String body) {
+    public HttpServerRequestBuilderContext withBody(String body) {
         this.body = body;
         return this;
     }
 
-    public IncomingMessage withHeader(String name, String value) {
+    public HttpServerRequestBuilderContext withHeader(String name, String value) {
         header = new Header(name, value);
         return this;
     }
 
-    public IncomingMessage withQueryParameter(String name, String value) {
+    public HttpServerRequestBuilderContext withQueryParameter(String name, String value) {
         this.queryParameter = new QueryParameter(name, value);
         return this;
     }
 
     public boolean isMatch(HttpRequestContext requestContext) {
         if (isContextMatch(requestContext) && isHttpMethodMatch(requestContext) && isRequestContentMatch(requestContext) &&
-            isHeadersMatch(requestContext) && isQueryParameterMatch(requestContext)) {
+                isHeadersMatch(requestContext) && isQueryParameterMatch(requestContext)) {
             return true;
         }
         return false;

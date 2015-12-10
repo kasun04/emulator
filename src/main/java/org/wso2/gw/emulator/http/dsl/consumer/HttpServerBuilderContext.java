@@ -22,8 +22,7 @@ package org.wso2.gw.emulator.http.dsl.consumer;
 
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.HttpVersion;
-import org.wso2.gw.emulator.core.AbstractEmulatorBuilderContext;
-import org.wso2.gw.emulator.core.AbstractEmulatorBuilderContext;
+import org.wso2.gw.emulator.core.contexts.AbstractEmulatorBuilderContext;
 import org.wso2.gw.emulator.core.AbstractProtocolEmulator;
 import org.wso2.gw.emulator.http.HTTPProtocolEmulator;
 

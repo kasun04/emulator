@@ -28,16 +28,17 @@ import io.netty.handler.codec.http.HttpContentDecompressor;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.ssl.SslContext;
 import org.wso2.gw.emulator.core.EmulatorType;
-import org.wso2.gw.emulator.http.server.HttpResponseProcessHandler;
-import org.wso2.gw.emulator.http.dsl.consumer.HttpServerBuilderContext;
-import org.wso2.gw.emulator.http.dsl.producer.OutgoingMessage;
+import org.wso2.gw.emulator.http.client.contexts.HttpClientInformationContext;
+import org.wso2.gw.emulator.http.client.handler.HttpClientHandler;
+import org.wso2.gw.emulator.http.server.handler.HttpServerHandler;
+import org.wso2.gw.emulator.http.server.contexts.HttpServerInformationContext;
 
 public class ChannelPipelineInitializer extends ChannelInitializer<SocketChannel> {
 
     private SslContext sslCtx;
-    private HttpServerBuilderContext consumerContext;
-    private OutgoingMessage producerOutgoingMessage;
     private EmulatorType emulatorType;
+    private HttpServerInformationContext serverInformationContext;
+    private HttpClientInformationContext clientInformationContext;
 
     public ChannelPipelineInitializer(SslContext sslCtx, EmulatorType emulatorType) {
         this.sslCtx = sslCtx;
@@ -47,25 +48,22 @@ public class ChannelPipelineInitializer extends ChannelInitializer<SocketChannel
     @Override
     public void initChannel(SocketChannel ch) {
         if(EmulatorType.HTTP_CONSUMER.equals(emulatorType)) {
-            initializeHttpConsumerChannel(ch);
+            initializeHttpServerChannel(ch);
         } else if(EmulatorType.HTTP_PRODUCER.equals(emulatorType)) {
-            initializeHttpProducerChannel(ch);
+            initializeHttpClientChannel(ch);
         }
     }
 
-    private void initializeHttpConsumerChannel(SocketChannel ch) {
+    private void initializeHttpServerChannel(SocketChannel ch) {
         ChannelPipeline pipeline = ch.pipeline();
         if (sslCtx != null) {
             pipeline.addLast("sslHandler", sslCtx.newHandler(ch.alloc()));
         }
         pipeline.addLast(new HttpServerCodec());
-        if (consumerContext.getLogicHandler() != null) {
-            pipeline.addLast("logicHandler", consumerContext.getLogicHandler());
-        }
-        pipeline.addLast("httpResponseHandler", new HttpResponseProcessHandler(consumerContext));
+        pipeline.addLast("httpResponseHandler", new HttpServerHandler(serverInformationContext));
     }
 
-    private void initializeHttpProducerChannel(SocketChannel ch) {
+    private void initializeHttpClientChannel(SocketChannel ch) {
         ChannelPipeline pipeline = ch.pipeline();
         // Enable HTTPS if necessary.
         if (sslCtx != null) {
@@ -73,14 +71,14 @@ public class ChannelPipelineInitializer extends ChannelInitializer<SocketChannel
         }
         pipeline.addLast(new HttpClientCodec());
         pipeline.addLast(new HttpContentDecompressor());
-        pipeline.addLast(new org.wso2.gw.emulator.http.client.HttpResponseProcessHandler(producerOutgoingMessage));
+        pipeline.addLast(new HttpClientHandler(clientInformationContext));
     }
 
-    public void setProducerOutgoingMessage(OutgoingMessage producerOutgoingMessage) {
-        this.producerOutgoingMessage = producerOutgoingMessage;
+    public void setServerInformationContext(HttpServerInformationContext serverInformationContext) {
+        this.serverInformationContext = serverInformationContext;
     }
 
-    public void setConsumerContext(HttpServerBuilderContext consumerContext) {
-        this.consumerContext = consumerContext;
+    public void setClientInformationContext(HttpClientInformationContext clientInformationContext) {
+        this.clientInformationContext = clientInformationContext;
     }
 }

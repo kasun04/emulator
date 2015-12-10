@@ -21,6 +21,7 @@
 package org.wso2.gw.emulator.core;
 
 import org.apache.log4j.Logger;
+import org.wso2.gw.emulator.core.contexts.AbstractGivenBuilderContext;
 
 public abstract class AbstractProtocolEmulator {
 

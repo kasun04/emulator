@@ -1,0 +1,100 @@
+/*
+ * *
+ *  * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *  *
+ *  * WSO2 Inc. licenses this file to you under the Apache License,
+ *  * Version 2.0 (the "License"); you may not use this file except
+ *  * in compliance with the License.
+ *  * You may obtain a copy of the License at
+ *  *
+ *  * http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing,
+ *  * software distributed under the License is distributed on an
+ *  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  * KIND, either express or implied.  See the License for the
+ *  * specific language governing permissions and limitations
+ *  * under the License.
+ *
+ */
+
+package org.wso2.gw.emulator.http.server.processors;
+
+import io.netty.buffer.Unpooled;
+import io.netty.handler.codec.http.DefaultFullHttpResponse;
+import io.netty.handler.codec.http.FullHttpResponse;
+import io.netty.handler.codec.http.HttpHeaders;
+import io.netty.handler.codec.http.HttpResponseStatus;
+import io.netty.handler.codec.http.HttpVersion;
+import io.netty.handler.codec.http.ServerCookieEncoder;
+import io.netty.util.CharsetUtil;
+import org.wso2.gw.emulator.http.dsl.params.Cookie;
+import org.wso2.gw.emulator.http.dsl.params.Header;
+import org.wso2.gw.emulator.http.server.contexts.HttpServerProcessorContext;
+import org.wso2.gw.emulator.http.server.contexts.HttpRequestContext;
+import org.wso2.gw.emulator.http.server.contexts.HttpServerResponseBuilderContext;
+
+import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
+
+
+public class HttpResponseProcessor extends AbstractServerProcessor {
+
+    @Override
+    public void process(HttpServerProcessorContext processorContext) {
+        if (processorContext.getSelectedResponseContext() == null) {
+            populate404NotFoundResponse(processorContext);
+        } else {
+           populateResponse(processorContext);
+        }
+    }
+
+    private void populateResponse(HttpServerProcessorContext processorContext) {
+        HttpRequestContext requestContext = processorContext.getHttpRequestContext();
+        HttpServerResponseBuilderContext responseContext = processorContext.getSelectedResponseContext();
+        boolean keepAlive = requestContext.isKeepAlive();
+
+        HttpResponseStatus httpResponseStatus = responseContext.getStatusCode();
+        FullHttpResponse response = new DefaultFullHttpResponse(
+                HttpVersion.HTTP_1_1, httpResponseStatus,
+                Unpooled.copiedBuffer(responseContext.getBody(), CharsetUtil.UTF_8));
+
+        populateHttpHeaders(response, responseContext);
+        populateCookies(response, responseContext);
+        response.headers().set(HttpHeaders.Names.CONTENT_LENGTH, response.content().readableBytes());
+
+        if (keepAlive) {
+            response.headers().set(HttpHeaders.Names.CONTENT_LENGTH, response.content().readableBytes());
+            response.headers().set(HttpHeaders.Names.CONNECTION, HttpHeaders.Values.KEEP_ALIVE);
+        }
+    }
+
+    private void populate404NotFoundResponse(HttpServerProcessorContext processorContext) {
+        HttpRequestContext requestContext = processorContext.getHttpRequestContext();
+        boolean keepAlive = requestContext.isKeepAlive();
+        FullHttpResponse response = new DefaultFullHttpResponse(
+                HttpVersion.HTTP_1_1, NOT_FOUND);
+        response.headers().set(HttpHeaders.Names.CONTENT_TYPE, "text/plain; charset=UTF-8");
+
+        if (keepAlive) {
+            response.headers().set(HttpHeaders.Names.CONTENT_LENGTH, response.content().readableBytes());
+            response.headers().set(HttpHeaders.Names.CONNECTION, HttpHeaders.Values.KEEP_ALIVE);
+        }
+    }
+
+    private void populateHttpHeaders(FullHttpResponse response, HttpServerResponseBuilderContext responseContext) {
+        if (responseContext.getHeaders() != null) {
+            for (Header header : responseContext.getHeaders()) {
+                response.headers().add(header.getName(), header.getValue());
+            }
+        }
+        response.headers().set(HttpHeaders.Names.CONTENT_LENGTH, response.content().readableBytes());
+    }
+
+    private void populateCookies(FullHttpResponse response, HttpServerResponseBuilderContext responseContext) {
+        if (responseContext.getCookies() != null) {
+            for (Cookie cookie : responseContext.getCookies()) {
+                response.headers().add(HttpHeaders.Names.SET_COOKIE, ServerCookieEncoder.encode(cookie.getName(), cookie.getValue()));
+            }
+        }
+    }
+}
