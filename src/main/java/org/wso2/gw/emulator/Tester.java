@@ -24,6 +24,10 @@ import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import org.wso2.gw.emulator.core.Emulator;
 import org.wso2.gw.emulator.core.OperationType;
+import org.wso2.gw.emulator.http.client.HttpClientConfigBuilderContext;
+import org.wso2.gw.emulator.http.client.HttpClientRequestBuilderContext;
+import org.wso2.gw.emulator.http.client.HttpClientResponseBuilderContext;
+
 import static org.wso2.gw.emulator.http.server.HttpServerRequestBuilderContext.request;
 import static org.wso2.gw.emulator.http.server.HttpServerResponseBuilderContext.response;
 import static org.wso2.gw.emulator.http.server.HttpServerConfigBuilderContext.configure;
@@ -31,23 +35,17 @@ import static org.wso2.gw.emulator.http.server.HttpServerConfigBuilderContext.co
 public class Tester {
     public static void main(String[] args) throws Exception {
         //startSampleTcpEmulator();
-        startHttpEmulator();
+        //startHttpEmulator();
         //Thread.sleep(1000);
-        //testProducer();
+        testProducer();
         //startHttpEmulator1();
     }
 
     private static void startHttpEmulator() {
-        Emulator.getHttpEmulator()
+        /*Emulator.getHttpEmulator()
                 .server()
                 .given(configure()
                         .host("127.0.0.1").port(6065).writingDelay(4000).context("/user"))
-                //.given()(config()        //httpServerBuilder
-                        /*.host("127.0.0.1")  //
-                        .port(6065)
-                        .writingDelay(4000)
-                        .context("/user")*/
-                //  )
                 .when(request()
                         .withMethod(HttpMethod.GET))
                 .then(response()
@@ -58,7 +56,7 @@ public class Tester {
                 .then(response()
                         .withBody("Test response2")
                         .withStatusCode(HttpResponseStatus.FORBIDDEN))
-                .operation(OperationType.START);
+                .operation(OperationType.START);*/
     }
 
     private static void startHttpEmulator1() {
@@ -85,10 +83,16 @@ public class Tester {
     }
 
     private static void testProducer() {
-        /*Emulator.getHttpEmulator().client().host("http://127.0.0.1").port(6065)
-                .when(org.wso2.gw.emulator.http.dsl.producer.IncomingMessage.request().withPath("/user")
-                              .withMethod(HttpMethod.GET))
-                .respond(org.wso2.gw.emulator.http.dsl.producer.OutgoingMessage.response().withBody("Test Response1"))
-                .operations().start();*/
+        Emulator.getHttpEmulator()
+                .client()
+                .given(HttpClientConfigBuilderContext.configure()
+                        .host("http://127.0.0.1")
+                        .port(6065))
+                .when(HttpClientRequestBuilderContext.request()
+                        .withPath("/user")
+                        .withMethod(HttpMethod.GET))
+                .then(HttpClientResponseBuilderContext.response()
+                        .withBody("Test Response1"))
+                .operation(OperationType.SEND);
     }
 }

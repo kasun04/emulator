@@ -5,6 +5,6 @@ package org.wso2.gw.emulator.core;
  */
 public enum OperationType {
 
-    START,STOP;
+    START,STOP,SEND;
 
 }

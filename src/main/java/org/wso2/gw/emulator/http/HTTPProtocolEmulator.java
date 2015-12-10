@@ -24,6 +24,7 @@ import org.wso2.gw.emulator.core.AbstractProtocolEmulator;
 import org.wso2.gw.emulator.core.Emulator;
 import org.wso2.gw.emulator.core.EmulatorType;
 import org.wso2.gw.emulator.http.client.HttpClientGivenBuilderContext;
+import org.wso2.gw.emulator.http.client.HttpClientInformationContext;
 import org.wso2.gw.emulator.http.server.HttpServerGivenBuilderContext;
 import org.wso2.gw.emulator.http.server.HttpServerInformationContext;
 
@@ -31,6 +32,8 @@ public class HTTPProtocolEmulator extends AbstractProtocolEmulator {
 
     private HttpServerInformationContext serverInformatioContext;
     private HttpServerGivenBuilderContext serverGivenBuilderContext;
+    private HttpClientInformationContext clientInformatioContext;
+    private HttpClientGivenBuilderContext clientGivenBuilderContext;
     /*private HttpEmulatorConsumerInitializer httpEmulatorConsumerInitializer;
     private HttpEmulatorProducerInitializer httpEmulatorProducerInitializer;
     private HttpServerBuilde consumerContext;
@@ -58,7 +61,9 @@ public class HTTPProtocolEmulator extends AbstractProtocolEmulator {
         setEmulatorType(EmulatorType.HTTP_PRODUCER);
         this.httpEmulatorProducerInitializer = new HttpEmulatorProducerInitializer(httpProducerContext);
         return httpProducerContext;*/
-        return null;
+        clientInformatioContext = new HttpClientInformationContext();
+        clientGivenBuilderContext = new HttpClientGivenBuilderContext(clientInformatioContext);
+        return clientGivenBuilderContext;
     }
 
     /*public HttpEmulatorConsumerInitializer getHttpEmulatorConsumerInitializer() {
