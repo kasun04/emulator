@@ -4,8 +4,8 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.HttpVersion;
 import org.wso2.gw.emulator.core.contexts.AbstractConfigurationBuilderContext;
 import org.wso2.gw.emulator.core.AbstractProtocolEmulator;
-import org.wso2.gw.emulator.http.dsl.consumer.IncomingMessage;
-import org.wso2.gw.emulator.http.dsl.consumer.OutgoingMessage;
+import org.wso2.gw.emulator.http.dsl.server.IncomingMessage;
+import org.wso2.gw.emulator.http.dsl.server.OutgoingMessage;
 
 import java.util.Map;
 

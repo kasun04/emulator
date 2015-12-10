@@ -34,6 +34,7 @@ import org.wso2.gw.emulator.http.server.contexts.HttpServerProcessorContext;
 import org.wso2.gw.emulator.http.server.contexts.HttpRequestContext;
 import org.wso2.gw.emulator.http.server.processors.HttpRequestInformationProcessor;
 import org.wso2.gw.emulator.http.server.contexts.HttpServerInformationContext;
+import org.wso2.gw.emulator.http.server.processors.HttpRequestResponseMatchingProcessor;
 import org.wso2.gw.emulator.http.server.processors.HttpResponseProcessor;
 
 import static io.netty.handler.codec.http.HttpResponseStatus.CONTINUE;
@@ -45,6 +46,7 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
     private HttpResponseProcessor httpResponseProcessor;
     private HttpServerInformationContext serverInformationContext;
     private HttpServerProcessorContext httpProcessorContext;
+    private HttpRequestResponseMatchingProcessor requestResponseMatchingProcessor;
 
     public HttpServerHandler(HttpServerInformationContext serverInformationContext) {
         this.serverInformationContext = serverInformationContext;
@@ -63,8 +65,8 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
             this.httpProcessorContext = new HttpServerProcessorContext();
             this.httpProcessorContext.setHttpRequestContext(new HttpRequestContext());
             this.httpProcessorContext.setServerInformationContext(serverInformationContext);
-
             HttpRequest httpRequest = (HttpRequest) msg;
+            this.httpProcessorContext.setHttpRequest(httpRequest);
             if (HttpHeaders.is100ContinueExpected(httpRequest)) {
                 send100Continue(ctx);
             }
@@ -79,6 +81,8 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
             }
 
             if (msg instanceof LastHttpContent) {
+                this.requestResponseMatchingProcessor = new HttpRequestResponseMatchingProcessor();
+                this.requestResponseMatchingProcessor.process(httpProcessorContext);
                 ctx.fireChannelReadComplete();
             }
         }

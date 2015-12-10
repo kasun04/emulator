@@ -43,15 +43,10 @@ public class Tester {
                 .given(configure()
                         .host("127.0.0.1").port(6065).writingDelay(4000).context("/user"))
                 .when(request()
-                        .withMethod(HttpMethod.GET))
+                        .withMethod(HttpMethod.POST).withBody("test"))
                 .then(response()
                         .withBody("Test Response1")
                         .withStatusCode(HttpResponseStatus.OK))
-                .when(request()
-                        .withPath("/name"))
-                .then(response()
-                        .withBody("Test response2")
-                        .withStatusCode(HttpResponseStatus.FORBIDDEN))
                 .operation().start();
     }
 

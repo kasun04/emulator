@@ -7,7 +7,7 @@ import org.wso2.gw.emulator.http.server.contexts.HttpServerResponseBuilderContex
 
 import java.util.Map;
 
-public class HttpRequestAssertProcessor extends AbstractServerProcessor {
+public class HttpRequestResponseMatchingProcessor extends AbstractServerProcessor {
 
     @Override
     public void process(HttpServerProcessorContext processorContext) {

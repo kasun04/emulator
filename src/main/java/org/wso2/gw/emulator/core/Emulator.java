@@ -22,12 +22,12 @@ package org.wso2.gw.emulator.core;
 
 import org.apache.log4j.Logger;
 import org.wso2.gw.emulator.http.HTTPProtocolEmulator;
-import org.wso2.gw.emulator.sampletcp.TCPProtocolEmulator;
+//import org.wso2.gw.emulator.sampletcp.TCPProtocolEmulator;
 
 public class Emulator extends Thread {
     private static final Logger log = Logger.getLogger(Emulator.class);
     private static HTTPProtocolEmulator httpProtocolEmulator;
-    private static TCPProtocolEmulator tcpProtocolEmulator;
+    //private static TCPProtocolEmulator tcpProtocolEmulator;
     private EmulatorType emulatorType;
 
     public static HTTPProtocolEmulator getHttpEmulator() {
@@ -35,20 +35,13 @@ public class Emulator extends Thread {
         return httpProtocolEmulator;
     }
 
-    public static TCPProtocolEmulator getTCPEmulator() {
-        tcpProtocolEmulator = new TCPProtocolEmulator(new Emulator());
-        return tcpProtocolEmulator;
-    }
 
     public void run(){
         try {
             if (EmulatorType.HTTP_CONSUMER.equals(emulatorType)) {
                 /*validateInput(httpProtocolEmulator.getConsumerContext());
                 httpProtocolEmulator.getHttpEmulatorConsumerInitializer().initialize();*/
-            } else if (EmulatorType.TCP_CONSUMER.equals(emulatorType)) {
-                /*validateInput(tcpProtocolEmulator.getTcpConsumerContext());
-                tcpProtocolEmulator.getEmulatorInitializer().initialize();*/
-            } else if(EmulatorType.HTTP_PRODUCER.equals(emulatorType)) {
+            }  else if(EmulatorType.HTTP_PRODUCER.equals(emulatorType)) {
                 /*validateInput(httpProtocolEmulator.getHttpProducerContext());
                 httpProtocolEmulator.getHttpEmulatorProducerInitializer().initialize();
            */ }
@@ -60,9 +53,7 @@ public class Emulator extends Thread {
     public void shutdown(EmulatorType emulatorType) {
         if(EmulatorType.HTTP_CONSUMER.equals(emulatorType)) {
             //httpProtocolEmulator.getHttpEmulatorConsumerInitializer().shutdown();
-        } else if(EmulatorType.TCP_CONSUMER.equals(emulatorType)) {
-            tcpProtocolEmulator.getEmulatorInitializer().shutdown();
-        } else if(EmulatorType.HTTP_PRODUCER.equals(emulatorType)) {
+          } else if(EmulatorType.HTTP_PRODUCER.equals(emulatorType)) {
             //httpProtocolEmulator.getHttpEmulatorProducerInitializer().shutdown();
         }
         log.info("Emulator shutdown successfully.......");

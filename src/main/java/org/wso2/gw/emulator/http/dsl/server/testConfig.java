@@ -1,4 +1,4 @@
-package org.wso2.gw.emulator.http.dsl.consumer;
+package org.wso2.gw.emulator.http.dsl.server;
 
 /**
  * Created by chamile on 12/7/15.

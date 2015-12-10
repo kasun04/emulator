@@ -18,7 +18,7 @@
  *
  */
 
-package org.wso2.gw.emulator.http.dsl.consumer;
+package org.wso2.gw.emulator.http.dsl.server;
 
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.HttpVersion;
