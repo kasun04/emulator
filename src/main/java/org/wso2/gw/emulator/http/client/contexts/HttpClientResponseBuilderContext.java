@@ -13,14 +13,14 @@ import java.util.List;
  */
 public class HttpClientResponseBuilderContext extends AbstractResponseBuilderContext {
 
-    private static HttpClientResponseBuilderContext outgoing;
+    private static HttpClientResponseBuilderContext clientResponseBuilderContext;
     private HttpResponseStatus statusCode;
     private List<Header> headers;
     private String body;
 
     private static HttpClientResponseBuilderContext getInstance() {
-        outgoing = new HttpClientResponseBuilderContext();
-        return outgoing;
+        clientResponseBuilderContext = new HttpClientResponseBuilderContext();
+        return clientResponseBuilderContext;
     }
 
     public static HttpClientResponseBuilderContext response() {
