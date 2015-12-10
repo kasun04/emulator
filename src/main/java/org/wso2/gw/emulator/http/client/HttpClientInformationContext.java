@@ -1,6 +1,4 @@
 package org.wso2.gw.emulator.http.client;
-
-import org.wso2.gw.emulator.http.server.HttpServerConfigBuilderContext;
 import org.wso2.gw.emulator.http.server.HttpServerRequestBuilderContext;
 import org.wso2.gw.emulator.http.server.HttpServerResponseBuilderContext;
 
@@ -11,33 +9,27 @@ import java.util.Map;
  * Created by chamile on 12/8/15.
  */
 public class HttpClientInformationContext {
-    private HttpServerConfigBuilderContext clientConfigBuilderContext;
-    private Map<HttpServerRequestBuilderContext,HttpServerResponseBuilderContext> correlation;
+    private HttpClientConfigBuilderContext clientConfigBuilderContext;
+    private Map<HttpClientRequestBuilderContext,HttpClientResponseBuilderContext> correlation;
+    private HttpClientRequestBuilderContext httpClientRequestBuilderContext;
+    private HttpClientResponseBuilderContext httpClientResponseBuilderContext;
 
-    public HttpServerConfigBuilderContext getClientConfigBuilderContext() {
+    public HttpClientConfigBuilderContext getClientConfigBuilderContext() {
         return clientConfigBuilderContext;
     }
 
-    public void setClientConfigBuilderContext(HttpServerConfigBuilderContext clientConfigBuilderContext) {
+    public void setClientConfigBuilderContext(HttpClientConfigBuilderContext clientConfigBuilderContext) {
         this.clientConfigBuilderContext = clientConfigBuilderContext;
     }
 
-    public Map<HttpServerRequestBuilderContext, HttpServerResponseBuilderContext> getCorrelation() {
+    public Map<HttpClientRequestBuilderContext, HttpClientResponseBuilderContext> getCorrelation() {
         return correlation;
     }
 
-    public void addCorrelation(HttpServerRequestBuilderContext httpServerRequestBuilderContext,HttpServerResponseBuilderContext httpServerResponseBuilderContext){
+    public void addCorrelation(HttpClientRequestBuilderContext httpClientRequestBuilderContext, HttpClientResponseBuilderContext httpClientResponseBuilderContext){
         if(correlation == null){
-            this.correlation = new HashMap<HttpServerRequestBuilderContext, HttpServerResponseBuilderContext>();
+            this.correlation = new HashMap<HttpClientRequestBuilderContext, HttpClientResponseBuilderContext>();
         }
-        correlation.put(httpServerRequestBuilderContext,httpServerResponseBuilderContext);
+        correlation.put(httpClientRequestBuilderContext,httpClientResponseBuilderContext);
     }
-
-
-
-
-
-
-
-
 }

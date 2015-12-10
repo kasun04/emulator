@@ -20,6 +20,8 @@ public class HttpClientConfigBuilderContext extends AbstractConfigurationBuilder
     private HTTPProtocolEmulator httpProtocolEmulator;
     private String host;
     private int port;
+    private int readingDelay;
+    private int writingDelay;
 
     /*public HttpClientConfigBuilderContext(HTTPProtocolEmulator httpProtocolEmulator) {
         this.httpProtocolEmulator = httpProtocolEmulator;
@@ -43,7 +45,18 @@ public class HttpClientConfigBuilderContext extends AbstractConfigurationBuilder
         this.port=port;
         return this;
     }
-    public HttpClientConfigBuilderContext when(IncomingMessage incoming) {
+
+    public HttpClientConfigBuilderContext readingDelay(int readingDelay) {
+        this.readingDelay = readingDelay;
+        return this;
+    }
+
+    public HttpClientConfigBuilderContext writingDelay(int writingDelay) {
+        this.writingDelay = writingDelay;
+        return this;
+    }
+
+    /*public HttpClientConfigBuilderContext when(IncomingMessage incoming) {
         this.incoming = incoming;
         return this;
     }
@@ -51,7 +64,7 @@ public class HttpClientConfigBuilderContext extends AbstractConfigurationBuilder
     public HttpClientConfigBuilderContext respond(OutgoingMessage outgoing) {
         this.inOutCorrelation.put(incoming, outgoing);
         return this;
-    }
+    }*/
 
     /*public AbstractProtocolEmulator operations() {
         return httpProtocolEmulator;
