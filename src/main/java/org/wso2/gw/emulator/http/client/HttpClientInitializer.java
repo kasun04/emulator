@@ -74,6 +74,7 @@ public class HttpClientInitializer {
             HttpClientRequestProcessorContext httpClientRequestProcessorContext = new
                     HttpClientRequestProcessorContext();
             httpClientRequestProcessorContext.setRequestBuilderContext(entry.getKey());
+            httpClientRequestProcessorContext.setClientInformationContext(clientInformationContext);
             sendMessage(httpClientRequestProcessorContext);
         }
     }

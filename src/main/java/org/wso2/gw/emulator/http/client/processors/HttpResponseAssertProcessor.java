@@ -34,9 +34,9 @@ public class HttpResponseAssertProcessor extends AbstractClientProcessor<HttpCli
     private void assertResponseContent(HttpClientResponseProcessorContext processorContext) {
         if (processorContext.getExpectedResponse().getBody().equalsIgnoreCase(processorContext.getReceivedResponseContext()
                                                                                       .getResponseBody())) {
-            System.out.print("Equal");
+            System.out.println("Equal");
         } else {
-            System.out.print("Wrong");
+            System.out.println("Wrong");
         }
     }
 

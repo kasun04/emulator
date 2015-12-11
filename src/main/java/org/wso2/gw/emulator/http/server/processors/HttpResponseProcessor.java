@@ -77,7 +77,7 @@ public class HttpResponseProcessor extends AbstractServerProcessor {
         response.headers().set(HttpHeaders.Names.CONTENT_TYPE, "text/plain; charset=UTF-8");
 
         if (keepAlive) {
-            response.headers().set(HttpHeaders.Names.CONTENT_LENGTH, response.content().readableBytes());
+            //response.headers().set(HttpHeaders.Names.CONTENT_LENGTH, response.content().readableBytes());
             response.headers().set(HttpHeaders.Names.CONNECTION, HttpHeaders.Values.KEEP_ALIVE);
         }
         processorContext.setFinalResponse(response);

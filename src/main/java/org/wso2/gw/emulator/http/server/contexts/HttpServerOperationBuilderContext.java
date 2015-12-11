@@ -12,7 +12,7 @@ public class HttpServerOperationBuilderContext extends AbstractServerOperationBu
     @Override
     public HttpServerOperationBuilderContext start() {
         try {
-            httpServerInformationContext.getHttpServerInitializer().initialize();
+            httpServerInformationContext.getHttpServerInitializer().start();
         } catch (Exception e) {
             e.printStackTrace();
         }

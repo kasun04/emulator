@@ -25,7 +25,6 @@ public class HttpClientRequestBuilderContext extends AbstractRequestBuilderConte
     private List<Header> headers;
     private List<QueryParameter> queryParameters;
     private List<Cookie> cookies;
-    private Pattern pathRegex;
 
 
     private static HttpClientRequestBuilderContext getInstance() {
@@ -81,53 +80,6 @@ public class HttpClientRequestBuilderContext extends AbstractRequestBuilderConte
         }
         cookies.add(cookie);
         return this;
-    }
-
-    public void buildPathRegex(String context) {
-        this.context = context;
-        String regex = buildRegex(context, path);
-        this.pathRegex = Pattern.compile(regex);
-    }
-
-    private String buildRegex(String context, String path) {
-        String fullPath = "";
-
-        if ((context == null || context.isEmpty()) && (path == null || path.isEmpty())) {
-            return ".*";
-        }
-
-        if (context != null && !context.isEmpty()) {
-            fullPath = context;
-
-            if (!fullPath.startsWith("/")) {
-                fullPath = "/" + fullPath;
-            }
-
-            if (!fullPath.endsWith("/")) {
-                fullPath = fullPath + "/";
-            }
-        } else {
-            fullPath = ".*";
-        }
-
-        if (path != null && !path.isEmpty()) {
-            if (fullPath.endsWith("/") && path.startsWith("/")) {
-                fullPath = fullPath + path.substring(1);
-            } else if (fullPath.endsWith("/") && !path.startsWith("/")) {
-                fullPath = fullPath + path;
-            } else if (!fullPath.endsWith("/") && path.startsWith("/")) {
-                fullPath = fullPath + path;
-            } else {
-                fullPath = fullPath + "/" + path;
-            }
-        } else {
-            fullPath = fullPath + ".*";
-        }
-
-        if (fullPath.endsWith("/")) {
-            fullPath = fullPath.substring(0, fullPath.length() - 1);
-        }
-        return "^" + fullPath + "$";
     }
 
     public String getContext() {

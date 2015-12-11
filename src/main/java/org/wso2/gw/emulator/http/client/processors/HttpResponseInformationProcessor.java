@@ -37,8 +37,9 @@ public class HttpResponseInformationProcessor extends AbstractClientProcessor<Ht
 
     @Override
     public void process(HttpClientResponseProcessorContext processorContext) {
-        HttpResponseContext httpResponse = new HttpResponseContext();
-        processorContext.setReceivedResponseContext(httpResponse);
+        HttpResponseContext httpResponseContext = new HttpResponseContext();
+        processorContext.setReceivedResponseContext(httpResponseContext);
+        processorContext.setReceivedResponseContext(httpResponseContext);
         processorContext.setExpectedResponse(processorContext.getClientInformationContext().getExpectedResponse());
         populateRequestHeaders(processorContext);
     }

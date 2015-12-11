@@ -34,9 +34,10 @@ import static org.wso2.gw.emulator.http.server.contexts.HttpServerConfigBuilderC
 public class Tester {
     public static void main(String[] args) throws Exception {
         //startSampleTcpEmulator();
-        //startHttpEmulator();
-        //Thread.sleep(1000);
+        startHttpEmulator();
+        Thread.sleep(1000);
         testProducer();
+        testProducer1();
         //startHttpEmulator1();
     }
 
@@ -44,12 +45,17 @@ public class Tester {
         Emulator.getHttpEmulator()
                 .server()
                 .given(configure()
-                        .host("127.0.0.1").port(6065).writingDelay(4000).context("/user"))
+                               .host("127.0.0.1").port(6065).writingDelay(4000).context("/user"))
                 .when(request()
-                        .withMethod(HttpMethod.POST).withBody("test"))
+                              .withMethod(HttpMethod.GET))
                 .then(response()
-                        .withBody("Test Response1")
-                        .withStatusCode(HttpResponseStatus.OK))
+                              .withBody("Test Response1")
+                              .withStatusCode(HttpResponseStatus.OK))
+                .when(request()
+                              .withMethod(HttpMethod.POST).withBody("test"))
+                .then(response()
+                              .withBody("Test Response2")
+                              .withStatusCode(HttpResponseStatus.OK))
                 .operation().start();
     }
 
@@ -84,6 +90,17 @@ public class Tester {
                 .when(HttpClientRequestBuilderContext.request()
                         .withPath("/user").withMethod(HttpMethod.GET))
                 .then(HttpClientResponseBuilderContext.response().withBody("Test Response1"))
+                .operation().send();
+    }
+
+    private static void testProducer1() {
+        Emulator.getHttpEmulator()
+                .client()
+                .given(HttpClientConfigBuilderContext.configure()
+                               .host("http://127.0.0.1").port(6065))
+                .when(HttpClientRequestBuilderContext.request()
+                              .withPath("/user").withMethod(HttpMethod.POST).withBody("test"))
+                .then(HttpClientResponseBuilderContext.response().withBody("Test Response2"))
                 .operation().send();
     }
 }

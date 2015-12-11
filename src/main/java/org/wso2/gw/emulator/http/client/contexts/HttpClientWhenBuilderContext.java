@@ -11,15 +11,15 @@ import java.util.List;
 
 public class HttpClientWhenBuilderContext extends AbstractWhenBuilderContext<HttpClientRequestBuilderContext> {
 
-    private final HttpClientInformationContext httpInformationContext;
-    private final List<HttpClientWhenBuilderContext> whenBuilderContextList;
+    private HttpClientInformationContext httpInformationContext;
+    private List<HttpClientWhenBuilderContext> whenBuilderContextList;
     private HttpClientRequestBuilderContext requestContext;
     private HttpClientInformationContext httpClientInformationContext;
     private HttpClientThenBuilderContext thenBuilderContext;
     private HttpClientOperationBuilderContext httpClientOperationBuilderContext;
 
     public HttpClientWhenBuilderContext(List<HttpClientWhenBuilderContext> whenBuilderContextList, HttpClientInformationContext httpClientInformationContext){
-        this.httpInformationContext =httpClientInformationContext;
+        this.httpClientInformationContext =httpClientInformationContext;
         this.whenBuilderContextList = whenBuilderContextList;
         this.whenBuilderContextList.add(this);
     }
@@ -27,7 +27,6 @@ public class HttpClientWhenBuilderContext extends AbstractWhenBuilderContext<Htt
     @Override
     public HttpClientThenBuilderContext when(HttpClientRequestBuilderContext requestContext) {
         this.requestContext = requestContext;
-        this.requestContext.buildPathRegex(httpClientInformationContext.getClientConfigBuilderContext().getContext());
         thenBuilderContext = new HttpClientThenBuilderContext(whenBuilderContextList,requestContext,httpClientInformationContext);
         return thenBuilderContext;
     }

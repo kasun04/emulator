@@ -13,7 +13,7 @@ import org.wso2.gw.emulator.core.EmulatorType;
 import org.wso2.gw.emulator.http.ChannelPipelineInitializer;
 import org.wso2.gw.emulator.http.server.contexts.HttpServerInformationContext;
 
-public class HttpServerInitializer {
+public class HttpServerInitializer extends Thread{
     private static final boolean SSL = System.getProperty("ssl") != null;
     private EventLoopGroup bossGroup;
     private EventLoopGroup workerGroup;
@@ -23,7 +23,7 @@ public class HttpServerInitializer {
         this.serverInformationContext = serverInformationContext;
     }
 
-    public void initialize() throws Exception {
+    public void run() {
         final SslContext sslCtx = null;
         /*if (SSL) {
             SelfSignedCertificate ssc = new SelfSignedCertificate();
@@ -48,7 +48,9 @@ public class HttpServerInitializer {
                     , serverInformationContext.getServerConfigBuilderContext().getPort())
                     .sync();
             f.channel().closeFuture().sync();
-        } finally {
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
         }

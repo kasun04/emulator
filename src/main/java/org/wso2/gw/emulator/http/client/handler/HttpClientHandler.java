@@ -28,16 +28,15 @@ import io.netty.handler.codec.http.HttpResponse;
 import io.netty.handler.codec.http.LastHttpContent;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientInformationContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientResponseProcessorContext;
-import org.wso2.gw.emulator.http.client.contexts.HttpResponseContext;
 import org.wso2.gw.emulator.http.client.processors.HttpResponseAssertProcessor;
 import org.wso2.gw.emulator.http.client.processors.HttpResponseInformationProcessor;
 
 public class HttpClientHandler extends ChannelInboundHandlerAdapter {
-    private HttpResponseContext responseContext;
     private HttpResponseInformationProcessor responseInformationProcessor;
     private HttpResponseAssertProcessor responseAssertProcessor;
     private HttpClientResponseProcessorContext processorContext;
     private HttpClientInformationContext clientInformationContext;
+    private boolean isReadComplete = false;
 
     public HttpClientHandler(HttpClientInformationContext clientInformationContext) {
         this.clientInformationContext = clientInformationContext;
@@ -48,12 +47,12 @@ public class HttpClientHandler extends ChannelInboundHandlerAdapter {
         if (msg instanceof HttpResponse) {
             this.processorContext = new HttpClientResponseProcessorContext();
             this.processorContext.setClientInformationContext(clientInformationContext);
-            this.responseContext = new HttpResponseContext();
             this.responseInformationProcessor = new HttpResponseInformationProcessor();
             this.responseAssertProcessor = new HttpResponseAssertProcessor();
             HttpResponse response = (HttpResponse) msg;
             processorContext.setReceivedResponse(response);
             responseInformationProcessor.process(processorContext);
+            isReadComplete = false;
         }
 
         if (msg instanceof HttpContent) {
@@ -61,13 +60,13 @@ public class HttpClientHandler extends ChannelInboundHandlerAdapter {
             ByteBuf content = httpContent.content();
 
             if (content.isReadable()) {
-                this.responseInformationProcessor.appendDecoderResult(responseContext, httpContent, content);
-            }
-
-            if (content instanceof LastHttpContent) {
-                ctx.fireChannelReadComplete();
+                this.responseInformationProcessor.appendDecoderResult(processorContext.getReceivedResponseContext(), httpContent, content);
             }
         }
+        if (msg instanceof LastHttpContent) {
+            isReadComplete = true;
+        }
+
     }
 
     @Override
@@ -78,7 +77,7 @@ public class HttpClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) {
-        if (responseAssertProcessor != null) {
+        if (responseAssertProcessor != null && isReadComplete) {
             this.responseAssertProcessor.process(processorContext);
         }
         ctx.close();

@@ -60,12 +60,21 @@ public class HttpRequestInformationProcessor extends AbstractClientProcessor<Htt
             //Need to log
         }
 
-        String rawData = processorContext.getRequestBuilderContext().getBody();
-        byte[] bytes = rawData.getBytes();
-        ByteBuf content = Unpooled.wrappedBuffer(bytes);
+        ByteBuf content = null;
+        HttpRequest request = null;
 
-        HttpRequest request = new DefaultFullHttpRequest(
-                HttpVersion.HTTP_1_1, processorContext.getRequest().getMethod(), requestUri.getRawPath(),content);
+        if(processorContext.getRequestBuilderContext().getBody() != null) {
+            String rawData = processorContext.getRequestBuilderContext().getBody();
+            byte[] bytes = rawData.getBytes();
+            content = Unpooled.wrappedBuffer(bytes);
+            request = new DefaultFullHttpRequest(
+                    HttpVersion.HTTP_1_1, processorContext.getRequestBuilderContext().getMethod(), requestUri.getRawPath(), content);
+        } else {
+            request = new DefaultFullHttpRequest(
+                    HttpVersion.HTTP_1_1, processorContext.getRequestBuilderContext().getMethod(), requestUri.getRawPath());
+        }
+
+
 
         processorContext.setRequest(request);
         populateHeader(processorContext);
