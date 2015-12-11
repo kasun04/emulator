@@ -10,6 +10,7 @@ public class HttpClientConfigBuilderContext extends AbstractConfigurationBuilder
     private static HttpClientConfigBuilderContext clientConfigBuilderContext;
     private String host;
     private int port;
+    private String context;
 
     private static HttpClientConfigBuilderContext getInstance() {
         clientConfigBuilderContext = new HttpClientConfigBuilderContext();
@@ -40,6 +41,10 @@ public class HttpClientConfigBuilderContext extends AbstractConfigurationBuilder
 
     public int getPort() {
         return port;
+    }
+
+    public String getContext() {
+        return context;
     }
 
     public void setPort(int port) {

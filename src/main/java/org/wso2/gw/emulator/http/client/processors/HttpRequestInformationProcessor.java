@@ -23,34 +23,29 @@ package org.wso2.gw.emulator.http.client.processors;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.http.DefaultFullHttpRequest;
+import io.netty.handler.codec.http.DefaultHttpRequest;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpVersion;
 import io.netty.handler.codec.http.cookie.ClientCookieEncoder;
 import io.netty.handler.codec.http.cookie.DefaultCookie;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientConfigBuilderContext;
-import org.wso2.gw.emulator.http.client.contexts.HttpClientInformationContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientProcessorContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientRequestBuilderContext;
-import org.wso2.gw.emulator.http.dsl.producer.HttpClientBuilderContext;
+import org.wso2.gw.emulator.http.client.contexts.HttpClientRequestProcessorContext;
 import org.wso2.gw.emulator.http.params.Cookie;
 import org.wso2.gw.emulator.http.params.Header;
-import org.wso2.gw.emulator.http.dsl.producer.IncomingMessage;
-import org.wso2.gw.emulator.http.params.Cookie;
-import org.wso2.gw.emulator.http.params.Header;
-import org.wso2.gw.emulator.http.server.contexts.HttpServerConfigBuilderContext;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 
-public class HttpRequestInformationProcessor extends AbstractClientProcessor {
+public class HttpRequestInformationProcessor extends AbstractClientProcessor<HttpClientRequestProcessorContext> {
 
     @Override
-    public void process(HttpClientProcessorContext processorContext) {
+    public void process(HttpClientRequestProcessorContext processorContext) {
         HttpClientConfigBuilderContext clientConfigBuilderContext = processorContext.getClientInformationContext()
                 .getClientConfigBuilderContext();
         String uri = getURI(clientConfigBuilderContext.getHost(), clientConfigBuilderContext.getPort(),
-                            processorContext.getRequestContext());
+                            processorContext.getRequestBuilderContext());
         URI requestUri = null;
         try {
             requestUri = new URI(uri);
@@ -64,7 +59,8 @@ public class HttpRequestInformationProcessor extends AbstractClientProcessor {
             System.err.println("Only HTTP(S) is supported.");
             //Need to log
         }
-        String rawData = processorContext.getRequest().getBody();
+
+        String rawData = processorContext.getRequestBuilderContext().getBody();
         byte[] bytes = rawData.getBytes();
         ByteBuf content = Unpooled.wrappedBuffer(bytes);
 
@@ -77,30 +73,9 @@ public class HttpRequestInformationProcessor extends AbstractClientProcessor {
         populateQueryParameters(processorContext);
     }
 
-/*
-    public HttpRequest populateHttpRequest(HttpClientProcessorContext processorContext) throws Exception {
-
-        String uri = getURI(clientBuilderContext.getHost(), clientBuilderContext.getPort(), requestBuilderContext);
-        URI requestUri = new URI(uri);
-        clientBuilderContext.host(requestUri.getHost());
-        String scheme = requestUri.getScheme();
-
-        if (!"http".equalsIgnoreCase(scheme) && !"https".equalsIgnoreCase(scheme)) {
-            System.err.println("Only HTTP(S) is supported.");
-            //Need to log
-        }
-        HttpRequest request = new DefaultFullHttpRequest(
-                HttpVersion.HTTP_1_1, requestBuilderContext.getMethod(), requestUri.getRawPath());
-        populateHeader(processorContext);
-        populateCookies(request, requestBuilderContext);
-        populateQueryParameters(request, requestBuilderContext);
-        return request;
-    }
-*/
-
-    private void populateHeader(HttpClientProcessorContext processorContext) {
+    private void populateHeader(HttpClientRequestProcessorContext processorContext) {
         HttpRequest request = processorContext.getRequest();
-        HttpClientRequestBuilderContext requestContext = processorContext.getRequestContext();
+        HttpClientRequestBuilderContext requestContext = processorContext.getRequestBuilderContext();
         request.headers().set(HttpHeaders.Names.HOST, processorContext.getClientInformationContext()
                 .getClientConfigBuilderContext().getHost());
         request.headers().set(HttpHeaders.Names.CONNECTION, HttpHeaders.Values.CLOSE);
@@ -116,8 +91,8 @@ public class HttpRequestInformationProcessor extends AbstractClientProcessor {
         }
     }
 
-    private void populateCookies(HttpClientProcessorContext processorContext) {
-        HttpClientRequestBuilderContext requestContext = processorContext.getRequestContext();
+    private void populateCookies(HttpClientRequestProcessorContext processorContext) {
+        HttpClientRequestBuilderContext requestContext = processorContext.getRequestBuilderContext();
         if (requestContext.getCookies() != null) {
             DefaultCookie[] cookies = new DefaultCookie[requestContext.getCookies().size()];
             int i = 0;
