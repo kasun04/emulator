@@ -21,6 +21,7 @@
 package org.wso2.gw.emulator.http.client.processors;
 
 import io.netty.handler.codec.http.DefaultFullHttpRequest;
+import io.netty.handler.codec.http.DefaultHttpRequest;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpVersion;
@@ -29,19 +30,20 @@ import io.netty.handler.codec.http.cookie.DefaultCookie;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientConfigBuilderContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientProcessorContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientRequestBuilderContext;
+import org.wso2.gw.emulator.http.client.contexts.HttpClientRequestProcessorContext;
 import org.wso2.gw.emulator.http.params.Cookie;
 import org.wso2.gw.emulator.http.params.Header;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-public class HttpRequestInformationProcessor extends AbstractClientProcessor {
+public class HttpRequestInformationProcessor extends AbstractClientProcessor<HttpClientRequestProcessorContext> {
 
     @Override
-    public void process(HttpClientProcessorContext processorContext) {
+    public void process(HttpClientRequestProcessorContext processorContext) {
         HttpClientConfigBuilderContext clientConfigBuilderContext = processorContext.getClientInformationContext()
                 .getClientConfigBuilderContext();
         String uri = getURI(clientConfigBuilderContext.getHost(), clientConfigBuilderContext.getPort(),
-                            processorContext.getRequestContext());
+                            processorContext.getRequestBuilderContext());
         URI requestUri = null;
         try {
             requestUri = new URI(uri);
@@ -63,9 +65,9 @@ public class HttpRequestInformationProcessor extends AbstractClientProcessor {
         populateQueryParameters(processorContext);
     }
 
-    private void populateHeader(HttpClientProcessorContext processorContext) {
+    private void populateHeader(HttpClientRequestProcessorContext processorContext) {
         HttpRequest request = processorContext.getRequest();
-        HttpClientRequestBuilderContext requestContext = processorContext.getRequestContext();
+        HttpClientRequestBuilderContext requestContext = processorContext.getRequestBuilderContext();
         request.headers().set(HttpHeaders.Names.HOST, processorContext.getClientInformationContext()
                 .getClientConfigBuilderContext().getHost());
         request.headers().set(HttpHeaders.Names.CONNECTION, HttpHeaders.Values.CLOSE);
@@ -81,8 +83,8 @@ public class HttpRequestInformationProcessor extends AbstractClientProcessor {
         }
     }
 
-    private void populateCookies(HttpClientProcessorContext processorContext) {
-        HttpClientRequestBuilderContext requestContext = processorContext.getRequestContext();
+    private void populateCookies(HttpClientRequestProcessorContext processorContext) {
+        HttpClientRequestBuilderContext requestContext = processorContext.getRequestBuilderContext();
         if (requestContext.getCookies() != null) {
             DefaultCookie[] cookies = new DefaultCookie[requestContext.getCookies().size()];
             int i = 0;

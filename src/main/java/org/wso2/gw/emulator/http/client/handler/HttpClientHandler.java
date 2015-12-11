@@ -39,14 +39,17 @@ public class HttpClientHandler extends ChannelInboundHandlerAdapter {
     private HttpResponseInformationProcessor responseInformationProcessor;
     private HttpResponseAssertProcessor responseAssertProcessor;
     private HttpClientProcessorContext processorContext;
+    private HttpClientInformationContext clientInformationContext;
 
-    public HttpClientHandler(HttpClientProcessorContext processorContext) {
-        this.processorContext = processorContext;
+    public HttpClientHandler(HttpClientInformationContext clientInformationContext) {
+        this.clientInformationContext = clientInformationContext;
     }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         if (msg instanceof HttpResponse) {
+            this.processorContext = new HttpClientProcessorContext();
+            this.processorContext.setClientInformationContext(clientInformationContext);
             this.responseContext = new HttpResponseContext();
             this.responseInformationProcessor = new HttpResponseInformationProcessor();
             this.responseAssertProcessor = new HttpResponseAssertProcessor();

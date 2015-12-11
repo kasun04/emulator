@@ -31,7 +31,7 @@ public class Emulator extends Thread {
     private EmulatorType emulatorType;
 
     public static HTTPProtocolEmulator getHttpEmulator() {
-        httpProtocolEmulator = new HTTPProtocolEmulator(new Emulator());
+        httpProtocolEmulator = new HTTPProtocolEmulator();
         return httpProtocolEmulator;
     }
 

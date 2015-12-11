@@ -28,24 +28,26 @@ import io.netty.handler.codec.http.HttpResponse;
 import io.netty.util.CharsetUtil;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientProcessorContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientResponseBuilderContext;
+import org.wso2.gw.emulator.http.client.contexts.HttpClientResponseProcessorContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpResponseContext;
 
 import java.util.Map;
 
-public class HttpResponseInformationProcessor extends AbstractClientProcessor {
+public class HttpResponseInformationProcessor extends AbstractClientProcessor<HttpClientResponseProcessorContext> {
 
     @Override
-    public void process(HttpClientProcessorContext processorContext) {
+    public void process(HttpClientResponseProcessorContext processorContext) {
         HttpResponseContext httpResponse = new HttpResponseContext();
-        processorContext.setReceivedResponse(httpResponse);
+        processorContext.setReceivedResponseContext(httpResponse);
+        processorContext.setExpectedResponse(processorContext.getClientInformationContext().getExpectedResponse());
         populateRequestHeaders(processorContext);
     }
 
-    private void populateRequestHeaders(HttpClientProcessorContext processorContext) {
-        HttpHeaders headers = processorContext.getHttpResponse().headers();
+    private void populateRequestHeaders(HttpClientResponseProcessorContext processorContext) {
+        HttpHeaders headers = processorContext.getReceivedResponse().headers();
         if (!headers.isEmpty()) {
             for (Map.Entry<String, String> entry : headers.entries()) {
-                processorContext.getReceivedResponse().addHeaderParameter(entry.getKey(), entry.getValue());
+                processorContext.getReceivedResponseContext().addHeaderParameter(entry.getKey(), entry.getValue());
             }
         }
     }

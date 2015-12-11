@@ -29,6 +29,7 @@ import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.ssl.SslContext;
 import org.wso2.gw.emulator.core.EmulatorType;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientInformationContext;
+import org.wso2.gw.emulator.http.client.contexts.HttpClientProcessorContext;
 import org.wso2.gw.emulator.http.client.handler.HttpClientHandler;
 import org.wso2.gw.emulator.http.server.handler.HttpServerHandler;
 import org.wso2.gw.emulator.http.server.contexts.HttpServerInformationContext;

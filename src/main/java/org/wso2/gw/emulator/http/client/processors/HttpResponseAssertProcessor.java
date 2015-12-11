@@ -21,19 +21,21 @@
 package org.wso2.gw.emulator.http.client.processors;
 
 import org.wso2.gw.emulator.http.client.contexts.HttpClientProcessorContext;
+import org.wso2.gw.emulator.http.client.contexts.HttpClientResponseProcessorContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpResponseContext;
 import org.wso2.gw.emulator.http.dsl.producer.OutgoingMessage;
 
-public class HttpResponseAssertProcessor extends AbstractClientProcessor {
+public class HttpResponseAssertProcessor extends AbstractClientProcessor<HttpClientResponseProcessorContext> {
 
     @Override
-    public void process(HttpClientProcessorContext processorContext) {
+    public void process(HttpClientResponseProcessorContext processorContext) {
         assertResponseContent(processorContext);
         assertHeaderParameters(processorContext);
     }
 
-    private void assertResponseContent(HttpClientProcessorContext processorContext) {
-        if (processorContext.getExpectedResponse().getBody().equalsIgnoreCase(processorContext.getReceivedResponse().getResponseBody())) {
+    private void assertResponseContent(HttpClientResponseProcessorContext processorContext) {
+        if (processorContext.getExpectedResponse().getBody().equalsIgnoreCase(processorContext.getReceivedResponseContext()
+                                                                                      .getResponseBody())) {
             System.out.print("Equal");
         } else {
             System.out.print("Wrong");
