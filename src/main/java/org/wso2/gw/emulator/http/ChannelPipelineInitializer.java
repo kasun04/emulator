@@ -28,10 +28,8 @@ import io.netty.handler.codec.http.HttpContentDecompressor;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.ssl.SslContext;
 import org.wso2.gw.emulator.core.EmulatorType;
-/*
 import org.wso2.gw.emulator.http.client.contexts.HttpClientInformationContext;
 import org.wso2.gw.emulator.http.client.handler.HttpClientHandler;
-*/
 import org.wso2.gw.emulator.http.server.handler.HttpServerHandler;
 import org.wso2.gw.emulator.http.server.contexts.HttpServerInformationContext;
 
@@ -40,7 +38,7 @@ public class ChannelPipelineInitializer extends ChannelInitializer<SocketChannel
     private SslContext sslCtx;
     private EmulatorType emulatorType;
     private HttpServerInformationContext serverInformationContext;
-//    private HttpClientInformationContext clientInformationContext;
+    private HttpClientInformationContext clientInformationContext;
 
     public ChannelPipelineInitializer(SslContext sslCtx, EmulatorType emulatorType) {
         this.sslCtx = sslCtx;
@@ -49,9 +47,9 @@ public class ChannelPipelineInitializer extends ChannelInitializer<SocketChannel
 
     @Override
     public void initChannel(SocketChannel ch) {
-        if(EmulatorType.HTTP_CONSUMER.equals(emulatorType)) {
+        if(EmulatorType.HTTP_SERVER.equals(emulatorType)) {
             initializeHttpServerChannel(ch);
-        } else if(EmulatorType.HTTP_PRODUCER.equals(emulatorType)) {
+        } else if(EmulatorType.HTTP_CLIENT.equals(emulatorType)) {
             initializeHttpClientChannel(ch);
         }
     }
@@ -73,14 +71,14 @@ public class ChannelPipelineInitializer extends ChannelInitializer<SocketChannel
         }
         pipeline.addLast(new HttpClientCodec());
         pipeline.addLast(new HttpContentDecompressor());
-  //      pipeline.addLast(new HttpClientHandler(clientInformationContext));
+        pipeline.addLast(new HttpClientHandler(clientInformationContext));
     }
 
     public void setServerInformationContext(HttpServerInformationContext serverInformationContext) {
         this.serverInformationContext = serverInformationContext;
     }
 
-    /*public void setClientInformationContext(HttpClientInformationContext clientInformationContext) {
+    public void setClientInformationContext(HttpClientInformationContext clientInformationContext) {
         this.clientInformationContext = clientInformationContext;
-    }*/
+    }
 }

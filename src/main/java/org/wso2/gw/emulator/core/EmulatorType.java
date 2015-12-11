@@ -21,5 +21,5 @@
 package org.wso2.gw.emulator.core;
 
 public enum EmulatorType {
-    HTTP_CONSUMER, HTTP_PRODUCER, TCP_CONSUMER, TCP_PRODUCER
+    HTTP_SERVER, HTTP_CLIENT, TCP_SERVER, TCP_CLIENT
 }

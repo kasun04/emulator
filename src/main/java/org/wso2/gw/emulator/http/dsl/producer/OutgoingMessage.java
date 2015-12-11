@@ -21,7 +21,7 @@
 package org.wso2.gw.emulator.http.dsl.producer;
 
 import io.netty.handler.codec.http.HttpResponseStatus;
-import org.wso2.gw.emulator.http.dsl.params.Header;
+import org.wso2.gw.emulator.http.params.Header;
 
 import java.util.ArrayList;
 import java.util.Arrays;

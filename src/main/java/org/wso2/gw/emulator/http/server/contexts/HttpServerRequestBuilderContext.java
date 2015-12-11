@@ -2,8 +2,8 @@ package org.wso2.gw.emulator.http.server.contexts;
 
 import io.netty.handler.codec.http.HttpMethod;
 import org.wso2.gw.emulator.core.contexts.AbstractRequestBuilderContext;
-import org.wso2.gw.emulator.http.dsl.params.Header;
-import org.wso2.gw.emulator.http.dsl.params.QueryParameter;
+import org.wso2.gw.emulator.http.params.Header;
+import org.wso2.gw.emulator.http.params.QueryParameter;
 
 import java.util.List;
 import java.util.Map;

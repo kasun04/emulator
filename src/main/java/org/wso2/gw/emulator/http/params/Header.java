@@ -18,17 +18,17 @@
  *
  */
 
-package org.wso2.gw.emulator.http.dsl.params;
+package org.wso2.gw.emulator.http.params;
 
-public class QueryParameter {
-
-    public QueryParameter(String name, String value) {
-        this.name = name;
-        this.value = value;
-    }
+public class Header {
 
     private String name;
     private String value;
+
+    public Header(String name, String value) {
+        this.name = name;
+        this.value = value;
+    }
 
     public String getName() {
         return name;

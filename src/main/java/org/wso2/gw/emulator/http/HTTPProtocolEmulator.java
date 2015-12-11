@@ -27,6 +27,9 @@ import org.wso2.gw.emulator.http.client.HttpClientInitializer;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientGivenBuilderContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientInformationContext;
 */
+import org.wso2.gw.emulator.http.client.HttpClientInitializer;
+import org.wso2.gw.emulator.http.client.contexts.HttpClientGivenBuilderContext;
+import org.wso2.gw.emulator.http.client.contexts.HttpClientInformationContext;
 import org.wso2.gw.emulator.http.server.contexts.HttpServerGivenBuilderContext;
 import org.wso2.gw.emulator.http.server.contexts.HttpServerInformationContext;
 import org.wso2.gw.emulator.http.server.HttpServerInitializer;
@@ -46,10 +49,6 @@ public class HTTPProtocolEmulator extends AbstractProtocolEmulator {
 
     @Override
     public HttpServerGivenBuilderContext server() {
-        /*consumerContext = new HttpServerBuilde(this);
-        setEmulatorType(EmulatorType.HTTP_CONSUMER);
-        httpEmulatorConsumerInitializer = new HttpEmulatorConsumerInitializer(consumerContext);
-        return consumerContext;*/
         HttpServerInformationContext serverInformationContext = new HttpServerInformationContext();
         HttpServerInitializer serverInitializer = new HttpServerInitializer(serverInformationContext);
         serverInformationContext.setHttpServerInitializer(serverInitializer);
@@ -59,19 +58,15 @@ public class HTTPProtocolEmulator extends AbstractProtocolEmulator {
 
     }
 
-    /*@Override
+    @Override
     public HttpClientGivenBuilderContext client() {
-
-        *//*httpProducerContext = new HttpClientBuilder(this);
-        setEmulatorType(EmulatorType.HTTP_PRODUCER);
-        this.httpEmulatorProducerInitializer = new HttpEmulatorProducerInitializer(httpProducerContext);
-        return httpProducerContext;*//*
-        HttpClientInformationContext httpClientInformationContext = new HttpClientInformationContext();
-        HttpClientInitializer clientInitializer = new HttpClientInitializer(httpClientInformationContext);
-        httpClientInformationContext.setClientInitializer(clientInitializer);
-        HttpClientGivenBuilderContext clientGivenBuilderContext = new HttpClientGivenBuilderContext(httpClientInformationContext);
-        return null;
-    }*/
+        HttpClientInformationContext clientInformationContext = new HttpClientInformationContext();
+        HttpClientInitializer clientInitializer = new HttpClientInitializer(clientInformationContext);
+        clientInformationContext.setClientInitializer(clientInitializer);
+        HttpClientGivenBuilderContext clientGivenBuilderContext = new HttpClientGivenBuilderContext
+                (clientInformationContext);
+        return clientGivenBuilderContext;
+    }
 
     /*public HttpEmulatorConsumerInitializer getHttpEmulatorConsumerInitializer() {
         return httpEmulatorConsumerInitializer;

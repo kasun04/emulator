@@ -1,37 +1,21 @@
-/*
- * *
- *  * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
- *  *
- *  * WSO2 Inc. licenses this file to you under the Apache License,
- *  * Version 2.0 (the "License"); you may not use this file except
- *  * in compliance with the License.
- *  * You may obtain a copy of the License at
- *  *
- *  * http://www.apache.org/licenses/LICENSE-2.0
- *  *
- *  * Unless required by applicable law or agreed to in writing,
- *  * software distributed under the License is distributed on an
- *  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- *  * KIND, either express or implied.  See the License for the
- *  * specific language governing permissions and limitations
- *  * under the License.
- *
- */
-
-package org.wso2.gw.emulator.http.dsl.producer;
+package org.wso2.gw.emulator.http.client.contexts;
 
 import io.netty.handler.codec.http.HttpMethod;
-import org.wso2.gw.emulator.http.params.Cookie;
-import org.wso2.gw.emulator.http.params.Header;
-import org.wso2.gw.emulator.http.params.QueryParameter;
+import org.wso2.gw.emulator.core.contexts.AbstractRequestBuilderContext;
+import org.wso2.gw.emulator.http.dsl.params.Cookie;
+import org.wso2.gw.emulator.http.dsl.params.Header;
+import org.wso2.gw.emulator.http.dsl.params.QueryParameter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class IncomingMessage {
+/**
+ * Created by chamile on 12/7/15.
+ */
+public class HttpClientRequsetBuilderContext extends AbstractRequestBuilderContext {
 
-    private static IncomingMessage incoming;
+    private static HttpClientRequsetBuilderContext incoming;
     private String path;
     private HttpMethod method;
     private String body;
@@ -40,31 +24,31 @@ public class IncomingMessage {
     private List<Cookie> cookies;
 
 
-    private static IncomingMessage getInstance() {
-        incoming = new IncomingMessage();
+    private static HttpClientRequsetBuilderContext getInstance() {
+        incoming = new HttpClientRequsetBuilderContext();
         return incoming;
     }
 
-    public static IncomingMessage request() {
+    public static HttpClientRequsetBuilderContext request() {
         return getInstance();
     }
 
-    public IncomingMessage withMethod(HttpMethod method) {
+    public HttpClientRequsetBuilderContext withMethod(HttpMethod method) {
         this.method = method;
         return this;
     }
 
-    public IncomingMessage withPath(String path) {
+    public HttpClientRequsetBuilderContext withPath(String path) {
         this.path = path;
         return this;
     }
 
-    public IncomingMessage withBody(String body) {
+    public HttpClientRequsetBuilderContext withBody(String body) {
         this.body = body;
         return this;
     }
 
-    public IncomingMessage withHeader(String name, String value) {
+    public HttpClientRequsetBuilderContext withHeader(String name, String value) {
         if (headers == null) {
             this.headers = new ArrayList<Header>();
         }
@@ -73,12 +57,12 @@ public class IncomingMessage {
         return this;
     }
 
-    public IncomingMessage withHeaders(Header... headers) {
+    public HttpClientRequsetBuilderContext withHeaders(Header... headers) {
         this.headers = Arrays.asList(headers);
         return this;
     }
 
-    public IncomingMessage withQueryParameter(String name, String value) {
+    public HttpClientRequsetBuilderContext withQueryParameter(String name, String value) {
         if (queryParameters == null) {
             this.queryParameters = new ArrayList<QueryParameter>();
         }
@@ -86,12 +70,12 @@ public class IncomingMessage {
         return this;
     }
 
-    public IncomingMessage withQueryParameters(QueryParameter... queryParameters) {
+    public HttpClientRequsetBuilderContext withQueryParameters(QueryParameter... queryParameters) {
         this.queryParameters = Arrays.asList(queryParameters);
         return this;
     }
 
-    public IncomingMessage withCookie(String name, String value) {
+    public HttpClientRequsetBuilderContext withCookie(String name, String value) {
         if (cookies == null) {
             this.cookies = new ArrayList<Cookie>();
         }
@@ -99,7 +83,7 @@ public class IncomingMessage {
         return this;
     }
 
-    public IncomingMessage withCookies(Cookie... cookies) {
+    public HttpClientRequsetBuilderContext withCookies(Cookie... cookies) {
         this.cookies = Arrays.asList(cookies);
         return this;
     }
@@ -127,4 +111,5 @@ public class IncomingMessage {
     public List<QueryParameter> getQueryParameters() {
         return queryParameters;
     }
+
 }

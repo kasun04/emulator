@@ -37,7 +37,7 @@ public class HttpServerInitializer {
         try {
             ServerBootstrap serverBootstrap = new ServerBootstrap();
             ChannelPipelineInitializer channelPipelineInitializer = new ChannelPipelineInitializer(sslCtx,
-                                                                                                   EmulatorType.HTTP_CONSUMER);
+                                                                                                   EmulatorType.HTTP_SERVER);
             channelPipelineInitializer.setServerInformationContext(serverInformationContext);
             serverBootstrap.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)

@@ -30,11 +30,11 @@ import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.LastHttpContent;
 import org.apache.log4j.Logger;
+import org.wso2.gw.emulator.http.server.processors.HttpRequestResponseMatchingProcessor;
 import org.wso2.gw.emulator.http.server.contexts.HttpServerProcessorContext;
 import org.wso2.gw.emulator.http.server.contexts.HttpRequestContext;
 import org.wso2.gw.emulator.http.server.processors.HttpRequestInformationProcessor;
 import org.wso2.gw.emulator.http.server.contexts.HttpServerInformationContext;
-import org.wso2.gw.emulator.http.server.processors.HttpRequestResponseMatchingProcessor;
 import org.wso2.gw.emulator.http.server.processors.HttpResponseProcessor;
 
 import static io.netty.handler.codec.http.HttpResponseStatus.CONTINUE;

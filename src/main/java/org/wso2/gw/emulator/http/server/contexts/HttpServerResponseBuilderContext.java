@@ -2,8 +2,8 @@ package org.wso2.gw.emulator.http.server.contexts;
 
 import io.netty.handler.codec.http.HttpResponseStatus;
 import org.wso2.gw.emulator.core.contexts.AbstractResponseBuilderContext;
-import org.wso2.gw.emulator.http.dsl.params.Cookie;
-import org.wso2.gw.emulator.http.dsl.params.Header;
+import org.wso2.gw.emulator.http.params.Cookie;
+import org.wso2.gw.emulator.http.params.Header;
 
 import java.util.ArrayList;
 import java.util.Arrays;

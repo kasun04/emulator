@@ -38,10 +38,10 @@ public class Emulator extends Thread {
 
     public void run(){
         try {
-            if (EmulatorType.HTTP_CONSUMER.equals(emulatorType)) {
+            if (EmulatorType.HTTP_SERVER.equals(emulatorType)) {
                 /*validateInput(httpProtocolEmulator.getConsumerContext());
                 httpProtocolEmulator.getHttpEmulatorConsumerInitializer().initialize();*/
-            }  else if(EmulatorType.HTTP_PRODUCER.equals(emulatorType)) {
+            }  else if(EmulatorType.HTTP_CLIENT.equals(emulatorType)) {
                 /*validateInput(httpProtocolEmulator.getHttpProducerContext());
                 httpProtocolEmulator.getHttpEmulatorProducerInitializer().initialize();
            */ }
@@ -51,9 +51,9 @@ public class Emulator extends Thread {
     }
 
     public void shutdown(EmulatorType emulatorType) {
-        if(EmulatorType.HTTP_CONSUMER.equals(emulatorType)) {
+        if(EmulatorType.HTTP_SERVER.equals(emulatorType)) {
             //httpProtocolEmulator.getHttpEmulatorConsumerInitializer().shutdown();
-          } else if(EmulatorType.HTTP_PRODUCER.equals(emulatorType)) {
+          } else if(EmulatorType.HTTP_CLIENT.equals(emulatorType)) {
             //httpProtocolEmulator.getHttpEmulatorProducerInitializer().shutdown();
         }
         log.info("Emulator shutdown successfully.......");

@@ -18,7 +18,7 @@
  *
  */
 
-package org.wso2.gw.emulator.http.dsl.params;
+package org.wso2.gw.emulator.http.params;
 
 public class Cookie {
 
