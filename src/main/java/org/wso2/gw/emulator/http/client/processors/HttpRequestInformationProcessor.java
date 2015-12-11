@@ -20,6 +20,8 @@
 
 package org.wso2.gw.emulator.http.client.processors;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.http.DefaultFullHttpRequest;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpRequest;
@@ -31,8 +33,8 @@ import org.wso2.gw.emulator.http.client.contexts.HttpClientInformationContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientProcessorContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientRequestBuilderContext;
 import org.wso2.gw.emulator.http.dsl.producer.HttpClientBuilderContext;
-import org.wso2.gw.emulator.http.dsl.params.Cookie;
-import org.wso2.gw.emulator.http.dsl.params.Header;
+import org.wso2.gw.emulator.http.params.Cookie;
+import org.wso2.gw.emulator.http.params.Header;
 import org.wso2.gw.emulator.http.dsl.producer.IncomingMessage;
 import org.wso2.gw.emulator.http.params.Cookie;
 import org.wso2.gw.emulator.http.params.Header;
@@ -62,8 +64,13 @@ public class HttpRequestInformationProcessor extends AbstractClientProcessor {
             System.err.println("Only HTTP(S) is supported.");
             //Need to log
         }
+        String rawData = processorContext.getRequest().getBody();
+        byte[] bytes = rawData.getBytes();
+        ByteBuf content = Unpooled.wrappedBuffer(bytes);
+
         HttpRequest request = new DefaultFullHttpRequest(
-                HttpVersion.HTTP_1_1, processorContext.getRequest().getMethod(), requestUri.getRawPath());
+                HttpVersion.HTTP_1_1, processorContext.getRequest().getMethod(), requestUri.getRawPath(),content);
+
         processorContext.setRequest(request);
         populateHeader(processorContext);
         populateCookies(processorContext);
