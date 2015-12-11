@@ -27,31 +27,33 @@ import io.netty.handler.codec.http.HttpContent;
 import io.netty.handler.codec.http.HttpResponse;
 import io.netty.handler.codec.http.LastHttpContent;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientInformationContext;
+import org.wso2.gw.emulator.http.client.contexts.HttpClientResponseProcessorContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpResponseContext;
 import org.wso2.gw.emulator.http.client.processors.HttpResponseAssertProcessor;
 import org.wso2.gw.emulator.http.client.processors.HttpResponseInformationProcessor;
-import org.wso2.gw.emulator.http.dsl.producer.OutgoingMessage;
-import org.wso2.gw.emulator.http.server.contexts.HttpServerInformationContext;
 
 public class HttpClientHandler extends ChannelInboundHandlerAdapter {
     private HttpResponseContext responseContext;
     private HttpResponseInformationProcessor responseInformationProcessor;
     private HttpResponseAssertProcessor responseAssertProcessor;
-    private OutgoingMessage outgoingMessage;
-    private HttpClientInformationContext httpClientInformationContext;
+    private HttpClientResponseProcessorContext processorContext;
+    private HttpClientInformationContext clientInformationContext;
 
-    public HttpClientHandler(HttpClientInformationContext httpClientInformationContext) {
-        this.httpClientInformationContext = httpClientInformationContext;
+    public HttpClientHandler(HttpClientInformationContext clientInformationContext) {
+        this.clientInformationContext = clientInformationContext;
     }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         if (msg instanceof HttpResponse) {
+            this.processorContext = new HttpClientResponseProcessorContext();
+            this.processorContext.setClientInformationContext(clientInformationContext);
             this.responseContext = new HttpResponseContext();
             this.responseInformationProcessor = new HttpResponseInformationProcessor();
             this.responseAssertProcessor = new HttpResponseAssertProcessor();
             HttpResponse response = (HttpResponse) msg;
-            responseInformationProcessor.process(response, responseContext);
+            processorContext.setReceivedResponse(response);
+            responseInformationProcessor.process(processorContext);
         }
 
         if (msg instanceof HttpContent) {
@@ -77,7 +79,7 @@ public class HttpClientHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) {
         if (responseAssertProcessor != null) {
-            this.responseAssertProcessor.process(responseContext, outgoingMessage);
+            this.responseAssertProcessor.process(processorContext);
         }
         ctx.close();
     }

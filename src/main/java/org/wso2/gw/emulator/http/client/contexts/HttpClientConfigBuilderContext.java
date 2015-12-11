@@ -1,12 +1,6 @@
 package org.wso2.gw.emulator.http.client.contexts;
 
 import org.wso2.gw.emulator.core.contexts.AbstractConfigurationBuilderContext;
-import org.wso2.gw.emulator.http.HTTPProtocolEmulator;
-import org.wso2.gw.emulator.http.dsl.producer.IncomingMessage;
-import org.wso2.gw.emulator.http.dsl.producer.OutgoingMessage;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by chamile on 12/7/15.
@@ -14,7 +8,6 @@ import java.util.Map;
 public class HttpClientConfigBuilderContext extends AbstractConfigurationBuilderContext {
 
     private static HttpClientConfigBuilderContext clientConfigBuilderContext;
-    private Map<IncomingMessage, OutgoingMessage> inOutCorrelation = new HashMap<IncomingMessage, OutgoingMessage>();
     private String host;
     private int port;
 

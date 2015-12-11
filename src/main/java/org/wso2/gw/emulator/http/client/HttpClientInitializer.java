@@ -34,7 +34,9 @@ import org.wso2.gw.emulator.http.client.contexts.HttpClientConfigBuilderContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientInformationContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientProcessorContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientRequestBuilderContext;
+import org.wso2.gw.emulator.http.client.contexts.HttpClientRequestProcessorContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientResponseBuilderContext;
+import org.wso2.gw.emulator.http.client.contexts.HttpClientResponseProcessorContext;
 import org.wso2.gw.emulator.http.client.processors.HttpRequestInformationProcessor;
 
 import java.util.Map;
@@ -68,14 +70,15 @@ public class HttpClientInitializer {
 
         for (Map.Entry<HttpClientRequestBuilderContext, HttpClientResponseBuilderContext> entry :
                 clientInformationContext.getRequestResponseCorrelation().entrySet()) {
-            HttpClientProcessorContext httpClientProcessorContext = new HttpClientProcessorContext();
-            httpClientProcessorContext.setRequest(entry.getKey());
-            httpClientProcessorContext.setExpectedResponse(entry.getValue());
-            sendMessage(httpClientProcessorContext);
+            clientInformationContext.setExpectedResponse(entry.getValue());
+            HttpClientRequestProcessorContext httpClientRequestProcessorContext = new
+                    HttpClientRequestProcessorContext();
+            httpClientRequestProcessorContext.setRequestBuilderContext(entry.getKey());
+            sendMessage(httpClientRequestProcessorContext);
         }
     }
 
-    private void sendMessage(HttpClientProcessorContext httpClientProcessorContext) throws Exception {
+    private void sendMessage(HttpClientRequestProcessorContext httpClientProcessorContext) throws Exception {
         try {
             new HttpRequestInformationProcessor().process(httpClientProcessorContext);
             HttpClientConfigBuilderContext clientConfigBuilderContext = httpClientProcessorContext.getClientInformationContext()

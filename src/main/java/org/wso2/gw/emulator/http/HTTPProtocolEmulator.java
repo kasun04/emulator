@@ -36,16 +36,10 @@ import org.wso2.gw.emulator.http.server.HttpServerInitializer;
 
 public class HTTPProtocolEmulator extends AbstractProtocolEmulator {
 
-    private HttpServerInformationContext serverInformationContext;
-    private HttpServerGivenBuilderContext serverGivenBuilderContext;
     /*private HttpEmulatorConsumerInitializer httpEmulatorConsumerInitializer;
     private HttpEmulatorProducerInitializer httpEmulatorProducerInitializer;
     private HttpServerBuilde consumerContext;
     private HttpClientBuilder httpProducerContext;*/
-
-    public HTTPProtocolEmulator(Emulator emulator) {
-        super(emulator);
-    }
 
     @Override
     public HttpServerGivenBuilderContext server() {

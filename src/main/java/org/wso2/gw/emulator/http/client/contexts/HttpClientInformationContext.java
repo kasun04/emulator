@@ -15,6 +15,8 @@ public class HttpClientInformationContext {
     private HttpClientConfigBuilderContext clientConfigBuilderContext;
     private Map<HttpClientRequestBuilderContext, HttpClientResponseBuilderContext> correlation;
     private HttpClientInitializer clientInitializer;
+    private HttpClientRequestBuilderContext requestContext;
+    private HttpClientResponseBuilderContext expectedResponse;
 
     public HttpClientConfigBuilderContext getClientConfigBuilderContext() {
         return clientConfigBuilderContext;
@@ -42,5 +44,21 @@ public class HttpClientInformationContext {
 
     public void setClientInitializer(HttpClientInitializer clientInitializer) {
         this.clientInitializer = clientInitializer;
+    }
+
+    public HttpClientRequestBuilderContext getRequestContext() {
+        return requestContext;
+    }
+
+    public void setRequestContext(HttpClientRequestBuilderContext requestContext) {
+        this.requestContext = requestContext;
+    }
+
+    public HttpClientResponseBuilderContext getExpectedResponse() {
+        return expectedResponse;
+    }
+
+    public void setExpectedResponse(HttpClientResponseBuilderContext expectedResponse) {
+        this.expectedResponse = expectedResponse;
     }
 }
