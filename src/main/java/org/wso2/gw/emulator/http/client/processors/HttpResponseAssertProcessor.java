@@ -33,7 +33,7 @@ public class HttpResponseAssertProcessor extends AbstractClientProcessor {
     }
 
     private void assertResponseContent(HttpClientProcessorContext processorContext) {
-        if (outgoingMessage.getBody().equalsIgnoreCase(responseContext.getRequestBody())) {
+        if (processorContext.getExpectedResponse().getBody().equalsIgnoreCase(processorContext.getReceivedResponse().getResponseBody())) {
             System.out.print("Equal");
         } else {
             System.out.print("Wrong");

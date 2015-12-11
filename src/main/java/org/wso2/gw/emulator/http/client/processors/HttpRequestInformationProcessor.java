@@ -27,17 +27,10 @@ import io.netty.handler.codec.http.HttpVersion;
 import io.netty.handler.codec.http.cookie.ClientCookieEncoder;
 import io.netty.handler.codec.http.cookie.DefaultCookie;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientConfigBuilderContext;
-import org.wso2.gw.emulator.http.client.contexts.HttpClientInformationContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientProcessorContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientRequestBuilderContext;
-import org.wso2.gw.emulator.http.dsl.producer.HttpClientBuilderContext;
-import org.wso2.gw.emulator.http.dsl.params.Cookie;
-import org.wso2.gw.emulator.http.dsl.params.Header;
-import org.wso2.gw.emulator.http.dsl.producer.IncomingMessage;
 import org.wso2.gw.emulator.http.params.Cookie;
 import org.wso2.gw.emulator.http.params.Header;
-import org.wso2.gw.emulator.http.server.contexts.HttpServerConfigBuilderContext;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -69,27 +62,6 @@ public class HttpRequestInformationProcessor extends AbstractClientProcessor {
         populateCookies(processorContext);
         populateQueryParameters(processorContext);
     }
-
-/*
-    public HttpRequest populateHttpRequest(HttpClientProcessorContext processorContext) throws Exception {
-
-        String uri = getURI(clientBuilderContext.getHost(), clientBuilderContext.getPort(), requestBuilderContext);
-        URI requestUri = new URI(uri);
-        clientBuilderContext.host(requestUri.getHost());
-        String scheme = requestUri.getScheme();
-
-        if (!"http".equalsIgnoreCase(scheme) && !"https".equalsIgnoreCase(scheme)) {
-            System.err.println("Only HTTP(S) is supported.");
-            //Need to log
-        }
-        HttpRequest request = new DefaultFullHttpRequest(
-                HttpVersion.HTTP_1_1, requestBuilderContext.getMethod(), requestUri.getRawPath());
-        populateHeader(processorContext);
-        populateCookies(request, requestBuilderContext);
-        populateQueryParameters(request, requestBuilderContext);
-        return request;
-    }
-*/
 
     private void populateHeader(HttpClientProcessorContext processorContext) {
         HttpRequest request = processorContext.getRequest();

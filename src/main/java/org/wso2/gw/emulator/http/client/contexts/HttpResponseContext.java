@@ -28,7 +28,7 @@ import java.util.Map;
 public class HttpResponseContext {
 
     private Map<String, List<String>> headerParameters;
-    private StringBuffer requestBody;
+    private StringBuffer responseBody;
 
     public void addHeaderParameter(String key, String value) {
         if (headerParameters == null) {
@@ -48,16 +48,16 @@ public class HttpResponseContext {
     }
 
     public void appendResponseContent(Object content) {
-        if (requestBody == null) {
-            this.requestBody = new StringBuffer();
+        if (responseBody == null) {
+            this.responseBody = new StringBuffer();
         }
-        this.requestBody.append(content);
+        this.responseBody.append(content);
     }
 
-    public String getRequestBody() {
-        if (requestBody == null) {
+    public String getResponseBody() {
+        if (responseBody == null) {
             return null;
         }
-        return requestBody.toString();
+        return responseBody.toString();
     }
 }

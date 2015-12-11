@@ -2,6 +2,7 @@ package org.wso2.gw.emulator.http.client.contexts;
 
 import io.netty.handler.codec.http.HttpMethod;
 import org.wso2.gw.emulator.core.contexts.AbstractRequestBuilderContext;
+import org.wso2.gw.emulator.http.params.Cookie;
 import org.wso2.gw.emulator.http.params.Header;
 import org.wso2.gw.emulator.http.params.QueryParameter;
 import org.wso2.gw.emulator.http.server.contexts.HttpRequestContext;
@@ -22,7 +23,8 @@ public class HttpClientRequestBuilderContext extends AbstractRequestBuilderConte
     private String body;
     private String context;
     private List<Header> headers;
-    private QueryParameter queryParameter;
+    private List<QueryParameter> queryParameters;
+    private List<Cookie> cookies;
 
 
     private static HttpClientRequestBuilderContext getInstance() {
@@ -61,7 +63,22 @@ public class HttpClientRequestBuilderContext extends AbstractRequestBuilderConte
     }
 
     public HttpClientRequestBuilderContext withQueryParameter(String name, String value) {
-        this.queryParameter = new QueryParameter(name, value);
+        QueryParameter queryParameter = new QueryParameter(name, value);
+
+        if(queryParameters == null) {
+            queryParameters = new ArrayList<QueryParameter>();
+        }
+        queryParameters.add(queryParameter);
+        return this;
+    }
+
+    public HttpClientRequestBuilderContext withCookie(String name, String value) {
+       Cookie cookie = new Cookie(name, value);
+
+        if(cookies == null) {
+            cookies = new ArrayList<Cookie>();
+        }
+        cookies.add(cookie);
         return this;
     }
 
@@ -83,5 +100,13 @@ public class HttpClientRequestBuilderContext extends AbstractRequestBuilderConte
 
     public List<Header> getHeaders() {
         return headers;
+    }
+
+    public List<QueryParameter> getQueryParameters() {
+        return queryParameters;
+    }
+
+    public List<Cookie> getCookies() {
+        return cookies;
     }
 }

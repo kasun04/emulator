@@ -27,6 +27,7 @@ import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpResponse;
 import io.netty.util.CharsetUtil;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientProcessorContext;
+import org.wso2.gw.emulator.http.client.contexts.HttpClientResponseBuilderContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpResponseContext;
 
 import java.util.Map;
@@ -35,14 +36,16 @@ public class HttpResponseInformationProcessor extends AbstractClientProcessor {
 
     @Override
     public void process(HttpClientProcessorContext processorContext) {
-        populateRequestHeaders(httpResponse, responseContext);
+        HttpResponseContext httpResponse = new HttpResponseContext();
+        processorContext.setReceivedResponse(httpResponse);
+        populateRequestHeaders(processorContext);
     }
 
     private void populateRequestHeaders(HttpClientProcessorContext processorContext) {
-        HttpHeaders headers = httpResponse.headers();
+        HttpHeaders headers = processorContext.getHttpResponse().headers();
         if (!headers.isEmpty()) {
             for (Map.Entry<String, String> entry : headers.entries()) {
-                responseContext.addHeaderParameter(entry.getKey(), entry.getValue());
+                processorContext.getReceivedResponse().addHeaderParameter(entry.getKey(), entry.getValue());
             }
         }
     }
