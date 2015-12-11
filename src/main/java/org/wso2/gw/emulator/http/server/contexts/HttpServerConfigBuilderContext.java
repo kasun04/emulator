@@ -4,10 +4,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.HttpVersion;
 import org.wso2.gw.emulator.core.contexts.AbstractConfigurationBuilderContext;
 import org.wso2.gw.emulator.core.AbstractProtocolEmulator;
-import org.wso2.gw.emulator.http.dsl.server.IncomingMessage;
-import org.wso2.gw.emulator.http.dsl.server.OutgoingMessage;
 
-import java.util.Map;
 
 /**
  * Created by chamile on 12/7/15.
@@ -25,7 +22,6 @@ public class HttpServerConfigBuilderContext extends AbstractConfigurationBuilder
     private HttpVersion httpVersion;
     private HttpServerRequestBuilderContext incoming;
     private AbstractProtocolEmulator httpProtocolEmulator;
-    private Map<IncomingMessage,OutgoingMessage> inOutCorrelation;
 
     /*public HttpServerConfigBuilderContext(HTTPProtocolEmulator httpProtocolEmulator) {
         this.httpProtocolEmulator = httpProtocolEmulator;

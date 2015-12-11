@@ -2,13 +2,14 @@ package org.wso2.gw.emulator.http.client.contexts;
 
 import io.netty.handler.codec.http.HttpMethod;
 import org.wso2.gw.emulator.core.contexts.AbstractRequestBuilderContext;
-import org.wso2.gw.emulator.http.dsl.params.Cookie;
-import org.wso2.gw.emulator.http.dsl.params.Header;
-import org.wso2.gw.emulator.http.dsl.params.QueryParameter;
+import org.wso2.gw.emulator.http.params.Cookie;
+import org.wso2.gw.emulator.http.params.Header;
+import org.wso2.gw.emulator.http.params.QueryParameter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 
 /**
  * Created by chamile on 12/7/15.

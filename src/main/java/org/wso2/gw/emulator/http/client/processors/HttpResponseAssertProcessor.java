@@ -22,8 +22,6 @@ package org.wso2.gw.emulator.http.client.processors;
 
 import org.wso2.gw.emulator.http.client.contexts.HttpClientProcessorContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientResponseProcessorContext;
-import org.wso2.gw.emulator.http.client.contexts.HttpResponseContext;
-import org.wso2.gw.emulator.http.dsl.producer.OutgoingMessage;
 
 public class HttpResponseAssertProcessor extends AbstractClientProcessor<HttpClientResponseProcessorContext> {
 
