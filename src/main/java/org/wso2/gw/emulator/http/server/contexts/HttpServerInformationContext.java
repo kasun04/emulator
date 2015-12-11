@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class HttpServerInformationContext {
     private HttpServerConfigBuilderContext serverConfigBuilderContext;
-    private Map<HttpServerRequestBuilderContext,HttpServerResponseBuilderContext> correlation;
+    private Map<HttpServerRequestBuilderContext, HttpServerResponseBuilderContext> correlation;
     private HttpServerInitializer httpServerInitializer;
 
     public HttpServerConfigBuilderContext getServerConfigBuilderContext() {
@@ -25,11 +25,11 @@ public class HttpServerInformationContext {
         return correlation;
     }
 
-    public void addCorrelation(HttpServerRequestBuilderContext httpServerRequestBuilderContext,HttpServerResponseBuilderContext httpServerResponseBuilderContext){
-        if(correlation == null){
+    public void addCorrelation(HttpServerRequestBuilderContext httpServerRequestBuilderContext, HttpServerResponseBuilderContext httpServerResponseBuilderContext) {
+        if (correlation == null) {
             this.correlation = new HashMap<HttpServerRequestBuilderContext, HttpServerResponseBuilderContext>();
         }
-        correlation.put(httpServerRequestBuilderContext,httpServerResponseBuilderContext);
+        correlation.put(httpServerRequestBuilderContext, httpServerResponseBuilderContext);
     }
 
     public HttpServerInitializer getHttpServerInitializer() {

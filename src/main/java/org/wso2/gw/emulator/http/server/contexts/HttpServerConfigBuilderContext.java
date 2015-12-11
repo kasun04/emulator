@@ -23,11 +23,6 @@ public class HttpServerConfigBuilderContext extends AbstractConfigurationBuilder
     private HttpServerRequestBuilderContext incoming;
     private AbstractProtocolEmulator httpProtocolEmulator;
 
-    /*public HttpServerConfigBuilderContext(HTTPProtocolEmulator httpProtocolEmulator) {
-        this.httpProtocolEmulator = httpProtocolEmulator;
-        this.httpVersion = HttpVersion.HTTP_1_1;
-    }*/
-
 
     private static HttpServerConfigBuilderContext getInstance() {
         config = new HttpServerConfigBuilderContext();
@@ -39,15 +34,14 @@ public class HttpServerConfigBuilderContext extends AbstractConfigurationBuilder
     }
 
     public HttpServerConfigBuilderContext host(String host) {
-        this.host=host;
+        this.host = host;
         return this;
     }
 
     public HttpServerConfigBuilderContext port(int port) {
-        this.port=port;
+        this.port = port;
         return this;
     }
-
 
     public HttpServerConfigBuilderContext context(String context) {
         this.context = context;
@@ -68,13 +62,6 @@ public class HttpServerConfigBuilderContext extends AbstractConfigurationBuilder
         this.randomConnectionClose = randomConnectionClose;
         return this;
     }
-
-    public HttpServerConfigBuilderContext httpVersion(HttpVersion httpVersion) {
-        this.httpVersion = httpVersion;
-        return this;
-    }
-
-
 
     public HttpServerConfigBuilderContext logic(ChannelInboundHandlerAdapter logicHandler) {
         this.logicHandler = logicHandler;

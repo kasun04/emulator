@@ -12,7 +12,6 @@ public class HttpServerWhenBuilderContext extends AbstractWhenBuilderContext<Htt
     private HttpServerThenBuilderContext thenBuilderContext;
     private List<HttpServerWhenBuilderContext> whenBuilderContextList;
     private HttpServerRequestBuilderContext requestContext;
-    //private HttpServerOperationBuilderContext httpProtocolEmulator;
     private HttpServerOperationBuilderContext httpServerOperationBuilderContext;
 
     public HttpServerWhenBuilderContext(List<HttpServerWhenBuilderContext> whenBuilderContextList,HttpServerInformationContext httpServerInformationContext){

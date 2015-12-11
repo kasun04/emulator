@@ -59,7 +59,7 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         if (msg instanceof HttpRequest) {
-           // readingDelay(serverInformationContext.getReadingDelay());
+            // readingDelay(serverInformationContext.getReadingDelay());
             this.httpRequestInformationProcessor = new HttpRequestInformationProcessor();
             this.httpResponseProcessor = new HttpResponseProcessor();
             this.httpProcessorContext = new HttpServerProcessorContext();
@@ -91,10 +91,10 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) {
         if (httpResponseProcessor != null) {
-           // waitingDelay(consumerContext.getWritingDelay());
+            // waitingDelay(consumerContext.getWritingDelay());
             this.httpResponseProcessor.process(httpProcessorContext);
             FullHttpResponse response = httpProcessorContext.getFinalResponse();
-            if(httpProcessorContext.getHttpRequestContext().isKeepAlive()) {
+            if (httpProcessorContext.getHttpRequestContext().isKeepAlive()) {
                 ctx.write(response);
             } else {
                 ctx.write(response).addListener(ChannelFutureListener.CLOSE);

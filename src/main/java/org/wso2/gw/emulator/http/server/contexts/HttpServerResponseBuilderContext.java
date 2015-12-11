@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by chamile on 12/7/15.
  */
-public class HttpServerResponseBuilderContext extends AbstractResponseBuilderContext{
+public class HttpServerResponseBuilderContext extends AbstractResponseBuilderContext {
 
     private static HttpServerResponseBuilderContext serverResponse;
     private HttpResponseStatus statusCode = HttpResponseStatus.OK;
@@ -52,6 +52,7 @@ public class HttpServerResponseBuilderContext extends AbstractResponseBuilderCon
         return this;
     }
 
+
     public HttpServerResponseBuilderContext withHeader(String name, String value) {
         if (headers == null) {
             this.headers = new ArrayList<Header>();
@@ -68,6 +69,10 @@ public class HttpServerResponseBuilderContext extends AbstractResponseBuilderCon
         if (headers != null && headers.length > 0) {
             this.headers.addAll(Arrays.asList(headers));
         }
+        return this;
+    }
+
+    public HttpServerResponseBuilderContext withCustomProcessor(String CustomRequestProcessor) {
         return this;
     }
 

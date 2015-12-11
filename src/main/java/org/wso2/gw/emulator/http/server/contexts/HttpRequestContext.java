@@ -23,6 +23,7 @@ package org.wso2.gw.emulator.http.server.contexts;
 
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpVersion;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +39,7 @@ public class HttpRequestContext {
     private HttpVersion httpVersion;
     private boolean isKeepAlive;
 
+
     public void addHeaderParameter(String key, String value) {
         if (headerParameters == null) {
             this.headerParameters = new HashMap<String, List<String>>();
@@ -50,6 +52,7 @@ public class HttpRequestContext {
         headerValues.add(value);
         this.headerParameters.put(key, headerValues);
     }
+
 
     public Map<String, List<String>> getQueryParameters() {
         return queryParameters;
