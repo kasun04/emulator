@@ -34,6 +34,8 @@ import org.wso2.gw.emulator.http.dsl.producer.HttpClientBuilderContext;
 import org.wso2.gw.emulator.http.dsl.params.Cookie;
 import org.wso2.gw.emulator.http.dsl.params.Header;
 import org.wso2.gw.emulator.http.dsl.producer.IncomingMessage;
+import org.wso2.gw.emulator.http.params.Cookie;
+import org.wso2.gw.emulator.http.params.Header;
 import org.wso2.gw.emulator.http.server.contexts.HttpServerConfigBuilderContext;
 
 import java.net.URI;
@@ -46,7 +48,7 @@ public class HttpRequestInformationProcessor extends AbstractClientProcessor {
         HttpClientConfigBuilderContext clientConfigBuilderContext = processorContext.getClientInformationContext()
                 .getClientConfigBuilderContext();
         String uri = getURI(clientConfigBuilderContext.getHost(), clientConfigBuilderContext.getPort(),
-                            processorContext.getRequest());
+                            processorContext.getRequestContext());
         URI requestUri = null;
         try {
             requestUri = new URI(uri);
@@ -62,13 +64,14 @@ public class HttpRequestInformationProcessor extends AbstractClientProcessor {
         }
         HttpRequest request = new DefaultFullHttpRequest(
                 HttpVersion.HTTP_1_1, processorContext.getRequest().getMethod(), requestUri.getRawPath());
-        populateHeader(request, requestUri.getHost(), processorContext.getRequest());
-        populateCookies(request, processorContext.getRequest());
-        populateQueryParameters(request, processorContext.getRequest());
+        processorContext.setRequest(request);
+        populateHeader(processorContext);
+        populateCookies(processorContext);
+        populateQueryParameters(processorContext);
     }
 
-    public HttpRequest populateHttpRequest(HttpClientBuilderContext clientBuilderContext, HttpClientRequestBuilderContext
-            requestBuilderContext) throws Exception {
+/*
+    public HttpRequest populateHttpRequest(HttpClientProcessorContext processorContext) throws Exception {
 
         String uri = getURI(clientBuilderContext.getHost(), clientBuilderContext.getPort(), requestBuilderContext);
         URI requestUri = new URI(uri);
@@ -81,41 +84,46 @@ public class HttpRequestInformationProcessor extends AbstractClientProcessor {
         }
         HttpRequest request = new DefaultFullHttpRequest(
                 HttpVersion.HTTP_1_1, requestBuilderContext.getMethod(), requestUri.getRawPath());
-        populateHeader(request, requestUri.getHost(), requestBuilderContext);
+        populateHeader(processorContext);
         populateCookies(request, requestBuilderContext);
         populateQueryParameters(request, requestBuilderContext);
         return request;
     }
+*/
 
-    private void populateHeader(HttpRequest request, String host, IncomingMessage incomingMessage) {
-        request.headers().set(HttpHeaders.Names.HOST, host);
+    private void populateHeader(HttpClientProcessorContext processorContext) {
+        HttpRequest request = processorContext.getRequest();
+        HttpClientRequestBuilderContext requestContext = processorContext.getRequestContext();
+        request.headers().set(HttpHeaders.Names.HOST, processorContext.getClientInformationContext()
+                .getClientConfigBuilderContext().getHost());
         request.headers().set(HttpHeaders.Names.CONNECTION, HttpHeaders.Values.CLOSE);
         request.headers().set(HttpHeaders.Names.ACCEPT_ENCODING, HttpHeaders.Values.GZIP);
-        if (incomingMessage.getBody() != null) {
-            request.headers().set(HttpHeaders.Names.CONTENT_LENGTH, incomingMessage.getBody().getBytes()
+        if (requestContext.getBody() != null) {
+            request.headers().set(HttpHeaders.Names.CONTENT_LENGTH, requestContext.getBody().getBytes()
                     .length);
         }
-        if (incomingMessage.getHeaders() != null) {
-            for (Header header : incomingMessage.getHeaders()) {
+        if (requestContext.getHeaders() != null) {
+            for (Header header : requestContext.getHeaders()) {
                 request.headers().set(header.getName(), header.getValue());
             }
         }
     }
 
-    private void populateCookies(HttpRequest request, IncomingMessage incomingMessage) {
-        if (incomingMessage.getCookies() != null) {
-            DefaultCookie[] cookies = new DefaultCookie[incomingMessage.getCookies().size()];
+    private void populateCookies(HttpClientProcessorContext processorContext) {
+        HttpClientRequestBuilderContext requestContext = processorContext.getRequestContext();
+        if (requestContext.getCookies() != null) {
+            DefaultCookie[] cookies = new DefaultCookie[requestContext.getCookies().size()];
             int i = 0;
-            for (Cookie cookie : incomingMessage.getCookies()) {
+            for (Cookie cookie : requestContext.getCookies()) {
                 cookies[i++] = new DefaultCookie(cookie.getName(), cookie.getValue());
             }
-            request.headers().set(
+            processorContext.getRequest().headers().set(
                     HttpHeaders.Names.COOKIE,
                     ClientCookieEncoder.STRICT.encode(cookies));
         }
     }
 
-    private void populateQueryParameters(HttpRequest request, IncomingMessage incomingMessage) {
+    private void populateQueryParameters(HttpClientProcessorContext processorContext) {
 
     }
 

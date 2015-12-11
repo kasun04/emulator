@@ -6,6 +6,7 @@ import org.wso2.gw.emulator.http.params.Header;
 import org.wso2.gw.emulator.http.params.QueryParameter;
 import org.wso2.gw.emulator.http.server.contexts.HttpRequestContext;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -20,7 +21,7 @@ public class HttpClientRequestBuilderContext extends AbstractRequestBuilderConte
     private String path;
     private String body;
     private String context;
-    private Header header;
+    private List<Header> headers;
     private QueryParameter queryParameter;
 
 
@@ -49,7 +50,13 @@ public class HttpClientRequestBuilderContext extends AbstractRequestBuilderConte
     }
 
     public HttpClientRequestBuilderContext withHeader(String name, String value) {
-        header = new Header(name, value);
+        Header header = new Header(name, value);
+
+        if(headers == null) {
+            headers = new ArrayList<Header>();
+        }
+
+        headers.add(header);
         return this;
     }
 
@@ -72,5 +79,9 @@ public class HttpClientRequestBuilderContext extends AbstractRequestBuilderConte
 
     public String getBody() {
         return body;
+    }
+
+    public List<Header> getHeaders() {
+        return headers;
     }
 }
