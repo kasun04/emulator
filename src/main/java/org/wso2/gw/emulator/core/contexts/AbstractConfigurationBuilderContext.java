@@ -5,7 +5,8 @@ package org.wso2.gw.emulator.core.contexts;
  */
 public abstract class AbstractConfigurationBuilderContext {
 
-    //public abstract void host();
-    //public abstract void port();
+    public abstract AbstractConfigurationBuilderContext host(String host);
+
+    public abstract AbstractConfigurationBuilderContext port(int port);
 
 }

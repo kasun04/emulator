@@ -25,47 +25,10 @@ import org.wso2.gw.emulator.core.contexts.AbstractGivenBuilderContext;
 
 public abstract class AbstractProtocolEmulator {
 
-    //private Emulator emulator;
-    //private EmulatorType emulatorType;
     private static final Logger log = Logger.getLogger(AbstractProtocolEmulator.class);
-
-    /*public AbstractProtocolEmulator(Emulator emulator) {
-        this.emulator = emulator;
-    }*/
 
     public abstract AbstractGivenBuilderContext server();
 
     public abstract AbstractGivenBuilderContext client();
 
-    /*public AbstractProtocolEmulator start() {
-        try {
-            emulator.setEmulatorType(emulatorType);
-            emulator.start();
-        } catch (Exception e) {
-            log.error("Exception occurred while initialize the emulator", e);
-        }
-        return this;
-    }
-
-    public AbstractProtocolEmulator send() {
-        try {
-            emulator.setEmulatorType(emulatorType);
-            emulator.run();
-        } catch (Exception e) {
-            log.error("Exception occurred while initialize the emulator", e);
-        }
-        return this;
-    }
-
-    public void shutdown() {
-        try {
-            emulator.shutdown(emulatorType);
-        } catch (Exception e) {
-            log.error("Exception occurred while shutdown the emulator", e);
-        }
-    }*/
-
-    /*public void setEmulatorType(EmulatorType emulatorType) {
-        this.emulatorType = emulatorType;
-    }*/
 }

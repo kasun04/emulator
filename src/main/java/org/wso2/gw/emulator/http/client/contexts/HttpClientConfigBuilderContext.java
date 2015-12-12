@@ -21,11 +21,13 @@ public class HttpClientConfigBuilderContext extends AbstractConfigurationBuilder
         return getInstance();
     }
 
+    @Override
     public HttpClientConfigBuilderContext host(String host) {
         this.host=host;
         return this;
     }
 
+    @Override
     public HttpClientConfigBuilderContext port(int port) {
         this.port=port;
         return this;
@@ -50,4 +52,5 @@ public class HttpClientConfigBuilderContext extends AbstractConfigurationBuilder
     public void setPort(int port) {
         this.port = port;
     }
+
 }

@@ -22,51 +22,13 @@ package org.wso2.gw.emulator.core;
 
 import org.apache.log4j.Logger;
 import org.wso2.gw.emulator.http.HTTPProtocolEmulator;
-//import org.wso2.gw.emulator.sampletcp.TCPProtocolEmulator;
 
 public class Emulator extends Thread {
     private static final Logger log = Logger.getLogger(Emulator.class);
     private static HTTPProtocolEmulator httpProtocolEmulator;
-    //private static TCPProtocolEmulator tcpProtocolEmulator;
-    private EmulatorType emulatorType;
 
     public static HTTPProtocolEmulator getHttpEmulator() {
         httpProtocolEmulator = new HTTPProtocolEmulator();
         return httpProtocolEmulator;
-    }
-
-
-    public void run(){
-        try {
-            if (EmulatorType.HTTP_SERVER.equals(emulatorType)) {
-                /*validateInput(httpProtocolEmulator.getConsumerContext());
-                httpProtocolEmulator.getHttpEmulatorConsumerInitializer().initialize();*/
-            }  else if(EmulatorType.HTTP_CLIENT.equals(emulatorType)) {
-                /*validateInput(httpProtocolEmulator.getHttpProducerContext());
-                httpProtocolEmulator.getHttpEmulatorProducerInitializer().initialize();
-           */ }
-        }catch (Exception e) {
-            log.error("Exception occurred while initialize the Emulator", e);
-        }
-    }
-
-    public void shutdown(EmulatorType emulatorType) {
-        if(EmulatorType.HTTP_SERVER.equals(emulatorType)) {
-            //httpProtocolEmulator.getHttpEmulatorConsumerInitializer().shutdown();
-          } else if(EmulatorType.HTTP_CLIENT.equals(emulatorType)) {
-            //httpProtocolEmulator.getHttpEmulatorProducerInitializer().shutdown();
-        }
-        log.info("Emulator shutdown successfully.......");
-    }
-
-   /* private void validateInput(AbstractEmulatorContext abstractEmulatorContext) {
-        if(abstractEmulatorContext.getHost() == null || abstractEmulatorContext.getPort() == null) {
-           log.error("Invalid host [" +abstractEmulatorContext.getHost() +"] and port [" +abstractEmulatorContext
-                   .getPort() +"]");
-        }
-    }*/
-
-    public void setEmulatorType(EmulatorType emulatorType) {
-        this.emulatorType = emulatorType;
     }
 }
