@@ -26,6 +26,7 @@ import org.wso2.gw.emulator.core.Emulator;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientConfigBuilderContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientRequestBuilderContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientResponseBuilderContext;
+import org.wso2.gw.emulator.http.server.contexts.HttpServerOperationBuilderContext;
 
 import static org.wso2.gw.emulator.http.server.contexts.HttpServerRequestBuilderContext.request;
 import static org.wso2.gw.emulator.http.server.contexts.HttpServerResponseBuilderContext.response;
@@ -34,15 +35,17 @@ import static org.wso2.gw.emulator.http.server.contexts.HttpServerConfigBuilderC
 public class Tester {
     public static void main(String[] args) throws Exception {
         //startSampleTcpEmulator();
-        startHttpEmulator();
+        HttpServerOperationBuilderContext serverOperationBuilderContext = startHttpEmulator();
         Thread.sleep(1000);
         testProducer();
         testProducer1();
+        Thread.sleep(1000);
+        serverOperationBuilderContext.stop();
         //startHttpEmulator1();
     }
 
-    private static void startHttpEmulator() {
-        Emulator.getHttpEmulator()
+    private static HttpServerOperationBuilderContext startHttpEmulator() {
+        return Emulator.getHttpEmulator()
                 .server()
                 .given(configure()
                                .host("127.0.0.1").port(6065).writingDelay(4000).context("/user"))
