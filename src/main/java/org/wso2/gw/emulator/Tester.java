@@ -34,14 +34,11 @@ import static org.wso2.gw.emulator.http.server.contexts.HttpServerConfigBuilderC
 
 public class Tester {
     public static void main(String[] args) throws Exception {
-        //startSampleTcpEmulator();
         HttpServerOperationBuilderContext serverOperationBuilderContext = startHttpEmulator();
         Thread.sleep(1000);
         testProducer();
         testProducer1();
-        Thread.sleep(1000);
         serverOperationBuilderContext.stop();
-        //startHttpEmulator1();
     }
 
     private static HttpServerOperationBuilderContext startHttpEmulator() {
@@ -62,37 +59,17 @@ public class Tester {
                 .operation().start();
     }
 
-    private static void startHttpEmulator1() {
-        /*Emulator.getHttpEmulator()
-                .server()
-                .host("127.0.0.1")
-                .port(6066)
-                .writingDelay(4000)
-                .context("/user")
-                .when(request().withMethod(HttpMethod.POST).withBody("TestRequest1").
-                        withQueryParameter("test", "123"))
-                .respond(response().withBody("Test Response2").withStatusCode(HttpResponseStatus.OK))
-                .when(request().withPath("/name"))
-                .respond(response().withBody("Test response2").withStatusCode(HttpResponseStatus.FORBIDDEN))
-                .operations().start();*/
-    }
-
-    private static void startSampleTcpEmulator() {
-        /*Emulator.getTCPEmulator().server().host("127.0.0.1").port(9890)
-                .when(IncomingMessage.request().withBody("Test TCP"))
-                .respond(OutgoingMessage.response().withBody("TCP Response body"))
-                .operations().start();
-*/
-    }
-
     private static void testProducer() {
         Emulator.getHttpEmulator()
                 .client()
                 .given(HttpClientConfigBuilderContext.configure()
-                        .host("http://127.0.0.1").port(6065))
+                               .host("127.0.0.1").port(6065))
                 .when(HttpClientRequestBuilderContext.request()
-                        .withPath("/user").withMethod(HttpMethod.GET))
+                              .withPath("/user").withMethod(HttpMethod.GET))
                 .then(HttpClientResponseBuilderContext.response().withBody("Test Response1"))
+                .when(HttpClientRequestBuilderContext.request()
+                              .withPath("/user").withMethod(HttpMethod.POST).withBody("test"))
+                .then(HttpClientResponseBuilderContext.response().withBody("Test Response2"))
                 .operation().send();
     }
 
@@ -100,7 +77,7 @@ public class Tester {
         Emulator.getHttpEmulator()
                 .client()
                 .given(HttpClientConfigBuilderContext.configure()
-                               .host("http://127.0.0.1").port(6065))
+                               .host("127.0.0.1").port(6065))
                 .when(HttpClientRequestBuilderContext.request()
                               .withPath("/user").withMethod(HttpMethod.POST).withBody("test"))
                 .then(HttpClientResponseBuilderContext.response().withBody("Test Response2"))

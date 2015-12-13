@@ -60,8 +60,8 @@ public class HttpRequestInformationProcessor extends AbstractClientProcessor<Htt
             //Need to log
         }
 
-        ByteBuf content = null;
-        HttpRequest request = null;
+        ByteBuf content;
+        HttpRequest request;
 
         if(processorContext.getRequestBuilderContext().getBody() != null) {
             String rawData = processorContext.getRequestBuilderContext().getBody();
@@ -119,12 +119,17 @@ public class HttpRequestInformationProcessor extends AbstractClientProcessor<Htt
     }
 
     private String getURI(String host, int port, HttpClientRequestBuilderContext requestBuilderContext) {
+        String httpSchema = "http://";
         String path = requestBuilderContext.getPath();
         String uri = host + ":" + port;
         if (path.startsWith("/")) {
             uri = uri + path;
         } else {
             uri = uri + "/" + path;
+        }
+
+        if(!uri.startsWith(httpSchema)) {
+            uri = httpSchema + uri;
         }
         return uri;
     }

@@ -77,19 +77,17 @@ public class HttpClientInitializer {
             httpClientRequestProcessorContext.setClientInformationContext(clientInformationContext);
             sendMessage(httpClientRequestProcessorContext);
         }
+
+        shutdown();
     }
 
     private void sendMessage(HttpClientRequestProcessorContext httpClientProcessorContext) throws Exception {
-        try {
-            new HttpRequestInformationProcessor().process(httpClientProcessorContext);
+        new HttpRequestInformationProcessor().process(httpClientProcessorContext);
             HttpClientConfigBuilderContext clientConfigBuilderContext = httpClientProcessorContext.getClientInformationContext()
                     .getClientConfigBuilderContext();
             Channel ch = bootstrap.connect(clientConfigBuilderContext.getHost(), clientConfigBuilderContext.getPort()).sync().channel();
             ch.writeAndFlush(httpClientProcessorContext.getRequest());
             ch.closeFuture().sync();
-        } finally {
-            group.shutdownGracefully();
-        }
     }
 
     public void shutdown() {
