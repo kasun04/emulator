@@ -41,6 +41,7 @@ import static io.netty.handler.codec.http.HttpResponseStatus.CONTINUE;
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
 public class HttpServerHandler extends ChannelInboundHandlerAdapter {
+
     private static final Logger log = Logger.getLogger(HttpServerHandler.class);
     private HttpRequestInformationProcessor httpRequestInformationProcessor;
     private HttpResponseProcessor httpResponseProcessor;
