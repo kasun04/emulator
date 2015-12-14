@@ -20,13 +20,7 @@
 
 package org.wso2.gw.emulator.http.client.contexts;
 
-import org.wso2.gw.emulator.core.contexts.AbstractResponseBuilderContext;
 import org.wso2.gw.emulator.core.contexts.AbstractThenBuilderContext;
-import org.wso2.gw.emulator.http.server.contexts.HttpServerInformationContext;
-import org.wso2.gw.emulator.http.server.contexts.HttpServerRequestBuilderContext;
-import org.wso2.gw.emulator.http.server.contexts.HttpServerResponseBuilderContext;
-import org.wso2.gw.emulator.http.server.contexts.HttpServerWhenBuilderContext;
-
 import java.util.List;
 
 public class HttpClientThenBuilderContext extends AbstractThenBuilderContext<HttpClientResponseBuilderContext>{

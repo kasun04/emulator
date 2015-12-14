@@ -32,11 +32,9 @@ import org.wso2.gw.emulator.core.EmulatorType;
 import org.wso2.gw.emulator.http.ChannelPipelineInitializer;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientConfigBuilderContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientInformationContext;
-import org.wso2.gw.emulator.http.client.contexts.HttpClientProcessorContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientRequestBuilderContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientRequestProcessorContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientResponseBuilderContext;
-import org.wso2.gw.emulator.http.client.contexts.HttpClientResponseProcessorContext;
 import org.wso2.gw.emulator.http.client.processors.HttpRequestInformationProcessor;
 
 import java.util.Map;

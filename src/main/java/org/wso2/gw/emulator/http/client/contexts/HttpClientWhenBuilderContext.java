@@ -21,7 +21,6 @@
 package org.wso2.gw.emulator.http.client.contexts;
 
 import org.wso2.gw.emulator.core.contexts.AbstractWhenBuilderContext;
-
 import java.util.List;
 
 public class HttpClientWhenBuilderContext extends AbstractWhenBuilderContext<HttpClientRequestBuilderContext> {

@@ -24,13 +24,9 @@ import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.DecoderResult;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpObject;
-import io.netty.handler.codec.http.HttpResponse;
 import io.netty.util.CharsetUtil;
-import org.wso2.gw.emulator.http.client.contexts.HttpClientProcessorContext;
-import org.wso2.gw.emulator.http.client.contexts.HttpClientResponseBuilderContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientResponseProcessorContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpResponseContext;
-
 import java.util.Map;
 
 public class HttpResponseInformationProcessor extends AbstractClientProcessor<HttpClientResponseProcessorContext> {
