@@ -5,16 +5,12 @@ import org.wso2.gw.emulator.core.contexts.AbstractRequestBuilderContext;
 import org.wso2.gw.emulator.http.params.Cookie;
 import org.wso2.gw.emulator.http.params.Header;
 import org.wso2.gw.emulator.http.params.QueryParameter;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-/**
- * Created by chamile on 12/7/15.
- */
 public class HttpServerRequestBuilderContext extends AbstractRequestBuilderContext {
 
     private static HttpServerRequestBuilderContext serverRequest;

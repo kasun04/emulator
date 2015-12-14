@@ -21,10 +21,6 @@
 package org.wso2.gw.emulator.http.server.contexts;
 
 import org.wso2.gw.emulator.http.server.HttpServerInitializer;
-import org.wso2.gw.emulator.http.server.contexts.HttpServerRequestBuilderContext;
-import org.wso2.gw.emulator.http.server.contexts.HttpServerResponseBuilderContext;
-import org.wso2.gw.emulator.http.server.contexts.HttpServerConfigBuilderContext;
-
 import java.util.HashMap;
 import java.util.Map;
 

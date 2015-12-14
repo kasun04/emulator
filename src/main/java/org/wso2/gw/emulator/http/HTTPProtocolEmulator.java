@@ -21,12 +21,6 @@
 package org.wso2.gw.emulator.http;
 
 import org.wso2.gw.emulator.core.AbstractProtocolEmulator;
-import org.wso2.gw.emulator.core.Emulator;
-/*
-import org.wso2.gw.emulator.http.client.HttpClientInitializer;
-import org.wso2.gw.emulator.http.client.contexts.HttpClientGivenBuilderContext;
-import org.wso2.gw.emulator.http.client.contexts.HttpClientInformationContext;
-*/
 import org.wso2.gw.emulator.http.client.HttpClientInitializer;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientGivenBuilderContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientInformationContext;

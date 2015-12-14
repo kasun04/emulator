@@ -36,7 +36,6 @@ import org.wso2.gw.emulator.http.server.contexts.HttpRequestContext;
 import org.wso2.gw.emulator.http.server.processors.HttpRequestInformationProcessor;
 import org.wso2.gw.emulator.http.server.contexts.HttpServerInformationContext;
 import org.wso2.gw.emulator.http.server.processors.HttpResponseProcessor;
-
 import static io.netty.handler.codec.http.HttpResponseStatus.CONTINUE;
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 

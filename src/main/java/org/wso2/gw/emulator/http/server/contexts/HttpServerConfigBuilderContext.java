@@ -21,9 +21,7 @@
 package org.wso2.gw.emulator.http.server.contexts;
 
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.handler.codec.http.HttpVersion;
 import org.wso2.gw.emulator.core.contexts.AbstractConfigurationBuilderContext;
-import org.wso2.gw.emulator.core.AbstractProtocolEmulator;
 
 public class HttpServerConfigBuilderContext extends AbstractConfigurationBuilderContext {
 

@@ -33,9 +33,7 @@ import org.wso2.gw.emulator.http.params.Header;
 import org.wso2.gw.emulator.http.server.contexts.HttpServerProcessorContext;
 import org.wso2.gw.emulator.http.server.contexts.HttpRequestContext;
 import org.wso2.gw.emulator.http.server.contexts.HttpServerResponseBuilderContext;
-
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
-
 
 public class HttpResponseProcessor extends AbstractServerProcessor {
 

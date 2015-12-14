@@ -24,7 +24,6 @@ import org.wso2.gw.emulator.http.server.contexts.HttpServerProcessorContext;
 import org.wso2.gw.emulator.http.server.contexts.HttpRequestContext;
 import org.wso2.gw.emulator.http.server.contexts.HttpServerRequestBuilderContext;
 import org.wso2.gw.emulator.http.server.contexts.HttpServerResponseBuilderContext;
-
 import java.util.Map;
 
 public class HttpRequestResponseMatchingProcessor extends AbstractServerProcessor {
