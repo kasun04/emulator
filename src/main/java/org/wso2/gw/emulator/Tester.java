@@ -27,7 +27,6 @@ import org.wso2.gw.emulator.http.client.contexts.HttpClientConfigBuilderContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientRequestBuilderContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientResponseBuilderContext;
 import org.wso2.gw.emulator.http.server.contexts.HttpServerOperationBuilderContext;
-
 import static org.wso2.gw.emulator.http.server.contexts.HttpServerRequestBuilderContext.request;
 import static org.wso2.gw.emulator.http.server.contexts.HttpServerResponseBuilderContext.response;
 import static org.wso2.gw.emulator.http.server.contexts.HttpServerConfigBuilderContext.configure;
@@ -45,7 +44,8 @@ public class Tester {
         return Emulator.getHttpEmulator()
                 .server()
                 .given(configure()
-                               .host("127.0.0.1").port(6065).writingDelay(4000).context("/user"))
+                               .host("127.0.0.1").port(6065).context("/user").readingDelay(1000).writingDelay(1000)
+                )
                 .when(request()
                               .withMethod(HttpMethod.GET))
                 .then(response()

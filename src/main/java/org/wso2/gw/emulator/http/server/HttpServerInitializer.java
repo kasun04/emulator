@@ -29,6 +29,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslContext;
+import io.netty.util.concurrent.EventExecutor;
 import org.wso2.gw.emulator.core.EmulatorType;
 import org.wso2.gw.emulator.http.ChannelPipelineInitializer;
 import org.wso2.gw.emulator.http.server.contexts.HttpServerInformationContext;
@@ -54,7 +55,7 @@ public class HttpServerInitializer extends Thread{
         // Configure the server.
         bossGroup = new NioEventLoopGroup(getCPUCoreSize());
         workerGroup = new NioEventLoopGroup();
-        try {
+               try {
             ServerBootstrap serverBootstrap = new ServerBootstrap();
             ChannelPipelineInitializer channelPipelineInitializer = new ChannelPipelineInitializer(sslCtx,
                                                                                                    EmulatorType.HTTP_SERVER);

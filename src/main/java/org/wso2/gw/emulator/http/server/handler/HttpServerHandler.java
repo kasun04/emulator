@@ -36,6 +36,7 @@ import org.wso2.gw.emulator.http.server.contexts.HttpRequestContext;
 import org.wso2.gw.emulator.http.server.processors.HttpRequestInformationProcessor;
 import org.wso2.gw.emulator.http.server.contexts.HttpServerInformationContext;
 import org.wso2.gw.emulator.http.server.processors.HttpResponseProcessor;
+import java.util.concurrent.*;
 import static io.netty.handler.codec.http.HttpResponseStatus.CONTINUE;
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
@@ -47,9 +48,13 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
     private HttpServerInformationContext serverInformationContext;
     private HttpServerProcessorContext httpProcessorContext;
     private HttpRequestResponseMatchingProcessor requestResponseMatchingProcessor;
+    private ScheduledExecutorService scheduledReadingExecutorService,scheduledWritingExecutorService;
+
 
     public HttpServerHandler(HttpServerInformationContext serverInformationContext) {
         this.serverInformationContext = serverInformationContext;
+        scheduledReadingExecutorService = Executors.newScheduledThreadPool(5);
+        scheduledWritingExecutorService = Executors.newScheduledThreadPool(5);
     }
 
     @Override
@@ -59,7 +64,7 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         if (msg instanceof HttpRequest) {
-            // readingDelay(serverInformationContext.getReadingDelay());
+            readingDelay(serverInformationContext.getServerConfigBuilderContext().getReadingDelay());
             this.httpRequestInformationProcessor = new HttpRequestInformationProcessor();
             this.httpResponseProcessor = new HttpResponseProcessor();
             this.httpProcessorContext = new HttpServerProcessorContext();
@@ -91,7 +96,7 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) {
         if (httpResponseProcessor != null) {
-            // waitingDelay(consumerContext.getWritingDelay());
+            waitingDelay(serverInformationContext.getServerConfigBuilderContext().getWritingDelay());
             this.httpResponseProcessor.process(httpProcessorContext);
             FullHttpResponse response = httpProcessorContext.getFinalResponse();
             if (httpProcessorContext.getHttpRequestContext().isKeepAlive()) {
@@ -114,23 +119,58 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
         ctx.write(response);
     }
 
-    private void readingDelay(int delay) {
+    private void readingDelay(final int delay) {
+
+
+        ScheduledFuture scheduledFuture =
+                scheduledReadingExecutorService.schedule(new Callable() {
+                                                      public Object call() throws Exception {
+                                                          //System.out.println("Executed!");
+                                                          return "Reading";
+                                                      }
+                                                  },
+                        delay,
+                        TimeUnit.MILLISECONDS);
+
         try {
-            if (delay > 0) {
-                Thread.sleep(delay);
-            }
+            System.out.println("result = " + scheduledFuture.get());
         } catch (InterruptedException e) {
-            log.error("Exception occurred while processing the reading delay", e);
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
         }
-    }
+
+        scheduledReadingExecutorService.shutdown();
+        }
 
     private void waitingDelay(int delay) {
+        /*ScheduledExecutorService scheduledReadingExecutorService =
+                Executors.newScheduledThreadPool(5);
+*/
+        ScheduledFuture scheduledWaitingFuture =
+                scheduledWritingExecutorService.schedule(new Callable() {
+                                                      public Object call() throws Exception {
+                                                          //System.out.println("Executed!");
+                                                          return "Writing";
+                                                      }
+                                                  },
+                        delay,
+                        TimeUnit.MILLISECONDS);
+
         try {
-            if (delay > 0) {
-                Thread.sleep(delay);
-            }
+            System.out.println("result = " + scheduledWaitingFuture.get());
         } catch (InterruptedException e) {
-            log.error("Exception occurred while processing the waiting delay", e);
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
         }
+
+        scheduledReadingExecutorService.shutdown();
     }
+
+    private void randomConnectionClose(ChannelHandlerContext ctx){
+        //int randomValue = (int)Math.random(1,100);
+        //ctx.close();
+    }
+
 }
