@@ -22,6 +22,7 @@ package org.wso2.gw.emulator.http.client.contexts;
 
 import io.netty.handler.codec.http.HttpResponseStatus;
 import org.wso2.gw.emulator.core.contexts.AbstractResponseBuilderContext;
+import org.wso2.gw.emulator.http.params.Cookie;
 import org.wso2.gw.emulator.http.params.Header;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,6 +33,7 @@ public class HttpClientResponseBuilderContext extends AbstractResponseBuilderCon
     private static HttpClientResponseBuilderContext clientResponseBuilderContext;
     private HttpResponseStatus statusCode;
     private List<Header> headers;
+    private List<Cookie> cookies;
     private String body;
 
     private static HttpClientResponseBuilderContext getInstance() {
@@ -67,6 +69,25 @@ public class HttpClientResponseBuilderContext extends AbstractResponseBuilderCon
         return this;
     }
 
+    public HttpClientResponseBuilderContext withCookie(String name, String value){
+        if(cookies == null){
+            this.cookies = new ArrayList<Cookie>();
+        }
+        cookies.add(new Cookie(name,value));
+        return this;
+    }
+
+    public HttpClientResponseBuilderContext withCookies(Cookie...cookies){
+        if (this.cookies == null){
+            this.cookies = new ArrayList<Cookie>();
+        }
+
+        if (cookies != null && cookies.length > 0){
+            this.cookies.addAll(Arrays.asList(cookies));
+        }
+        return this;
+    }
+
     public HttpClientResponseBuilderContext withBody(String body) {
         this.body = body;
         return this;
@@ -78,6 +99,10 @@ public class HttpClientResponseBuilderContext extends AbstractResponseBuilderCon
 
     public List<Header> getHeaders() {
         return headers;
+    }
+
+    public List<Cookie> getCookies() {
+        return cookies;
     }
 
     public String getBody() {

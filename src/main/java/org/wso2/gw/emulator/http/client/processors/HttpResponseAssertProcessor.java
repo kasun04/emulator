@@ -22,6 +22,11 @@ package org.wso2.gw.emulator.http.client.processors;
 
 import org.wso2.gw.emulator.http.client.contexts.HttpClientProcessorContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientResponseProcessorContext;
+import org.wso2.gw.emulator.http.params.Cookie;
+import org.wso2.gw.emulator.http.params.Header;
+
+import java.util.List;
+import java.util.Map;
 
 public class HttpResponseAssertProcessor extends AbstractClientProcessor<HttpClientResponseProcessorContext> {
 
@@ -29,18 +34,55 @@ public class HttpResponseAssertProcessor extends AbstractClientProcessor<HttpCli
     public void process(HttpClientResponseProcessorContext processorContext) {
         assertResponseContent(processorContext);
         assertHeaderParameters(processorContext);
+        //assertCookieParameters(processorContext);
     }
+
+
 
     private void assertResponseContent(HttpClientResponseProcessorContext processorContext) {
         if (processorContext.getExpectedResponse().getBody().equalsIgnoreCase(processorContext.getReceivedResponseContext()
                                                                                       .getResponseBody())) {
-            System.out.println("Equal");
+            System.out.println("Equal content");
         } else {
-            System.out.println("Wrong");
+            System.out.println("Wrong content");
         }
     }
 
-    private void assertHeaderParameters(HttpClientProcessorContext processorContext) {
+    private void assertHeaderParameters(HttpClientResponseProcessorContext processorContext) {
+
+        if(processorContext.getExpectedResponse().getHeaders() == null || processorContext.getExpectedResponse().getHeaders().isEmpty()) {
+            return;
+        }
+
+        Map<String, List<String>> receivedHeaders = processorContext.getReceivedResponseContext().getHeaderParameters();
+
+        for(Header header : processorContext.getExpectedResponse().getHeaders()) {
+           List<String> receivedHeaderValues = receivedHeaders.get(header.getName());
+
+            if(receivedHeaderValues == null || receivedHeaderValues.isEmpty() || !receivedHeaderValues.contains(header.getValue())) {
+                System.out.print("Header not present");
+                break;
+            }
+        }
 
     }
+
+    /*private void assertCookieParameters(HttpClientResponseProcessorContext processorContext) {
+
+        if (processorContext.getExpectedResponse().getCookies() == null || processorContext.getExpectedResponse().getCookies().isEmpty()){
+            return;
+        }
+
+        Map<String, List<String >> receivedCookies = processorContext.getReceivedResponseContext().getCookieParameters();
+
+        for (Cookie cookie : processorContext.getExpectedResponse().getCookies()){
+            List<String> receivedCookieValues = receivedCookies.get(cookie.getName());
+
+            if (receivedCookieValues == null || receivedCookieValues.isEmpty() || !receivedCookieValues.contains(cookie.getValue())){
+                System.out.println("Cookies not present");
+                break;
+            }
+        }
+    }*/
+
 }

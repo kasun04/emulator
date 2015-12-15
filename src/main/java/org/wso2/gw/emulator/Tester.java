@@ -35,7 +35,7 @@ public class Tester {
     public static void main(String[] args) throws Exception {
         HttpServerOperationBuilderContext serverOperationBuilderContext = startHttpEmulator();
         Thread.sleep(1000);
-        testProducer();
+        //testProducer();
         testProducer1();
         serverOperationBuilderContext.stop();
     }
@@ -47,14 +47,13 @@ public class Tester {
                                .host("127.0.0.1").port(6065).context("/user").readingDelay(1000).writingDelay(1000)
                 )
                 .when(request()
-                              .withMethod(HttpMethod.GET))
+                              .withMethod(HttpMethod.POST)
+                              .withBody("test")
+                              .withHeader("name2","value2")
+                        )
                 .then(response()
-                              .withBody("Test Response1")
-                              .withStatusCode(HttpResponseStatus.OK))
-                .when(request()
-                              .withMethod(HttpMethod.POST).withBody("test"))
-                .then(response()
-                              .withBody("Test Response2")
+                              .withBody("Test Responseee")
+                              .withHeader("name3","value3")
                               .withStatusCode(HttpResponseStatus.OK))
                 .operation().start();
     }
@@ -77,10 +76,15 @@ public class Tester {
         Emulator.getHttpEmulator()
                 .client()
                 .given(HttpClientConfigBuilderContext.configure()
-                               .host("127.0.0.1").port(6065))
+                               .host("127.0.0.1").port(6065).readingDelay(1000).writingDelay(2000))
                 .when(HttpClientRequestBuilderContext.request()
-                              .withPath("/user").withMethod(HttpMethod.POST).withBody("test"))
-                .then(HttpClientResponseBuilderContext.response().withBody("Test Response2"))
+                              .withPath("/user")
+                              .withMethod(HttpMethod.POST).withBody("test")
+                              .withHeader("name2","value2").withQueryParameter("q1","q1")
+                )
+                .then(HttpClientResponseBuilderContext.response()
+                        .withBody("Test Responseee")
+                        .withHeader("name3","value3"))
                 .operation().send();
     }
 }

@@ -20,6 +20,7 @@
 
 package org.wso2.gw.emulator.http.client.contexts;
 
+import java.awt.font.TextHitInfo;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +29,7 @@ import java.util.Map;
 public class HttpResponseContext {
 
     private Map<String, List<String>> headerParameters;
+    //private Map<String, List<String>> cookieParameters;
     private StringBuffer responseBody;
 
     public void addHeaderParameter(String key, String value) {
@@ -43,9 +45,25 @@ public class HttpResponseContext {
         this.headerParameters.put(key, headerValues);
     }
 
+    /*public void addCookieParameter(String key, String value){
+        if (cookieParameters == null) {
+            this.cookieParameters = new HashMap<String, List<String>>();
+        }
+        List<String> cookieValues = this.cookieParameters.get(key);
+        if (cookieValues == null){
+            cookieValues = new ArrayList<String>();
+        }
+        cookieValues.add(value);
+        this.cookieParameters.put(key, cookieValues);
+    }*/
+
     public Map<String, List<String>> getHeaderParameters() {
         return headerParameters;
     }
+
+    /*public Map<String, List<String>> getCookieParameters() {
+        return cookieParameters;
+    }*/
 
     public void appendResponseContent(Object content) {
         if (responseBody == null) {

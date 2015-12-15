@@ -38,7 +38,10 @@ public class HttpResponseInformationProcessor extends AbstractClientProcessor<Ht
         processorContext.setReceivedResponseContext(httpResponseContext);
         processorContext.setExpectedResponse(processorContext.getClientInformationContext().getExpectedResponse());
         populateRequestHeaders(processorContext);
+        //populateCookies(processorContext);
+
     }
+
 
     private void populateRequestHeaders(HttpClientResponseProcessorContext processorContext) {
         HttpHeaders headers = processorContext.getReceivedResponse().headers();
@@ -49,6 +52,21 @@ public class HttpResponseInformationProcessor extends AbstractClientProcessor<Ht
         }
     }
 
+    /*private void populateCookies(HttpClientResponseProcessorContext processorContext) {
+
+        //Cookie cookie = processorContext.getReceivedResponse().
+        Map<String, List<String>> cookieParameters =
+                processorContext.getReceivedResponseContext().getCookieParameters();
+
+        if (!cookieParameters.isEmpty()){
+            for (Map.Entry<String, List<String>> entry : cookieParameters.entrySet()){
+                //processorContext.getReceivedResponseContext().addCookieParameter(entry.getKey(),entry.getValue());
+            }
+        }
+
+
+    }
+*/
     public void appendDecoderResult(HttpResponseContext responseContext, HttpObject httpObject, ByteBuf content) {
         responseContext.appendResponseContent(content.toString(CharsetUtil.UTF_8));
         DecoderResult result = httpObject.getDecoderResult();

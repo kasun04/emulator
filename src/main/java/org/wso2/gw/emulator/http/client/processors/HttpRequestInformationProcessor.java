@@ -63,6 +63,7 @@ public class HttpRequestInformationProcessor extends AbstractClientProcessor<Htt
         HttpRequest request;
 
         if(processorContext.getRequestBuilderContext().getBody() != null) {
+
             String rawData = processorContext.getRequestBuilderContext().getBody();
             byte[] bytes = rawData.getBytes();
             content = Unpooled.wrappedBuffer(bytes);

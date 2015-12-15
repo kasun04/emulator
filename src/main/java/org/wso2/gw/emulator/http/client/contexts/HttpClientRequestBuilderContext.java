@@ -64,6 +64,7 @@ public class HttpClientRequestBuilderContext extends AbstractRequestBuilderConte
         return this;
     }
 
+
     public HttpClientRequestBuilderContext withHeader(String name, String value) {
         Header header = new Header(name, value);
 
@@ -72,6 +73,17 @@ public class HttpClientRequestBuilderContext extends AbstractRequestBuilderConte
         }
 
         headers.add(header);
+        return this;
+    }
+
+    public HttpClientRequestBuilderContext withHeaders(Header...headerList){
+
+        if(headers == null) {
+            headers = new ArrayList<Header>();
+        }
+        for (Header header : headerList) {
+            headers.add(header);
+        }
         return this;
     }
 
@@ -85,6 +97,18 @@ public class HttpClientRequestBuilderContext extends AbstractRequestBuilderConte
         return this;
     }
 
+    public HttpClientRequestBuilderContext withQueryParameters(QueryParameter...queryParameterList){
+
+        if(queryParameters == null) {
+            queryParameters = new ArrayList<QueryParameter>();
+        }
+
+        for (QueryParameter queryParameter : queryParameterList) {
+            queryParameters.add(queryParameter);
+        }
+        return this;
+    }
+
     public HttpClientRequestBuilderContext withCookie(String name, String value) {
        Cookie cookie = new Cookie(name, value);
 
@@ -92,6 +116,17 @@ public class HttpClientRequestBuilderContext extends AbstractRequestBuilderConte
             cookies = new ArrayList<Cookie>();
         }
         cookies.add(cookie);
+        return this;
+    }
+
+    public HttpClientRequestBuilderContext withCookies(Cookie...cookieList){
+
+        if (cookies == null){
+            cookies = new ArrayList<Cookie>();
+        }
+        for (Cookie cookie: cookieList) {
+            cookies.add(cookie);
+        }
         return this;
     }
 
@@ -122,4 +157,6 @@ public class HttpClientRequestBuilderContext extends AbstractRequestBuilderConte
     public List<Cookie> getCookies() {
         return cookies;
     }
+
+
 }

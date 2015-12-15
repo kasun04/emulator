@@ -21,6 +21,7 @@ public class HttpServerRequestBuilderContext extends AbstractRequestBuilderConte
     private Pattern pathRegex;
     private Header header;
     private QueryParameter queryParameter;
+    private Cookie cookie;
     private List<Header> headers;
     private List<QueryParameter> queryParameters;
     private List<Cookie> cookies;
@@ -62,7 +63,7 @@ public class HttpServerRequestBuilderContext extends AbstractRequestBuilderConte
 
 
     public HttpServerRequestBuilderContext withQueryParameter(String name, String value) {
-        this.queryParameter = new QueryParameter(name, value);
+        queryParameter = new QueryParameter(name, value);
         return this;
     }
 
@@ -73,7 +74,7 @@ public class HttpServerRequestBuilderContext extends AbstractRequestBuilderConte
     }
 
     public HttpServerRequestBuilderContext withCookie(String name, String value) {
-        if (cookies == null) {
+        if (cookie == null) {
             this.cookies = new ArrayList<Cookie>();
         }
         this.cookies.add(new Cookie(name, value));

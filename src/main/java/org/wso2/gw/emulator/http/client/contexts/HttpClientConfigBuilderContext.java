@@ -24,10 +24,15 @@ import org.wso2.gw.emulator.core.contexts.AbstractConfigurationBuilderContext;
 
 public class HttpClientConfigBuilderContext extends AbstractConfigurationBuilderContext {
 
+
     private static HttpClientConfigBuilderContext clientConfigBuilderContext;
     private String host;
     private int port;
     private String context;
+    private int readingDelay;
+    private int writingDelay;
+    private boolean randomConnectionClose;
+
 
     private static HttpClientConfigBuilderContext getInstance() {
         clientConfigBuilderContext = new HttpClientConfigBuilderContext();
@@ -50,6 +55,23 @@ public class HttpClientConfigBuilderContext extends AbstractConfigurationBuilder
         return this;
     }
 
+    public HttpClientConfigBuilderContext readingDelay(int readingDelay){
+        this.readingDelay = readingDelay;
+        return this;
+    }
+
+    public HttpClientConfigBuilderContext writingDelay(int writingDelay){
+        this.writingDelay = writingDelay;
+        return this;
+    }
+
+
+    public HttpClientConfigBuilderContext randomConnectionClose(boolean randomConnectionClose){
+        this.randomConnectionClose = randomConnectionClose;
+        return this;
+
+    }
+
     public String getHost() {
         return host;
     }
@@ -68,6 +90,18 @@ public class HttpClientConfigBuilderContext extends AbstractConfigurationBuilder
 
     public void setPort(int port) {
         this.port = port;
+    }
+
+    public int getReadingDelay() {
+        return readingDelay;
+    }
+
+    public int getWritingDelay() {
+        return writingDelay;
+    }
+
+    public boolean isRandomConnectionClose() {
+        return randomConnectionClose;
     }
 
 }
