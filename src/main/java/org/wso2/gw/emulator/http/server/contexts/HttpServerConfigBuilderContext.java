@@ -23,6 +23,8 @@ package org.wso2.gw.emulator.http.server.contexts;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import org.wso2.gw.emulator.core.contexts.AbstractConfigurationBuilderContext;
 
+import java.util.Random;
+
 public class HttpServerConfigBuilderContext extends AbstractConfigurationBuilderContext {
 
     private static HttpServerConfigBuilderContext config;
@@ -33,6 +35,7 @@ public class HttpServerConfigBuilderContext extends AbstractConfigurationBuilder
     private int writingDelay;
     private boolean randomConnectionClose;
     private ChannelInboundHandlerAdapter logicHandler;
+    private int logicDelay;
 
     private static HttpServerConfigBuilderContext getInstance() {
         config = new HttpServerConfigBuilderContext();
@@ -68,6 +71,11 @@ public class HttpServerConfigBuilderContext extends AbstractConfigurationBuilder
         return this;
     }
 
+    public HttpServerConfigBuilderContext logicDelay(int logicDelay) {
+        this.logicDelay = logicDelay;
+        return this;
+    }
+
     public HttpServerConfigBuilderContext randomConnectionClose(boolean randomConnectionClose) {
         this.randomConnectionClose = randomConnectionClose;
         return this;
@@ -96,5 +104,13 @@ public class HttpServerConfigBuilderContext extends AbstractConfigurationBuilder
 
     public int getWritingDelay() {
         return writingDelay;
+    }
+
+    public boolean isRandomConnectionClose() {
+        return randomConnectionClose;
+    }
+
+    public int getLogicDelay() {
+        return logicDelay;
     }
 }

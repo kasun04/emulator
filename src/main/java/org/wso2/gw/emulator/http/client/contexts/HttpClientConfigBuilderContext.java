@@ -30,8 +30,6 @@ public class HttpClientConfigBuilderContext extends AbstractConfigurationBuilder
     private int port;
     private String context;
     private int readingDelay;
-    private int writingDelay;
-    private boolean randomConnectionClose;
 
 
     private static HttpClientConfigBuilderContext getInstance() {
@@ -55,22 +53,12 @@ public class HttpClientConfigBuilderContext extends AbstractConfigurationBuilder
         return this;
     }
 
+
     public HttpClientConfigBuilderContext readingDelay(int readingDelay){
         this.readingDelay = readingDelay;
         return this;
     }
 
-    public HttpClientConfigBuilderContext writingDelay(int writingDelay){
-        this.writingDelay = writingDelay;
-        return this;
-    }
-
-
-    public HttpClientConfigBuilderContext randomConnectionClose(boolean randomConnectionClose){
-        this.randomConnectionClose = randomConnectionClose;
-        return this;
-
-    }
 
     public String getHost() {
         return host;
@@ -94,14 +82,6 @@ public class HttpClientConfigBuilderContext extends AbstractConfigurationBuilder
 
     public int getReadingDelay() {
         return readingDelay;
-    }
-
-    public int getWritingDelay() {
-        return writingDelay;
-    }
-
-    public boolean isRandomConnectionClose() {
-        return randomConnectionClose;
     }
 
 }

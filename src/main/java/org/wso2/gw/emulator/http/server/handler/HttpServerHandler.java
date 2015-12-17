@@ -36,6 +36,9 @@ import org.wso2.gw.emulator.http.server.contexts.HttpRequestContext;
 import org.wso2.gw.emulator.http.server.processors.HttpRequestInformationProcessor;
 import org.wso2.gw.emulator.http.server.contexts.HttpServerInformationContext;
 import org.wso2.gw.emulator.http.server.processors.HttpResponseProcessor;
+
+import java.io.IOException;
+import java.util.Random;
 import java.util.concurrent.*;
 import static io.netty.handler.codec.http.HttpResponseStatus.CONTINUE;
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
@@ -48,23 +51,29 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
     private HttpServerInformationContext serverInformationContext;
     private HttpServerProcessorContext httpProcessorContext;
     private HttpRequestResponseMatchingProcessor requestResponseMatchingProcessor;
-    private ScheduledExecutorService scheduledReadingExecutorService,scheduledWritingExecutorService;
+    private ScheduledExecutorService scheduledReadingExecutorService,scheduledWritingExecutorService,scheduledLogicExecutorService;
+    private int index,corePoolSize = 10;
 
 
     public HttpServerHandler(HttpServerInformationContext serverInformationContext) {
         this.serverInformationContext = serverInformationContext;
-        scheduledReadingExecutorService = Executors.newScheduledThreadPool(5);
-        scheduledWritingExecutorService = Executors.newScheduledThreadPool(5);
+        scheduledReadingExecutorService = Executors.newScheduledThreadPool(corePoolSize);
+        scheduledWritingExecutorService = Executors.newScheduledThreadPool(corePoolSize);
+        scheduledLogicExecutorService = Executors.newScheduledThreadPool(corePoolSize);
     }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        randomIndexGenerator(serverInformationContext.getServerConfigBuilderContext().isRandomConnectionClose());
+        //randomConnectionClose(ctx,this.index.getIndex(),0);
+
     }
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws IOException {
         if (msg instanceof HttpRequest) {
-            readingDelay(serverInformationContext.getServerConfigBuilderContext().getReadingDelay());
+            randomConnectionClose(ctx,this.index,0);
+            //readingDelay(serverInformationContext.getServerConfigBuilderContext().getReadingDelay(),ctx);
             this.httpRequestInformationProcessor = new HttpRequestInformationProcessor();
             this.httpResponseProcessor = new HttpResponseProcessor();
             this.httpProcessorContext = new HttpServerProcessorContext();
@@ -77,6 +86,7 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
             }
             httpRequestInformationProcessor.process(httpProcessorContext);
         } else {
+            readingDelay(serverInformationContext.getServerConfigBuilderContext().getReadingDelay(),ctx);
             if (msg instanceof HttpContent) {
                 HttpContent httpContent = (HttpContent) msg;
                 if (httpContent.content().isReadable()) {
@@ -94,17 +104,22 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
     }
 
     @Override
-    public void channelReadComplete(ChannelHandlerContext ctx) {
+    public void channelReadComplete(ChannelHandlerContext ctx) throws IOException {
         if (httpResponseProcessor != null) {
-            waitingDelay(serverInformationContext.getServerConfigBuilderContext().getWritingDelay());
+            randomConnectionClose(ctx,this.index,1);
+            businessLogicDelay(serverInformationContext.getServerConfigBuilderContext().getLogicDelay(),ctx);
             this.httpResponseProcessor.process(httpProcessorContext);
             FullHttpResponse response = httpProcessorContext.getFinalResponse();
+            waitingDelay(serverInformationContext.getServerConfigBuilderContext().getWritingDelay(),ctx);
             if (httpProcessorContext.getHttpRequestContext().isKeepAlive()) {
+                randomConnectionClose(ctx,this.index,2);
                 ctx.write(response);
             } else {
+                randomConnectionClose(ctx,this.index,2);
                 ctx.write(response).addListener(ChannelFutureListener.CLOSE);
             }
         }
+        randomConnectionClose(ctx,this.index,3);
         ctx.flush();
     }
 
@@ -119,19 +134,13 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
         ctx.write(response);
     }
 
-    private void readingDelay(final int delay) {
-
-
+    private void readingDelay(int delay,ChannelHandlerContext ctx) {
         ScheduledFuture scheduledFuture =
                 scheduledReadingExecutorService.schedule(new Callable() {
-                                                      public Object call() throws Exception {
-                                                          //System.out.println("Executed!");
-                                                          return "Reading";
-                                                      }
-                                                  },
-                        delay,
-                        TimeUnit.MILLISECONDS);
-
+                    public Object call() throws Exception {
+                        return "Reading";
+                    }
+                }, delay, TimeUnit.MILLISECONDS);
         try {
             System.out.println("result = " + scheduledFuture.get());
         } catch (InterruptedException e) {
@@ -139,24 +148,17 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-
         scheduledReadingExecutorService.shutdown();
-        }
+    }
 
-    private void waitingDelay(int delay) {
-        /*ScheduledExecutorService scheduledReadingExecutorService =
-                Executors.newScheduledThreadPool(5);
-*/
+
+    private void waitingDelay(int delay,ChannelHandlerContext ctx) {
         ScheduledFuture scheduledWaitingFuture =
                 scheduledWritingExecutorService.schedule(new Callable() {
-                                                      public Object call() throws Exception {
-                                                          //System.out.println("Executed!");
-                                                          return "Writing";
-                                                      }
-                                                  },
-                        delay,
-                        TimeUnit.MILLISECONDS);
-
+                    public Object call() throws Exception {
+                        return "Writing";
+                    }
+                }, delay, TimeUnit.MILLISECONDS);
         try {
             System.out.println("result = " + scheduledWaitingFuture.get());
         } catch (InterruptedException e) {
@@ -164,13 +166,43 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+        scheduledWritingExecutorService.shutdown();
 
-        scheduledReadingExecutorService.shutdown();
     }
 
-    private void randomConnectionClose(ChannelHandlerContext ctx){
-        //int randomValue = (int)Math.random(1,100);
-        //ctx.close();
+    private void businessLogicDelay(int delay,ChannelHandlerContext ctx) {
+        ScheduledFuture scheduledLogicFuture =
+                scheduledLogicExecutorService.schedule(new Callable() {
+                    public Object call() throws Exception {
+                        return "Logic delay";
+                    }
+                }, delay, TimeUnit.MILLISECONDS);
+        try {
+            System.out.println("result = " + scheduledLogicFuture.get());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        scheduledLogicExecutorService.shutdown();
     }
+
+    private void randomConnectionClose(ChannelHandlerContext ctx,int randomIndex, int pointIndex){
+        if(randomIndex==pointIndex) {
+            log.info("Random close");
+            ctx.close();
+        }
+    }
+
+    private void randomIndexGenerator(Boolean randomConnectionClose ){
+        if(randomConnectionClose){
+            Random rn = new Random();
+            index = (rn.nextInt(100) + 1 )% 6;
+        }
+        else
+            index = -1;
+    }
+
+
 
 }

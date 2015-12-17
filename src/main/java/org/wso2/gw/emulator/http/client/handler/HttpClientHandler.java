@@ -31,15 +31,20 @@ import org.wso2.gw.emulator.http.client.contexts.HttpClientResponseProcessorCont
 import org.wso2.gw.emulator.http.client.processors.HttpResponseAssertProcessor;
 import org.wso2.gw.emulator.http.client.processors.HttpResponseInformationProcessor;
 
+import java.util.concurrent.*;
+
 public class HttpClientHandler extends ChannelInboundHandlerAdapter {
     private HttpResponseInformationProcessor responseInformationProcessor;
     private HttpResponseAssertProcessor responseAssertProcessor;
     private HttpClientResponseProcessorContext processorContext;
     private HttpClientInformationContext clientInformationContext;
+    private ScheduledExecutorService scheduledReadingExecutorService;
     private boolean isReadComplete = false;
+    private int corePoolSize = 10;
 
     public HttpClientHandler(HttpClientInformationContext clientInformationContext) {
         this.clientInformationContext = clientInformationContext;
+        scheduledReadingExecutorService = Executors.newScheduledThreadPool(corePoolSize);
     }
 
     @Override
@@ -56,6 +61,7 @@ public class HttpClientHandler extends ChannelInboundHandlerAdapter {
         }
 
         if (msg instanceof HttpContent) {
+            readingDelay(clientInformationContext.getClientConfigBuilderContext().getReadingDelay());
             HttpContent httpContent = (HttpContent) msg;
             ByteBuf content = httpContent.content();
 
@@ -81,5 +87,22 @@ public class HttpClientHandler extends ChannelInboundHandlerAdapter {
             this.responseAssertProcessor.process(processorContext);
         }
         ctx.close();
+    }
+
+    private void readingDelay(int delay) {
+        ScheduledFuture scheduledFuture =
+                scheduledReadingExecutorService.schedule(new Callable() {
+                    public Object call() throws Exception {
+                        return "Client Reading";
+                    }
+                }, delay, TimeUnit.MILLISECONDS);
+        try {
+            System.out.println("result = " + scheduledFuture.get());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        scheduledReadingExecutorService.shutdown();
     }
 }
