@@ -20,7 +20,7 @@
 
 package org.wso2.gw.emulator.http.client.contexts;
 
-import org.wso2.gw.emulator.core.contexts.AbstractConfigurationBuilderContext;
+import org.wso2.gw.emulator.dsl.contexts.AbstractConfigurationBuilderContext;
 
 public class HttpClientConfigBuilderContext extends AbstractConfigurationBuilderContext {
 
@@ -28,7 +28,6 @@ public class HttpClientConfigBuilderContext extends AbstractConfigurationBuilder
     private static HttpClientConfigBuilderContext clientConfigBuilderContext;
     private String host;
     private int port;
-    private String context;
     private int readingDelay;
 
 
@@ -72,10 +71,6 @@ public class HttpClientConfigBuilderContext extends AbstractConfigurationBuilder
         return port;
     }
 
-    public String getContext() {
-        return context;
-    }
-
     public void setPort(int port) {
         this.port = port;
     }
@@ -83,5 +78,6 @@ public class HttpClientConfigBuilderContext extends AbstractConfigurationBuilder
     public int getReadingDelay() {
         return readingDelay;
     }
+
 
 }

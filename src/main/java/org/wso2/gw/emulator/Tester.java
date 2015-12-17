@@ -22,11 +22,18 @@ package org.wso2.gw.emulator;
 
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpResponseStatus;
-import org.wso2.gw.emulator.core.Emulator;
+import org.wso2.gw.emulator.dsl.Emulator;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientConfigBuilderContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientRequestBuilderContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientResponseBuilderContext;
+import org.wso2.gw.emulator.http.params.Header;
 import org.wso2.gw.emulator.http.server.contexts.HttpServerOperationBuilderContext;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+
 import static org.wso2.gw.emulator.http.server.contexts.HttpServerRequestBuilderContext.request;
 import static org.wso2.gw.emulator.http.server.contexts.HttpServerResponseBuilderContext.response;
 import static org.wso2.gw.emulator.http.server.contexts.HttpServerConfigBuilderContext.configure;
@@ -40,21 +47,26 @@ public class Tester {
         serverOperationBuilderContext.stop();
     }
 
-    private static HttpServerOperationBuilderContext startHttpEmulator() {
+    private static HttpServerOperationBuilderContext startHttpEmulator() throws FileNotFoundException {
         return Emulator.getHttpEmulator()
                 .server()
                 .given(configure()
+
                                .host("127.0.0.1").port(6065).context("/user").readingDelay(1000).writingDelay(1000)
                                 .randomConnectionClose(false).logicDelay(1000))
+
                 .when(request()
-                              .withMethod(HttpMethod.POST)
-                              .withBody("test")
-                              .withHeader("name2","value2")
+                              .withMethod(HttpMethod.POST)//.withPath("*")
+                              .withBody("dilshan")
+                              .withHeader("name2","kanchana")
                         )
                 .then(response()
-                              .withBody("Test Responseee")
+                              .withBody("my name is @{body} @{header.name2} @{header.name2}")
                               .withHeader("name3","value3")
-                              .withStatusCode(HttpResponseStatus.OK))
+
+                              .withStatusCode(HttpResponseStatus.OK)
+
+                )
                 .operation().start();
     }
 
@@ -72,23 +84,27 @@ public class Tester {
                 .operation().send();
     }
 
-    private static void testProducer1() {
+    private static void testProducer1() throws FileNotFoundException {
         Emulator.getHttpEmulator()
                 .client()
                 .given(HttpClientConfigBuilderContext.configure()
+                        .host("127.0.0.1")
+                        .port(6065)
+                        .readingDelay(1000)
+                        .writingDelay(2000))
 
-                               .host("127.0.0.1").port(6065)
-                        //.readingDelay(1000)
-                )
 
                 .when(HttpClientRequestBuilderContext.request()
-                              .withPath("/user")
-                              .withMethod(HttpMethod.POST).withBody("test")
-                              .withHeader("name2","value2").withQueryParameter("q1","q1")
+                        .withPath("/user/dilshan")
+                        .withMethod(HttpMethod.POST)
+                        .withBody("dilshan")
+                        .withHeader("name2","kanchana").withHeaders()
+                              //.withQueryParameter("q1","q1")
                 )
                 .then(HttpClientResponseBuilderContext.response()
-                        .withBody("Test Responseee")
-                        .withHeader("name3","value3"))
+                        .withBody("my name is dilshan kanchana kanchana")
+                        .withHeader("name3","value3")
+                )
                 .operation().send();
     }
 }

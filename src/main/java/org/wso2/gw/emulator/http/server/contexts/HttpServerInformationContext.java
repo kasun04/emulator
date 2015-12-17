@@ -29,6 +29,12 @@ public class HttpServerInformationContext {
     private HttpServerConfigBuilderContext serverConfigBuilderContext;
     private Map<HttpServerRequestBuilderContext, HttpServerResponseBuilderContext> correlation;
     private HttpServerInitializer httpServerInitializer;
+    private UtilityContext utilityContext;
+
+    public UtilityContext getUtilityContext() {
+        return new UtilityContext();
+
+    }
 
     public HttpServerConfigBuilderContext getServerConfigBuilderContext() {
         return serverConfigBuilderContext;

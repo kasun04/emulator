@@ -33,6 +33,11 @@ import org.wso2.gw.emulator.http.params.Header;
 import org.wso2.gw.emulator.http.server.contexts.HttpServerProcessorContext;
 import org.wso2.gw.emulator.http.server.contexts.HttpRequestContext;
 import org.wso2.gw.emulator.http.server.contexts.HttpServerResponseBuilderContext;
+
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 
 public class HttpResponseProcessor extends AbstractServerProcessor {
@@ -50,11 +55,13 @@ public class HttpResponseProcessor extends AbstractServerProcessor {
         HttpRequestContext requestContext = processorContext.getHttpRequestContext();
         HttpServerResponseBuilderContext responseContext = processorContext.getSelectedResponseContext();
         boolean keepAlive = requestContext.isKeepAlive();
+        Pattern pattern = processorContext.getServerInformationContext().getUtilityContext().getPattern();
 
+        //patternMatcher(requestContext,responseContext);
         HttpResponseStatus httpResponseStatus = responseContext.getStatusCode();
         FullHttpResponse response = new DefaultFullHttpResponse(
                 HttpVersion.HTTP_1_1, httpResponseStatus,
-                Unpooled.copiedBuffer(responseContext.getBody(), CharsetUtil.UTF_8));
+                Unpooled.copiedBuffer(patternMatcher(requestContext,responseContext,pattern), CharsetUtil.UTF_8));
 
         populateHttpHeaders(response, responseContext);
         populateCookies(response, responseContext);
@@ -65,6 +72,40 @@ public class HttpResponseProcessor extends AbstractServerProcessor {
             response.headers().set(HttpHeaders.Names.CONNECTION, HttpHeaders.Values.KEEP_ALIVE);
         }
         processorContext.setFinalResponse(response);
+    }
+
+    private String patternMatcher(HttpRequestContext requestContext, HttpServerResponseBuilderContext responseContext, Pattern pathRegex) {
+
+        String responseBody = responseContext.getBody();
+        String requestBody = requestContext.getRequestBody();
+
+        Matcher matcher = pathRegex.matcher(responseBody);
+
+        while (matcher.find()) {
+
+            String tag = "";
+            tag = matcher.group(0);
+
+            String word = tag.substring(2, tag.length() - 1);
+
+            if (word.startsWith("body")) {
+                responseBody = pathRegex.matcher(responseBody).replaceFirst(requestBody);
+
+            } else if (word.startsWith("header")) {
+
+                String[] split = word.split(Pattern.quote("."));
+                String s = split[1];
+
+                List<String> strings = requestContext.getHeaderParameters().get(s);
+
+
+                responseBody = pathRegex.matcher(responseBody).replaceFirst(strings.get(0));
+
+            } else if (word.startsWith("query")) {
+                System.out.println("dddd");
+            }
+        }
+        return responseBody;
     }
 
     private void populate404NotFoundResponse(HttpServerProcessorContext processorContext) {
