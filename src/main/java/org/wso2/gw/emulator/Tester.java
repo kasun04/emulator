@@ -91,7 +91,7 @@ public class Tester {
                         .host("127.0.0.1")
                         .port(6065)
                         .readingDelay(1000)
-                        .writingDelay(2000))
+                        )
 
 
                 .when(HttpClientRequestBuilderContext.request()
