@@ -43,7 +43,7 @@ public class Tester {
     public static void main(String[] args) throws Exception {
         HttpServerOperationBuilderContext serverOperationBuilderContext = startHttpEmulator();
         Thread.sleep(1000);
-        //testProducer();
+        testProducer();
         testProducer1();
         serverOperationBuilderContext.stop();
     }
@@ -57,9 +57,29 @@ public class Tester {
                                 .randomConnectionClose(false).logicDelay(1000))
 
                 .when(request()
+/*<<<<<<< Updated upstream
                               .withMethod(HttpMethod.POST)//.withPath("*")
                               .withBody("dilshan")
                               .withHeader("name2","kanchana")
+=======*/
+                        .withMethod(HttpMethod.GET).withPath("*")
+                )
+                .then(response()
+                        .withBody("Test Response1111111111111111111111111111111").withStatusCode(HttpResponseStatus.OK))
+                .when(request()
+                        .withMethod(HttpMethod.POST).withBody("test")
+                )
+                .then(response()
+                        .withBody("Test Response2").withStatusCode(HttpResponseStatus.OK))
+                /*.when(request()
+                        .withMethod(HttpMethod.POST).withBody("files/ServerRequest.txt")
+                )
+                .then(response()
+                        .withBody("files/ServerResponse.txt").withStatusCode(HttpResponseStatus.OK))*/
+                .when(request()
+                              .withMethod(HttpMethod.POST)
+                              .withBody("test")
+                              .withHeader("name2","value2")
                         )
                 .then(response()
                               .withBody("my name is @{body} @{header.name2} @{header.name2}")
@@ -78,7 +98,10 @@ public class Tester {
                                 .host("127.0.0.1").port(6065))
                 .when(HttpClientRequestBuilderContext.request()
                               .withPath("/user").withMethod(HttpMethod.GET))
-                .then(HttpClientResponseBuilderContext.response().withBody("Test Response1"))
+                .then(HttpClientResponseBuilderContext.response().withBody("Test Response1111111111111111111111111111111"))
+                /*.when(HttpClientRequestBuilderContext.request()
+                        .withMethod(HttpMethod.POST).withBody("files/ClientRequest.txt"))
+                .then(HttpClientResponseBuilderContext.response().withBody("files/ClientResponse.txt"))*/
                 .when(HttpClientRequestBuilderContext.request()
                               .withPath("/user").withMethod(HttpMethod.POST).withBody("test"))
                 .then(HttpClientResponseBuilderContext.response().withBody("Test Response2"))

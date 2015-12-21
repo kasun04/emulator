@@ -84,6 +84,16 @@ public class HttpClientInitializer {
             HttpClientConfigBuilderContext clientConfigBuilderContext = httpClientProcessorContext.getClientInformationContext()
                     .getClientConfigBuilderContext();
             Channel ch = bootstrap.connect(clientConfigBuilderContext.getHost(), clientConfigBuilderContext.getPort()).sync().channel();
+
+            //writing delay
+            //Thread.sleep(clientConfigBuilderContext.getWritingDelay());
+
+            //random connection close
+            /*if (clientConfigBuilderContext.isRandomConnectionClose()){
+                ch.close();
+                System.out.println("random connection close");
+            }*/
+
             ch.writeAndFlush(httpClientProcessorContext.getRequest());
             ch.closeFuture().sync();
     }

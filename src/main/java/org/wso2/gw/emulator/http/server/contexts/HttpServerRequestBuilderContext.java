@@ -5,6 +5,10 @@ import org.wso2.gw.emulator.core.contexts.AbstractRequestBuilderContext;
 import org.wso2.gw.emulator.http.params.Cookie;
 import org.wso2.gw.emulator.http.params.Header;
 import org.wso2.gw.emulator.http.params.QueryParameter;
+import org.wso2.gw.emulator.util.FileRead;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -48,6 +52,16 @@ public class HttpServerRequestBuilderContext extends AbstractRequestBuilderConte
 
     public HttpServerRequestBuilderContext withBody(String body) {
         this.body = body;
+        return this;
+    }
+
+    public HttpServerRequestBuilderContext withBody(File filePath)  {
+        try {
+            this.body = FileRead.getFileBody(filePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //this.body = body;
         return this;
     }
 

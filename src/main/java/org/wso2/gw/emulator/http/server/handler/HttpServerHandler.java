@@ -36,7 +36,6 @@ import org.wso2.gw.emulator.http.server.contexts.HttpRequestContext;
 import org.wso2.gw.emulator.http.server.processors.HttpRequestInformationProcessor;
 import org.wso2.gw.emulator.http.server.contexts.HttpServerInformationContext;
 import org.wso2.gw.emulator.http.server.processors.HttpResponseProcessor;
-
 import java.io.IOException;
 import java.util.Random;
 import java.util.concurrent.*;
@@ -58,7 +57,6 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
     public HttpServerHandler(HttpServerInformationContext serverInformationContext) {
         this.serverInformationContext = serverInformationContext;
         scheduledReadingExecutorService = Executors.newScheduledThreadPool(corePoolSize);
-        scheduledWritingExecutorService = Executors.newScheduledThreadPool(corePoolSize);
         scheduledLogicExecutorService = Executors.newScheduledThreadPool(corePoolSize);
     }
 
@@ -104,13 +102,13 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
     }
 
     @Override
-    public void channelReadComplete(ChannelHandlerContext ctx) throws IOException {
+    public void channelReadComplete(final ChannelHandlerContext ctx) throws IOException {
         if (httpResponseProcessor != null) {
             randomConnectionClose(ctx,this.index,1);
             businessLogicDelay(serverInformationContext.getServerConfigBuilderContext().getLogicDelay(),ctx);
             this.httpResponseProcessor.process(httpProcessorContext);
             FullHttpResponse response = httpProcessorContext.getFinalResponse();
-            waitingDelay(serverInformationContext.getServerConfigBuilderContext().getWritingDelay(),ctx);
+            //waitingDelay(serverInformationContext.getServerConfigBuilderContext().getWritingDelay(),ctx);
             if (httpProcessorContext.getHttpRequestContext().isKeepAlive()) {
                 randomConnectionClose(ctx,this.index,2);
                 ctx.write(response);
@@ -152,7 +150,7 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
     }
 
 
-    private void waitingDelay(int delay,ChannelHandlerContext ctx) {
+    /*private void waitingDelay(int delay,ChannelHandlerContext ctx) {
         ScheduledFuture scheduledWaitingFuture =
                 scheduledWritingExecutorService.schedule(new Callable() {
                     public Object call() throws Exception {
@@ -167,8 +165,7 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
             e.printStackTrace();
         }
         scheduledWritingExecutorService.shutdown();
-
-    }
+    }*/
 
     private void businessLogicDelay(int delay,ChannelHandlerContext ctx) {
         ScheduledFuture scheduledLogicFuture =
