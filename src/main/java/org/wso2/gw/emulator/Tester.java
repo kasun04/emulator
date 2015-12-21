@@ -23,6 +23,7 @@ package org.wso2.gw.emulator;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import org.wso2.gw.emulator.dsl.Emulator;
+import org.wso2.gw.emulator.dsl.Operation;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientConfigBuilderContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientRequestBuilderContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientResponseBuilderContext;
@@ -38,13 +39,17 @@ import static org.wso2.gw.emulator.http.server.contexts.HttpServerRequestBuilder
 import static org.wso2.gw.emulator.http.server.contexts.HttpServerResponseBuilderContext.response;
 import static org.wso2.gw.emulator.http.server.contexts.HttpServerConfigBuilderContext.configure;
 
+
 public class Tester {
+
+    public static Operation operation;
     public static void main(String[] args) throws Exception {
         HttpServerOperationBuilderContext serverOperationBuilderContext = startHttpEmulator();
         Thread.sleep(1000);
         //testProducer();
         testProducer1();
         serverOperationBuilderContext.stop();
+
     }
 
     private static HttpServerOperationBuilderContext startHttpEmulator() throws FileNotFoundException {
@@ -53,16 +58,24 @@ public class Tester {
                 .given(configure()
 
                                .host("127.0.0.1").port(6065).context("/user").readingDelay(1000).writingDelay(1000)
-                                .randomConnectionClose(false).logicDelay(1000))
+                                .randomConnectionClose(false).logicDelay(1000)
+                .withCustomProcessor(true))
 
                 .when(request()
                               .withMethod(HttpMethod.POST)//.withPath("*")
                               .withBody("dilshan")
-                              .withHeader("name2","kanchana")
+                              //.withHeader("name2","kanchana")
+                        .withHeaders(
+                                new Header("name","dilsha"),
+                                new Header("name2","kanchana")
+                        )
                         )
                 .then(response()
                               .withBody("my name is @{body} @{header.name2} @{header.name2}")
-                              .withHeader("name3","value3")
+                              .withHeaders(
+                                      new Header("res1","vres1"),
+                                      new Header("res2","vres2")
+                              )
 
                               .withStatusCode(HttpResponseStatus.OK)
 
@@ -98,12 +111,18 @@ public class Tester {
                         .withPath("/user/dilshan")
                         .withMethod(HttpMethod.POST)
                         .withBody("dilshan")
-                        .withHeader("name2","kanchana").withHeaders()
+                        //.withHeader("name2","kanchana")
+                        .withHeaders(
+                                Operation.AND,
+                                new Header("name1","dilshan"),
+                                new Header("name2","kanchana")
+
+                        )
                               //.withQueryParameter("q1","q1")
                 )
                 .then(HttpClientResponseBuilderContext.response()
                         .withBody("my name is dilshan kanchana kanchana")
-                        .withHeader("name3","value3")
+                        .withHeader("res1","vres1")
                 )
                 .operation().send();
     }

@@ -18,9 +18,17 @@
  *
  */
 
-package org.wso2.gw.emulator.core.contexts;
+package org.wso2.gw.emulator.dsl;
 
-public class AbstractRequestBuilderContext {
+import org.apache.log4j.Logger;
+import org.wso2.gw.emulator.http.HTTPProtocolEmulator;
 
+public class Emulator extends Thread {
+    private static final Logger log = Logger.getLogger(Emulator.class);
+    private static HTTPProtocolEmulator httpProtocolEmulator;
 
+    public static HTTPProtocolEmulator getHttpEmulator() {
+        httpProtocolEmulator = new HTTPProtocolEmulator();
+        return httpProtocolEmulator;
+    }
 }

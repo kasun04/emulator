@@ -20,9 +20,8 @@
 
 package org.wso2.gw.emulator.http.client.processors;
 
-import org.wso2.gw.emulator.http.client.contexts.HttpClientProcessorContext;
+import org.wso2.gw.emulator.dsl.Operation;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientResponseProcessorContext;
-import org.wso2.gw.emulator.http.params.Cookie;
 import org.wso2.gw.emulator.http.params.Header;
 
 import java.util.List;
@@ -34,12 +33,12 @@ public class HttpResponseAssertProcessor extends AbstractClientProcessor<HttpCli
     public void process(HttpClientResponseProcessorContext processorContext) {
         assertResponseContent(processorContext);
         assertHeaderParameters(processorContext);
-        //assertCookieParameters(processorContext);
     }
 
 
-
     private void assertResponseContent(HttpClientResponseProcessorContext processorContext) {
+
+
         if (processorContext.getExpectedResponse().getBody().equalsIgnoreCase(processorContext.getReceivedResponseContext()
                                                                                       .getResponseBody())) {
             System.out.println("Equal content");
@@ -50,39 +49,47 @@ public class HttpResponseAssertProcessor extends AbstractClientProcessor<HttpCli
 
     private void assertHeaderParameters(HttpClientResponseProcessorContext processorContext) {
 
+
+
         if(processorContext.getExpectedResponse().getHeaders() == null || processorContext.getExpectedResponse().getHeaders().isEmpty()) {
             return;
         }
-
         Map<String, List<String>> receivedHeaders = processorContext.getReceivedResponseContext().getHeaderParameters();
 
-        for(Header header : processorContext.getExpectedResponse().getHeaders()) {
-           List<String> receivedHeaderValues = receivedHeaders.get(header.getName());
+        Operation operation = processorContext.getClientInformationContext().getRequestContext().getOperations();
+        processorContext.getClientInformationContext().getRequestContext().getOperations();
 
-            if(receivedHeaderValues == null || receivedHeaderValues.isEmpty() || !receivedHeaderValues.contains(header.getValue())) {
-                System.out.print("Header not present");
-                break;
+
+        boolean value = false;
+        if (operation == Operation.AND) {
+
+            for (Header header : processorContext.getExpectedResponse().getHeaders()) {
+                List<String> receivedHeaderValues = receivedHeaders.get(header.getName());
+
+                if (receivedHeaderValues == null || receivedHeaderValues.isEmpty() || !receivedHeaderValues.contains(header.getValue())) {
+                    System.out.print("Header not present");
+                    break;
+                }
+            }
+        }else{
+            for (Header header : processorContext.getExpectedResponse().getHeaders()) {
+                List<String> receivedHeaderValues = receivedHeaders.get(header.getName());
+
+                if (receivedHeaderValues == null || receivedHeaderValues.isEmpty() || !receivedHeaderValues.contains(header.getValue())) {
+                   ;
+                    // System.out.print("Non of the Headers present");
+                }else{
+                    value = true;
+                }
+            }
+            if (value){
+                System.out.println("Headers are present");
+            }else {
+                System.out.print("Non of the Headers present");
             }
         }
 
     }
 
-    /*private void assertCookieParameters(HttpClientResponseProcessorContext processorContext) {
-
-        if (processorContext.getExpectedResponse().getCookies() == null || processorContext.getExpectedResponse().getCookies().isEmpty()){
-            return;
-        }
-
-        Map<String, List<String >> receivedCookies = processorContext.getReceivedResponseContext().getCookieParameters();
-
-        for (Cookie cookie : processorContext.getExpectedResponse().getCookies()){
-            List<String> receivedCookieValues = receivedCookies.get(cookie.getName());
-
-            if (receivedCookieValues == null || receivedCookieValues.isEmpty() || !receivedCookieValues.contains(cookie.getValue())){
-                System.out.println("Cookies not present");
-                break;
-            }
-        }
-    }*/
 
 }

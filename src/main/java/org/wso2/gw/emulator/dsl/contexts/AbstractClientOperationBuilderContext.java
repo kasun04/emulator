@@ -18,12 +18,9 @@
  *
  */
 
-package org.wso2.gw.emulator.core.contexts;
+package org.wso2.gw.emulator.dsl.contexts;
 
-public abstract class AbstractConfigurationBuilderContext {
+public abstract class AbstractClientOperationBuilderContext extends AbstractOperationBuilderContext {
 
-    public abstract AbstractConfigurationBuilderContext host(String host);
-
-    public abstract AbstractConfigurationBuilderContext port(int port);
-
+    public abstract void send();
 }

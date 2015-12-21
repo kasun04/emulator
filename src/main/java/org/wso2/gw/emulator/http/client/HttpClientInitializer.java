@@ -28,7 +28,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
-import org.wso2.gw.emulator.core.EmulatorType;
+import org.wso2.gw.emulator.dsl.EmulatorType;
 import org.wso2.gw.emulator.http.ChannelPipelineInitializer;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientConfigBuilderContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientInformationContext;
@@ -84,14 +84,6 @@ public class HttpClientInitializer {
             HttpClientConfigBuilderContext clientConfigBuilderContext = httpClientProcessorContext.getClientInformationContext()
                     .getClientConfigBuilderContext();
             Channel ch = bootstrap.connect(clientConfigBuilderContext.getHost(), clientConfigBuilderContext.getPort()).sync().channel();
-            //writing delay
-            Thread.sleep(clientConfigBuilderContext.getWritingDelay());
-
-            //random connection close
-            if (clientConfigBuilderContext.isRandomConnectionClose()){
-                ch.close();
-                System.out.println("random connection close");
-            }
             ch.writeAndFlush(httpClientProcessorContext.getRequest());
             ch.closeFuture().sync();
     }

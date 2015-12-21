@@ -20,7 +20,7 @@
 
 package org.wso2.gw.emulator.http.client.contexts;
 
-import org.wso2.gw.emulator.core.contexts.AbstractGivenBuilderContext;
+import org.wso2.gw.emulator.dsl.contexts.AbstractGivenBuilderContext;
 import java.util.ArrayList;
 
 public class HttpClientGivenBuilderContext extends AbstractGivenBuilderContext<HttpClientConfigBuilderContext>{

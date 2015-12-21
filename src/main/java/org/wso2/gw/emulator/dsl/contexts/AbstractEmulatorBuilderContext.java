@@ -18,7 +18,7 @@
  *
  */
 
-package org.wso2.gw.emulator.core.contexts;
+package org.wso2.gw.emulator.dsl.contexts;
 
 public class AbstractEmulatorBuilderContext {
 

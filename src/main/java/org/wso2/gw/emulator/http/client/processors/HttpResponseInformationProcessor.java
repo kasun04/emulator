@@ -27,9 +27,11 @@ import io.netty.handler.codec.http.HttpObject;
 import io.netty.util.CharsetUtil;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientResponseProcessorContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpResponseContext;
+
 import java.util.Map;
 
 public class HttpResponseInformationProcessor extends AbstractClientProcessor<HttpClientResponseProcessorContext> {
+
 
     @Override
     public void process(HttpClientResponseProcessorContext processorContext) {
@@ -37,13 +39,13 @@ public class HttpResponseInformationProcessor extends AbstractClientProcessor<Ht
         processorContext.setReceivedResponseContext(httpResponseContext);
         processorContext.setReceivedResponseContext(httpResponseContext);
         processorContext.setExpectedResponse(processorContext.getClientInformationContext().getExpectedResponse());
-        populateRequestHeaders(processorContext);
-        //populateCookies(processorContext);
+        populateResponseHeaders(processorContext);
+        populateResponseCookies(processorContext);
 
     }
 
 
-    private void populateRequestHeaders(HttpClientResponseProcessorContext processorContext) {
+    private void populateResponseHeaders(HttpClientResponseProcessorContext processorContext) {
         HttpHeaders headers = processorContext.getReceivedResponse().headers();
         if (!headers.isEmpty()) {
             for (Map.Entry<String, String> entry : headers.entries()) {
@@ -52,10 +54,11 @@ public class HttpResponseInformationProcessor extends AbstractClientProcessor<Ht
         }
     }
 
-    /*private void populateCookies(HttpClientResponseProcessorContext processorContext) {
+    private void populateResponseCookies(HttpClientResponseProcessorContext processorContext) {
 
         //Cookie cookie = processorContext.getReceivedResponse().
-        Map<String, List<String>> cookieParameters =
+
+        /*Map<String, List<String>> cookieParameters =
                 processorContext.getReceivedResponseContext().getCookieParameters();
 
         if (!cookieParameters.isEmpty()){
@@ -63,10 +66,10 @@ public class HttpResponseInformationProcessor extends AbstractClientProcessor<Ht
                 //processorContext.getReceivedResponseContext().addCookieParameter(entry.getKey(),entry.getValue());
             }
         }
-
+*/
 
     }
-*/
+
     public void appendDecoderResult(HttpResponseContext responseContext, HttpObject httpObject, ByteBuf content) {
         responseContext.appendResponseContent(content.toString(CharsetUtil.UTF_8));
         DecoderResult result = httpObject.getDecoderResult();

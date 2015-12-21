@@ -21,10 +21,15 @@
 package org.wso2.gw.emulator.http.client.contexts;
 
 import io.netty.handler.codec.http.HttpMethod;
-import org.wso2.gw.emulator.core.contexts.AbstractRequestBuilderContext;
+import org.wso2.gw.emulator.dsl.Operation;
+import org.wso2.gw.emulator.dsl.contexts.AbstractRequestBuilderContext;
+import org.wso2.gw.emulator.util.FileRead;
 import org.wso2.gw.emulator.http.params.Cookie;
 import org.wso2.gw.emulator.http.params.Header;
 import org.wso2.gw.emulator.http.params.QueryParameter;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,10 +39,10 @@ public class HttpClientRequestBuilderContext extends AbstractRequestBuilderConte
     private HttpMethod method;
     private String path;
     private String body;
-    private String context;
     private List<Header> headers;
     private List<QueryParameter> queryParameters;
     private List<Cookie> cookies;
+    private Operation operations;
 
 
     private static HttpClientRequestBuilderContext getInstance() {
@@ -64,6 +69,16 @@ public class HttpClientRequestBuilderContext extends AbstractRequestBuilderConte
         return this;
     }
 
+    public HttpClientRequestBuilderContext withBody(File filePath) {
+
+        try {
+            this.body = FileRead.getFileBody(filePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return this;
+    }
+
 
     public HttpClientRequestBuilderContext withHeader(String name, String value) {
         Header header = new Header(name, value);
@@ -76,8 +91,9 @@ public class HttpClientRequestBuilderContext extends AbstractRequestBuilderConte
         return this;
     }
 
-    public HttpClientRequestBuilderContext withHeaders(Header...headerList){
+    public HttpClientRequestBuilderContext withHeaders(Operation operation, Header... headerList){
 
+        this.operations = operation;
         if(headers == null) {
             headers = new ArrayList<Header>();
         }
@@ -130,10 +146,6 @@ public class HttpClientRequestBuilderContext extends AbstractRequestBuilderConte
         return this;
     }
 
-    public String getContext() {
-        return context;
-    }
-
     public HttpMethod getMethod() {
         return method;
     }
@@ -158,5 +170,7 @@ public class HttpClientRequestBuilderContext extends AbstractRequestBuilderConte
         return cookies;
     }
 
-
+    public Operation getOperations() {
+        return operations;
+    }
 }

@@ -30,12 +30,10 @@ import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.LastHttpContent;
 import org.apache.log4j.Logger;
-import org.wso2.gw.emulator.http.server.processors.HttpRequestResponseMatchingProcessor;
+import org.wso2.gw.emulator.http.server.processors.*;
 import org.wso2.gw.emulator.http.server.contexts.HttpServerProcessorContext;
 import org.wso2.gw.emulator.http.server.contexts.HttpRequestContext;
-import org.wso2.gw.emulator.http.server.processors.HttpRequestInformationProcessor;
 import org.wso2.gw.emulator.http.server.contexts.HttpServerInformationContext;
-import org.wso2.gw.emulator.http.server.processors.HttpResponseProcessor;
 
 import java.io.IOException;
 import java.util.Random;
@@ -96,6 +94,12 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
             }
 
             if (msg instanceof LastHttpContent) {
+                //methanata request processor
+                boolean customProcessor = httpProcessorContext.getServerInformationContext().getServerConfigBuilderContext().isCustomProcessor();
+                if (customProcessor){
+                    httpProcessorContext = new HttpRequestCustomProcessor().process(httpProcessorContext);
+                }
+
                 this.requestResponseMatchingProcessor = new HttpRequestResponseMatchingProcessor();
                 this.requestResponseMatchingProcessor.process(httpProcessorContext);
                 ctx.fireChannelReadComplete();
@@ -109,7 +113,15 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
             randomConnectionClose(ctx,this.index,1);
             businessLogicDelay(serverInformationContext.getServerConfigBuilderContext().getLogicDelay(),ctx);
             this.httpResponseProcessor.process(httpProcessorContext);
+
+            boolean customProcessor = httpProcessorContext.getServerInformationContext().getServerConfigBuilderContext().isCustomProcessor();
+
+            if (customProcessor) {
+                httpProcessorContext = new HttpResponseCustomProcessor().process(httpProcessorContext);
+            }
             FullHttpResponse response = httpProcessorContext.getFinalResponse();
+
+       //
             waitingDelay(serverInformationContext.getServerConfigBuilderContext().getWritingDelay(),ctx);
             if (httpProcessorContext.getHttpRequestContext().isKeepAlive()) {
                 randomConnectionClose(ctx,this.index,2);
@@ -121,6 +133,7 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
         }
         randomConnectionClose(ctx,this.index,3);
         ctx.flush();
+       // ctx.channel().close();
     }
 
     @Override

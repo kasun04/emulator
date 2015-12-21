@@ -72,7 +72,6 @@ public class HttpClientHandler extends ChannelInboundHandlerAdapter {
         if (msg instanceof LastHttpContent) {
             isReadComplete = true;
         }
-
     }
 
     @Override

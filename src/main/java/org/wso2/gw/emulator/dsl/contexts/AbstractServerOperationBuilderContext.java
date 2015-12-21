@@ -18,9 +18,11 @@
  *
  */
 
-package org.wso2.gw.emulator.core.contexts;
+package org.wso2.gw.emulator.dsl.contexts;
 
-public abstract class AbstractGivenBuilderContext<T extends AbstractConfigurationBuilderContext>{
+public abstract class AbstractServerOperationBuilderContext extends AbstractOperationBuilderContext {
 
-    public abstract AbstractWhenBuilderContext given(T configurationContext);
+    public abstract AbstractServerOperationBuilderContext start();
+
+    public abstract AbstractServerOperationBuilderContext stop();
 }

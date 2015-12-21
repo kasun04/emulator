@@ -18,17 +18,12 @@
  *
  */
 
-package org.wso2.gw.emulator.core;
+package org.wso2.gw.emulator.dsl.contexts;
 
-import org.apache.log4j.Logger;
-import org.wso2.gw.emulator.core.contexts.AbstractGivenBuilderContext;
+public abstract class AbstractConfigurationBuilderContext {
 
-public abstract class AbstractProtocolEmulator {
+    public abstract AbstractConfigurationBuilderContext host(String host);
 
-    private static final Logger log = Logger.getLogger(AbstractProtocolEmulator.class);
-
-    public abstract AbstractGivenBuilderContext server();
-
-    public abstract AbstractGivenBuilderContext client();
+    public abstract AbstractConfigurationBuilderContext port(int port);
 
 }

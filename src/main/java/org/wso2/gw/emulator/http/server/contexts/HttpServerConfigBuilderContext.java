@@ -21,7 +21,8 @@
 package org.wso2.gw.emulator.http.server.contexts;
 
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import org.wso2.gw.emulator.core.contexts.AbstractConfigurationBuilderContext;
+import org.wso2.gw.emulator.dsl.contexts.AbstractConfigurationBuilderContext;
+import org.wso2.gw.emulator.http.client.contexts.HttpClientRequestBuilderContext;
 
 import java.util.Random;
 
@@ -36,10 +37,15 @@ public class HttpServerConfigBuilderContext extends AbstractConfigurationBuilder
     private boolean randomConnectionClose;
     private ChannelInboundHandlerAdapter logicHandler;
     private int logicDelay;
+    private boolean customProcessor;
 
     private static HttpServerConfigBuilderContext getInstance() {
         config = new HttpServerConfigBuilderContext();
         return config;
+    }
+
+    public boolean isCustomProcessor() {
+        return customProcessor;
     }
 
     public static HttpServerConfigBuilderContext configure() {
@@ -83,6 +89,11 @@ public class HttpServerConfigBuilderContext extends AbstractConfigurationBuilder
 
     public HttpServerConfigBuilderContext logic(ChannelInboundHandlerAdapter logicHandler) {
         this.logicHandler = logicHandler;
+        return this;
+    }
+
+    public HttpServerConfigBuilderContext withCustomProcessor(boolean customProcessor){
+        this.customProcessor = customProcessor;
         return this;
     }
 

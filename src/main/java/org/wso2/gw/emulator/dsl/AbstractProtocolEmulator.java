@@ -18,8 +18,17 @@
  *
  */
 
-package org.wso2.gw.emulator.core;
+package org.wso2.gw.emulator.dsl;
 
-public enum EmulatorType {
-    HTTP_SERVER, HTTP_CLIENT, TCP_SERVER, TCP_CLIENT
+import org.apache.log4j.Logger;
+import org.wso2.gw.emulator.dsl.contexts.AbstractGivenBuilderContext;
+
+public abstract class AbstractProtocolEmulator {
+
+    private static final Logger log = Logger.getLogger(AbstractProtocolEmulator.class);
+
+    public abstract AbstractGivenBuilderContext server();
+
+    public abstract AbstractGivenBuilderContext client();
+
 }

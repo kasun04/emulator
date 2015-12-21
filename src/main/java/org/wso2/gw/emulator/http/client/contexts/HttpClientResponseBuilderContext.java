@@ -21,9 +21,13 @@
 package org.wso2.gw.emulator.http.client.contexts;
 
 import io.netty.handler.codec.http.HttpResponseStatus;
-import org.wso2.gw.emulator.core.contexts.AbstractResponseBuilderContext;
+import org.wso2.gw.emulator.dsl.contexts.AbstractResponseBuilderContext;
+import org.wso2.gw.emulator.util.FileRead;
 import org.wso2.gw.emulator.http.params.Cookie;
 import org.wso2.gw.emulator.http.params.Header;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -90,6 +94,16 @@ public class HttpClientResponseBuilderContext extends AbstractResponseBuilderCon
 
     public HttpClientResponseBuilderContext withBody(String body) {
         this.body = body;
+        return this;
+    }
+
+    public HttpClientResponseBuilderContext withBody(File filePath) {
+
+        try {
+            this.body = FileRead.getFileBody(filePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return this;
     }
 

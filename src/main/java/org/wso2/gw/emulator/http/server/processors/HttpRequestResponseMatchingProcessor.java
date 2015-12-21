@@ -30,6 +30,8 @@ public class HttpRequestResponseMatchingProcessor extends AbstractServerProcesso
 
     @Override
     public void process(HttpServerProcessorContext processorContext) {
+
+
         Map<HttpServerRequestBuilderContext, HttpServerResponseBuilderContext> requestResponseCorrelation= processorContext
         .getServerInformationContext().getRequestResponseCorrelation();
         HttpRequestContext httpRequestContext = processorContext.getHttpRequestContext();
@@ -38,5 +40,14 @@ public class HttpRequestResponseMatchingProcessor extends AbstractServerProcesso
                 processorContext.setSelectedResponseContext(entry.getValue());
             }
         }
+
+        /*boolean customProcessor = processorContext.getServerInformationContext().getServerConfigBuilderContext().isCustomProcessor();
+
+        if (customProcessor){
+
+            new HttpResponseCustomProcessor().process()
+            HttpServerResponseBuilderContext selectedResponseContext = processorContext.getSelectedResponseContext();
+        }*/
+
     }
 }

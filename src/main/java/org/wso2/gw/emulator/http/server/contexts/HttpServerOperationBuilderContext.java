@@ -20,7 +20,7 @@
 
 package org.wso2.gw.emulator.http.server.contexts;
 
-import org.wso2.gw.emulator.core.contexts.AbstractServerOperationBuilderContext;
+import org.wso2.gw.emulator.dsl.contexts.AbstractServerOperationBuilderContext;
 
 public class HttpServerOperationBuilderContext extends AbstractServerOperationBuilderContext {
 
@@ -32,12 +32,21 @@ public class HttpServerOperationBuilderContext extends AbstractServerOperationBu
 
     @Override
     public HttpServerOperationBuilderContext start() {
-        try {
-            httpServerInformationContext.getHttpServerInitializer().start();
-        } catch (Exception e) {
-            e.printStackTrace();
+
+        boolean b = parameterValidation();
+
+        if (!b){
+            System.out.println("server parameters were not set");
+            return null;
+        }else{
+
+            try {
+                httpServerInformationContext.getHttpServerInitializer().start();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return this;
         }
-        return this;
     }
 
     @Override
@@ -48,5 +57,17 @@ public class HttpServerOperationBuilderContext extends AbstractServerOperationBu
             e.printStackTrace();
         }
         return this;
+    }
+
+    public boolean parameterValidation(){
+        String host = httpServerInformationContext.getServerConfigBuilderContext().getHost();
+        Integer port = httpServerInformationContext.getServerConfigBuilderContext().getPort();
+
+        if (host == null){
+            if (port.toString() == null){
+                return false;
+            }
+        }
+        return true;
     }
 }

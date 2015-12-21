@@ -20,7 +20,7 @@
 
 package org.wso2.gw.emulator.http.client.contexts;
 
-import org.wso2.gw.emulator.core.contexts.AbstractWhenBuilderContext;
+import org.wso2.gw.emulator.dsl.contexts.AbstractWhenBuilderContext;
 import java.util.List;
 
 public class HttpClientWhenBuilderContext extends AbstractWhenBuilderContext<HttpClientRequestBuilderContext> {
@@ -41,6 +41,7 @@ public class HttpClientWhenBuilderContext extends AbstractWhenBuilderContext<Htt
     @Override
     public HttpClientThenBuilderContext when(HttpClientRequestBuilderContext requestContext) {
         this.requestContext = requestContext;
+        httpClientInformationContext.setRequestContext(requestContext);
         thenBuilderContext = new HttpClientThenBuilderContext(whenBuilderContextList,requestContext,httpClientInformationContext);
         return thenBuilderContext;
     }

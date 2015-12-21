@@ -18,11 +18,8 @@
  *
  */
 
-package org.wso2.gw.emulator.core.contexts;
+package org.wso2.gw.emulator.dsl;
 
-public abstract class AbstractWhenBuilderContext<T extends AbstractRequestBuilderContext>{
-
-    public abstract AbstractThenBuilderContext when(T requestContextBuilder);
-
-    public abstract AbstractOperationBuilderContext operation();
+public enum EmulatorType {
+    HTTP_SERVER, HTTP_CLIENT, TCP_SERVER, TCP_CLIENT
 }

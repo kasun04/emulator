@@ -20,7 +20,7 @@
 
 package org.wso2.gw.emulator.http.server.contexts;
 
-import org.wso2.gw.emulator.core.contexts.AbstractGivenBuilderContext;
+import org.wso2.gw.emulator.dsl.contexts.AbstractGivenBuilderContext;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,10 +1,14 @@
 package org.wso2.gw.emulator.http.server.contexts;
 
 import io.netty.handler.codec.http.HttpMethod;
-import org.wso2.gw.emulator.core.contexts.AbstractRequestBuilderContext;
+import org.wso2.gw.emulator.dsl.contexts.AbstractRequestBuilderContext;
+import org.wso2.gw.emulator.util.FileRead;
 import org.wso2.gw.emulator.http.params.Cookie;
 import org.wso2.gw.emulator.http.params.Header;
 import org.wso2.gw.emulator.http.params.QueryParameter;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -48,6 +52,16 @@ public class HttpServerRequestBuilderContext extends AbstractRequestBuilderConte
 
     public HttpServerRequestBuilderContext withBody(String body) {
         this.body = body;
+        return this;
+    }
+
+    public HttpServerRequestBuilderContext withBody(File filePath)  {
+        try {
+            this.body = FileRead.getFileBody(filePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //this.body = body;
         return this;
     }
 
@@ -179,6 +193,10 @@ public class HttpServerRequestBuilderContext extends AbstractRequestBuilderConte
             return ".*";
         }
 
+        if ((context == "*") && (path == "*")) {
+            return ".*";
+        }
+
         if (context != null && !context.isEmpty()) {
             fullPath = context;
 
@@ -210,7 +228,7 @@ public class HttpServerRequestBuilderContext extends AbstractRequestBuilderConte
         if (fullPath.endsWith("/")) {
             fullPath = fullPath.substring(0, fullPath.length() - 1);
         }
-        return "^" + fullPath + "$";
+        return "^" + fullPath + "/$";
     }
 
     private String extractContext(String uri) {

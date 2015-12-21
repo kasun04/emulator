@@ -20,7 +20,7 @@
 
 package org.wso2.gw.emulator.http.client.contexts;
 
-import org.wso2.gw.emulator.core.contexts.AbstractEmulatorBuilderContext;
+import org.wso2.gw.emulator.dsl.contexts.AbstractEmulatorBuilderContext;
 
 import java.util.HashMap;
 import java.util.Map;
