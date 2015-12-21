@@ -22,7 +22,8 @@ package org.wso2.gw.emulator;
 
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpResponseStatus;
-import org.wso2.gw.emulator.dsl.Emulator;
+import org.wso2.gw.emulator.core.Emulator;
+import org.wso2.gw.emulator.http.HTTPProtocolEmulator;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientConfigBuilderContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientRequestBuilderContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientResponseBuilderContext;
