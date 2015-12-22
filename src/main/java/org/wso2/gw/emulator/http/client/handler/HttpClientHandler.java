@@ -61,7 +61,7 @@ public class HttpClientHandler extends ChannelInboundHandlerAdapter {
         }
 
         if (msg instanceof HttpContent) {
-            readingDelay(clientInformationContext.getClientConfigBuilderContext().getReadingDelay());
+            //readingDelay(clientInformationContext.getClientConfigBuilderContext().getReadingDelay());
             HttpContent httpContent = (HttpContent) msg;
             ByteBuf content = httpContent.content();
 
@@ -84,6 +84,7 @@ public class HttpClientHandler extends ChannelInboundHandlerAdapter {
     public void channelReadComplete(ChannelHandlerContext ctx) {
         if (responseAssertProcessor != null && isReadComplete) {
             this.responseAssertProcessor.process(processorContext);
+            this.clientInformationContext.setReceivedResponseProcessContext(processorContext);
         }
         ctx.close();
     }

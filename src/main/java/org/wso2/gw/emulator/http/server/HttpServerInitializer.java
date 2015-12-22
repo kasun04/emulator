@@ -34,6 +34,7 @@ import io.netty.util.concurrent.ExecutorServiceFactory;
 import org.wso2.gw.emulator.dsl.EmulatorType;
 import org.wso2.gw.emulator.http.ChannelPipelineInitializer;
 import org.wso2.gw.emulator.http.server.contexts.HttpServerInformationContext;
+import sun.rmi.runtime.Log;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -52,7 +53,7 @@ public class HttpServerInitializer extends Thread{
     private InputStream inputStream;
 
 
-    public HttpServerInitializer(HttpServerInformationContext serverInformationContext) {
+    public HttpServerInitializer(HttpServerInformationContext serverInformationContext){
         this.serverInformationContext = serverInformationContext;
         prop = new Properties();
         String propFileName = "server.properties";

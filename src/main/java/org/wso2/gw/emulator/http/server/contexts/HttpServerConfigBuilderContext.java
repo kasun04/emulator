@@ -29,7 +29,7 @@ import java.util.Random;
 public class HttpServerConfigBuilderContext extends AbstractConfigurationBuilderContext {
 
     private static HttpServerConfigBuilderContext config;
-    private String host;
+    private String host = null;
     private int port;
     private String context;
     private int readingDelay;
