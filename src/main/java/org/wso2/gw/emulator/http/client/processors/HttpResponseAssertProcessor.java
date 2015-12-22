@@ -31,8 +31,13 @@ public class HttpResponseAssertProcessor extends AbstractClientProcessor<HttpCli
 
     @Override
     public void process(HttpClientResponseProcessorContext processorContext) {
-        assertResponseContent(processorContext);
-        assertHeaderParameters(processorContext);
+
+        if(!processorContext.getExpectedResponse().getAssertionStatus()){
+            assertResponseContent(processorContext);
+            assertHeaderParameters(processorContext);
+        }else{
+            System.out.println("Assertion ignored");
+        }
     }
 
 

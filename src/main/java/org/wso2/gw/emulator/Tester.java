@@ -22,64 +22,72 @@ package org.wso2.gw.emulator;
 
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpResponseStatus;
-import org.wso2.gw.emulator.core.Emulator;
+import org.wso2.gw.emulator.dsl.CookieOperation;
+import org.wso2.gw.emulator.dsl.Emulator;
+import org.wso2.gw.emulator.dsl.Operation;
+import org.wso2.gw.emulator.dsl.QueryParameterOperation;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientConfigBuilderContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientRequestBuilderContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientResponseBuilderContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientResponseProcessorContext;
+import org.wso2.gw.emulator.http.params.Cookie;
+import org.wso2.gw.emulator.http.params.Header;
+import org.wso2.gw.emulator.http.params.QueryParameter;
 import org.wso2.gw.emulator.http.server.contexts.HttpServerOperationBuilderContext;
+import sun.text.normalizer.NormalizerBase;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 
 import static org.wso2.gw.emulator.http.server.contexts.HttpServerRequestBuilderContext.request;
 import static org.wso2.gw.emulator.http.server.contexts.HttpServerResponseBuilderContext.response;
 import static org.wso2.gw.emulator.http.server.contexts.HttpServerConfigBuilderContext.configure;
 
+
 public class Tester {
+
+    public static Operation operation;
     public static void main(String[] args) throws Exception {
         HttpServerOperationBuilderContext serverOperationBuilderContext = startHttpEmulator();
         Thread.sleep(1000);
-        testProducer();
-        //testProducer1();
+        //testProducer();
+        testProducer1();
         serverOperationBuilderContext.stop();
+
     }
 
-    private static HttpServerOperationBuilderContext startHttpEmulator() throws FileNotFoundException{
+    private static HttpServerOperationBuilderContext startHttpEmulator() throws FileNotFoundException {
         return Emulator.getHttpEmulator()
                 .server()
                 .given(configure()
 
-                        .host("127.0.0.1")
-                        .port(6065)
-                        .context("/user").readingDelay(1000).writingDelay(1000)
-                                .randomConnectionClose(false).logicDelay(1000))
+                               .host("127.0.0.1").port(6065).context("/user").readingDelay(1000).writingDelay(1000)
+                                .randomConnectionClose(false).logicDelay(1000)
+                .withCustomProcessor(true))
 
                 .when(request()
-                        .withMethod(HttpMethod.GET).withPath("*")
-                )
-                .then(response()
-                        .withBody("Test Response1").withStatusCode(HttpResponseStatus.OK))
-                .when(request()
-                        .withMethod(HttpMethod.POST).withBody("test")
-                )
-                .then(response()
-                        .withBody("Test Response2").withStatusCode(HttpResponseStatus.OK))
-                /*.when(request()
-                        .withMethod(HttpMethod.POST).withBody("files/ServerRequest.txt")
-                )
-                .then(response()
-                        .withBody("files/ServerResponse.txt").withStatusCode(HttpResponseStatus.OK))*//*
-                */.when(request()
-                              .withMethod(HttpMethod.POST).withPath("/dilshan")
-                              .withBody("test")
-                              .withHeader("name2","value2")
+                        .withMethod(HttpMethod.POST)//.withPath("*")
+                        .withBody("dilshan")
+                              //.withHeader("name2","kanchana")
+                        .withHeaders(
+                                Operation.AND,
+                                new Header("name1","dilshan"),
+                                new Header("name2","kanchana"))
+
+                        .withQueryParameters(
+                                QueryParameterOperation.AND,
+                                new QueryParameter("query1","val1"),
+                                new QueryParameter("query2","val2")
                         )
+                )
                 .then(response()
-                              .withBody("response")
-                              .withHeader("name3","value3")
-
-                              .withStatusCode(HttpResponseStatus.OK)
-
+                        .withBody("my name is @{body} @{header.name2} @{header.name2}")
+                        .withHeaders(
+                                new Header("res1","vres1"),
+                                new Header("res2","vres2"))
+                        .withStatusCode(HttpResponseStatus.OK)
                 )
                 .operation().start();
     }
@@ -92,9 +100,6 @@ public class Tester {
                 .when(HttpClientRequestBuilderContext.request()
                               .withPath("/user").withMethod(HttpMethod.GET))
                 .then(HttpClientResponseBuilderContext.response().withBody("Test Response1"))
-                /*.when(HttpClientRequestBuilderContext.request()
-                        .withMethod(HttpMethod.POST).withBody("files/ClientRequest.txt"))
-                .then(HttpClientResponseBuilderContext.response().withBody("files/ClientResponse.txt"))*/
                 .when(HttpClientRequestBuilderContext.request()
                               .withPath("/user").withMethod(HttpMethod.POST).withBody("test"))
                 .then(HttpClientResponseBuilderContext.response().withBody("Test Response2").assertionIgnore())
@@ -110,14 +115,26 @@ public class Tester {
                         .readingDelay(1000)
                 )
                 .when(HttpClientRequestBuilderContext.request()
-                        .withMethod(HttpMethod.POST).withPath("/user/dilshan")
-                        .withBody("test")
-                        .withHeader("name2","value2")//.withHeaders()
+                        .withPath("/user/dilshan")
+                        .withMethod(HttpMethod.POST)
+                        .withBody("dilshan")
+                        //.withHeader("name2","kanchana")
+                        .withHeaders(
+                                Operation.AND,
+                                new Header("name1","dilshan"),
+                                new Header("name2","kanchana")
+                        ).withQueryParameters(
+                                new QueryParameter("query1","val1"),
+                                new QueryParameter("query2","val2")
+                        )
                               //.withQueryParameter("q1","q1")
                 )
                 .then(HttpClientResponseBuilderContext.response()
-                        .withBody("response")
-                        .withHeader("name3","value3")
+                        .withBody("my name is dilshan kanchana kanchana")
+                        .withHeaders(
+                                new Header("res1","vres1"),
+                                new Header("res2","vres2")
+                        ).assertionIgnore()
                 )
                 .operation().send();
     }

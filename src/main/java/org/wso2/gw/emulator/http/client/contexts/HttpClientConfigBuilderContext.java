@@ -20,7 +20,7 @@
 
 package org.wso2.gw.emulator.http.client.contexts;
 
-import org.wso2.gw.emulator.core.contexts.AbstractConfigurationBuilderContext;
+import org.wso2.gw.emulator.dsl.contexts.AbstractConfigurationBuilderContext;
 
 public class HttpClientConfigBuilderContext extends AbstractConfigurationBuilderContext {
 

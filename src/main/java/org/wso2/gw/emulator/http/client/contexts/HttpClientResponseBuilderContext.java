@@ -39,6 +39,7 @@ public class HttpClientResponseBuilderContext extends AbstractResponseBuilderCon
     private List<Header> headers;
     private List<Cookie> cookies;
     private String body;
+    private boolean isIgnored;
 
     private static HttpClientResponseBuilderContext getInstance() {
         clientResponseBuilderContext = new HttpClientResponseBuilderContext();
@@ -105,6 +106,16 @@ public class HttpClientResponseBuilderContext extends AbstractResponseBuilderCon
             e.printStackTrace();
         }
         return this;
+    }
+
+    public boolean getAssertionStatus() {
+        return isIgnored;
+    }
+
+    public HttpClientResponseBuilderContext assertionIgnore() {
+        this.isIgnored = true;
+        return this;
+
     }
 
     public HttpResponseStatus getStatusCode() {
