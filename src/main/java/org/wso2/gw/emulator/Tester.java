@@ -52,7 +52,7 @@ public class Tester {
     public static void main(String[] args) throws Exception {
         HttpServerOperationBuilderContext serverOperationBuilderContext = startHttpEmulator();
         Thread.sleep(1000);
-        //testProducer();
+        testProducer();
         testProducer1();
         serverOperationBuilderContext.stop();
 
@@ -66,11 +66,20 @@ public class Tester {
                                .host("127.0.0.1").port(6065).context("/user").readingDelay(1000).writingDelay(1000)
                                 .randomConnectionClose(false).logicDelay(1000)
                 .withCustomProcessor(true))
-
                 .when(request()
-                        .withMethod(HttpMethod.POST)//.withPath("*")
+
+                        .withMethod(HttpMethod.GET).withPath("*")
+                )
+                .then(response()
+                        .withBody("Test Response1").withStatusCode(HttpResponseStatus.OK))
+                .when(request()
+                        .withMethod(HttpMethod.POST).withBody("test")
+                )
+                .then(response()
+                        .withBody("Test Response2").withStatusCode(HttpResponseStatus.OK))
+                .when(request()
+                        .withMethod(HttpMethod.POST)
                         .withBody("dilshan")
-                              //.withHeader("name2","kanchana")
                         .withHeaders(
                                 Operation.AND,
                                 new Header("name1","dilshan"),
@@ -134,7 +143,7 @@ public class Tester {
                         .withHeaders(
                                 new Header("res1","vres1"),
                                 new Header("res2","vres2")
-                        ).assertionIgnore()
+                        )
                 )
                 .operation().send();
     }
