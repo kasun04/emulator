@@ -1,6 +1,9 @@
 package org.wso2.gw.emulator.http.server.contexts;
 
 import io.netty.handler.codec.http.HttpMethod;
+import org.wso2.gw.emulator.dsl.CookieOperation;
+import org.wso2.gw.emulator.dsl.Operation;
+import org.wso2.gw.emulator.dsl.QueryParameterOperation;
 import org.wso2.gw.emulator.dsl.contexts.AbstractRequestBuilderContext;
 import org.wso2.gw.emulator.util.FileRead;
 import org.wso2.gw.emulator.http.params.Cookie;
@@ -22,13 +25,17 @@ public class HttpServerRequestBuilderContext extends AbstractRequestBuilderConte
     private String path;
     private String body;
     private String context;
-    private Pattern pathRegex;
     private Header header;
+    private Pattern pathRegex;
     private QueryParameter queryParameter;
     private Cookie cookie;
     private List<Header> headers;
     private List<QueryParameter> queryParameters;
     private List<Cookie> cookies;
+    private Operation operation;
+    private CookieOperation cookieOperation;
+    private QueryParameterOperation queryOperation;
+
 
 
     private static HttpServerRequestBuilderContext getInstance() {
@@ -66,23 +73,45 @@ public class HttpServerRequestBuilderContext extends AbstractRequestBuilderConte
     }
 
     public HttpServerRequestBuilderContext withHeader(String name, String value) {
-        header = new Header(name, value);
+        this.header = new Header(name, value);
+        if(headers == null) {
+            headers = new ArrayList<Header>();
+        }
+        headers.add(header);
         return this;
     }
 
-    public HttpServerRequestBuilderContext withHeaders(Header... headers) {
+    public Operation getOperation() {
+        return operation;
+    }
+
+    public CookieOperation getCookieOperation() {
+        return cookieOperation;
+    }
+
+    public HttpServerRequestBuilderContext withHeaders(Operation operation, Header... headers) {
+        this.operation = operation;
         this.headers = Arrays.asList(headers);
         return this;
     }
 
 
     public HttpServerRequestBuilderContext withQueryParameter(String name, String value) {
-        queryParameter = new QueryParameter(name, value);
+        this.queryParameter = new QueryParameter(name, value);
+        if (queryParameters == null){
+            queryParameters = new ArrayList<QueryParameter>();
+        }
+        queryParameters.add(queryParameter);
         return this;
     }
 
 
-    public HttpServerRequestBuilderContext withQueryParameters(QueryParameter... queryParameters) {
+    public QueryParameterOperation getQueryOperation() {
+        return queryOperation;
+    }
+
+    public HttpServerRequestBuilderContext withQueryParameters(QueryParameterOperation queryOperation, QueryParameter... queryParameters) {
+        this.queryOperation = queryOperation;
         this.queryParameters = Arrays.asList(queryParameters);
         return this;
     }
@@ -95,7 +124,8 @@ public class HttpServerRequestBuilderContext extends AbstractRequestBuilderConte
         return this;
     }
 
-    public HttpServerRequestBuilderContext withCookies(Cookie... cookies) {
+    public HttpServerRequestBuilderContext withCookies(CookieOperation cookieOperation, Cookie... cookies) {
+        this.cookieOperation = cookieOperation;
         this.cookies = Arrays.asList(cookies);
         return this;
     }
@@ -105,8 +135,9 @@ public class HttpServerRequestBuilderContext extends AbstractRequestBuilderConte
     }
 
     public boolean isMatch(HttpRequestContext requestContext) {
+        
         if (isContextMatch(requestContext) && isHttpMethodMatch(requestContext) && isRequestContentMatch(requestContext) &&
-                isHeadersMatch(requestContext) && isQueryParameterMatch(requestContext)) {
+                isHeadersMatch(requestContext) ) {//&& isQueryParameterMatch(requestContext)
             return true;
         }
         return false;
@@ -147,32 +178,82 @@ public class HttpServerRequestBuilderContext extends AbstractRequestBuilderConte
     }
 
     private boolean isHeadersMatch(HttpRequestContext requestContext) {
-        if (header == null) {
+
+        if (headers == null) {
+            return true;
+        }
+        Operation operation = getOperation();
+        Map<String, List<String>> headerParameters = requestContext.getHeaderParameters();
+
+        if (operation == Operation.OR) {
+            for (Header header : headers) {
+                List<String> headerValues = headerParameters.get(header.getName());
+                String value = header.getValue();
+
+                if (headerValues.contains(value)) {
+                    return true;
+                }
+            }
+        }else {
+            List<String> headerValues = null;
+            String value = null;
+
+            for (Header header : headers) {
+
+                if (headerParameters.get(header.getName()) != null){
+                    headerValues = headerParameters.get(header.getName());
+                    value = header.getValue();
+                }else {
+                    return false;
+                }
+
+                if (!headerValues.contains(value)) {
+                    return false;
+                }
+            }
             return true;
         }
 
-        Map<String, List<String>> headerParameters = requestContext.getHeaderParameters();
-        List<String> headerValues = headerParameters.get(header.getName());
-
-        if (headerParameters == null || headerValues == null || headerValues.isEmpty()) {
-            return false;
-        }
-
-        for (String value : headerValues) {
-            if (value.equalsIgnoreCase(header.getValue())) {
-                return true;
-            }
-        }
         return false;
     }
 
     private boolean isQueryParameterMatch(HttpRequestContext requestContext) {
-        if (queryParameter == null) {
+        if (queryParameters == null) {
             return true;
         }
 
-        Map<String, List<String>> queryParameters = requestContext.getQueryParameters();
-        List<String> queryValues = queryParameters.get(queryParameter.getName());
+        Map<String, List<String>> queryParametersMap = requestContext.getQueryParameters();
+
+        if (operation == Operation.OR) {
+            for (QueryParameter query : queryParameters) {
+                List<String> queryParameterValues = queryParametersMap.get(query.getName());
+                String value = query.getValue();
+
+                if (queryParameterValues.contains(value)) {
+                    return true;
+                }
+            }
+        }else {
+            List<String> queryParameterValues = null;
+            String value = null;
+
+            for (QueryParameter query : queryParameters) {
+
+                if (queryParametersMap.get(query.getName()) != null){
+                    queryParameterValues = queryParametersMap.get(query.getName());
+                    value = query.getValue();
+                }else {
+                    return false;
+                }
+
+                if (!queryParameterValues.contains(value)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        /*List<String> queryValues = queryParameters.get(queryParameter.getName());
 
         if (queryParameters == null || queryValues == null || queryValues.isEmpty()) {
             return false;
@@ -182,7 +263,7 @@ public class HttpServerRequestBuilderContext extends AbstractRequestBuilderConte
             if (value.equalsIgnoreCase(queryParameter.getValue())) {
                 return true;
             }
-        }
+        }*/
         return false;
     }
 

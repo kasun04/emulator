@@ -22,13 +22,18 @@ package org.wso2.gw.emulator;
 
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpResponseStatus;
+import org.wso2.gw.emulator.dsl.CookieOperation;
 import org.wso2.gw.emulator.dsl.Emulator;
 import org.wso2.gw.emulator.dsl.Operation;
+import org.wso2.gw.emulator.dsl.QueryParameterOperation;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientConfigBuilderContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientRequestBuilderContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientResponseBuilderContext;
+import org.wso2.gw.emulator.http.params.Cookie;
 import org.wso2.gw.emulator.http.params.Header;
+import org.wso2.gw.emulator.http.params.QueryParameter;
 import org.wso2.gw.emulator.http.server.contexts.HttpServerOperationBuilderContext;
+import sun.text.normalizer.NormalizerBase;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -62,23 +67,26 @@ public class Tester {
                 .withCustomProcessor(true))
 
                 .when(request()
-                              .withMethod(HttpMethod.POST)//.withPath("*")
-                              .withBody("dilshan")
+                        .withMethod(HttpMethod.POST)//.withPath("*")
+                        .withBody("dilshan")
                               //.withHeader("name2","kanchana")
                         .withHeaders(
-                                new Header("name","dilsha"),
-                                new Header("name2","kanchana")
+                                Operation.AND,
+                                new Header("name1","dilshan"),
+                                new Header("name2","kanchana"))
+
+                        .withQueryParameters(
+                                QueryParameterOperation.AND,
+                                new QueryParameter("query1","val1"),
+                                new QueryParameter("query2","val2")
                         )
-                        )
+                )
                 .then(response()
-                              .withBody("my name is @{body} @{header.name2} @{header.name2}")
-                              .withHeaders(
-                                      new Header("res1","vres1"),
-                                      new Header("res2","vres2")
-                              )
-
-                              .withStatusCode(HttpResponseStatus.OK)
-
+                        .withBody("my name is @{body} @{header.name2} @{header.name2}")
+                        .withHeaders(
+                                new Header("res1","vres1"),
+                                new Header("res2","vres2"))
+                        .withStatusCode(HttpResponseStatus.OK)
                 )
                 .operation().start();
     }
@@ -104,9 +112,7 @@ public class Tester {
                         .host("127.0.0.1")
                         .port(6065)
                         .readingDelay(1000)
-                        )
-
-
+                )
                 .when(HttpClientRequestBuilderContext.request()
                         .withPath("/user/dilshan")
                         .withMethod(HttpMethod.POST)
@@ -116,13 +122,18 @@ public class Tester {
                                 Operation.AND,
                                 new Header("name1","dilshan"),
                                 new Header("name2","kanchana")
-
+                        ).withQueryParameters(
+                                new QueryParameter("query1","val1"),
+                                new QueryParameter("query2","val2")
                         )
                               //.withQueryParameter("q1","q1")
                 )
                 .then(HttpClientResponseBuilderContext.response()
                         .withBody("my name is dilshan kanchana kanchana")
-                        .withHeader("res1","vres1")
+                        .withHeaders(
+                                new Header("res1","vres1"),
+                                new Header("res2","vres2")
+                        )
                 )
                 .operation().send();
     }

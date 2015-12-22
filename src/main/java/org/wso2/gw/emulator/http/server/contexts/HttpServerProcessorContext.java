@@ -32,6 +32,15 @@ public class HttpServerProcessorContext {
     private HttpContent httpContent;
     private HttpServerResponseBuilderContext selectedResponseContext;
     private FullHttpResponse finalResponse;
+    private HttpServerRequestBuilderContext requestBuilderContext;
+
+    public HttpServerRequestBuilderContext getRequestBuilderContext() {
+        return requestBuilderContext;
+    }
+
+    public void setRequestBuilderContext(HttpServerRequestBuilderContext requestBuilderContext) {
+        this.requestBuilderContext = requestBuilderContext;
+    }
 
     public HttpServerInformationContext getServerInformationContext() {
         return serverInformationContext;

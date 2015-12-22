@@ -29,19 +29,46 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslContext;
+import io.netty.util.concurrent.DefaultExecutorServiceFactory;
+import io.netty.util.concurrent.ExecutorServiceFactory;
 import org.wso2.gw.emulator.dsl.EmulatorType;
 import org.wso2.gw.emulator.http.ChannelPipelineInitializer;
 import org.wso2.gw.emulator.http.server.contexts.HttpServerInformationContext;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+import java.util.concurrent.ExecutorService;
 
 public class HttpServerInitializer extends Thread{
     private static final boolean SSL = System.getProperty("ssl") != null;
     private EventLoopGroup bossGroup;
     private EventLoopGroup workerGroup;
     private HttpServerInformationContext serverInformationContext;
+    private int bossCount;
+    private int workerCount;
+    private Properties prop;
+    private InputStream inputStream;
+
 
     public HttpServerInitializer(HttpServerInformationContext serverInformationContext) {
         this.serverInformationContext = serverInformationContext;
+        prop = new Properties();
+        String propFileName = "server.properties";
+        inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
+        if (inputStream != null) {
+            try {
+                prop.load(inputStream);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        setBossCount();
+        setWorkerCount();
     }
+
+
 
     public void run() {
         final SslContext sslCtx = null;
@@ -52,9 +79,16 @@ public class HttpServerInitializer extends Thread{
             sslCtx = null;
         }*/
         // Configure the server.
-        bossGroup = new NioEventLoopGroup(getCPUCoreSize());
-        workerGroup = new NioEventLoopGroup();
-               try {
+       ExecutorServiceFactory bossExecutorServiceFactory = new DefaultExecutorServiceFactory("sample-bosses");
+        bossExecutorServiceFactory.newExecutorService(bossCount);
+
+        ExecutorServiceFactory workerExecutorServiceFactory = new DefaultExecutorServiceFactory("sample-workers");
+        workerExecutorServiceFactory.newExecutorService(workerCount);
+
+        bossGroup = new NioEventLoopGroup(bossCount);
+        workerGroup = new NioEventLoopGroup(workerCount);
+
+        try {
             ServerBootstrap serverBootstrap = new ServerBootstrap();
             ChannelPipelineInitializer channelPipelineInitializer = new ChannelPipelineInitializer(sslCtx,
                                                                                                    EmulatorType.HTTP_SERVER);
@@ -84,4 +118,26 @@ public class HttpServerInitializer extends Thread{
     private int getCPUCoreSize() {
         return Runtime.getRuntime().availableProcessors();
     }
+
+
+    public void setBossCount() {
+        this.bossCount = Integer.parseInt(prop.getProperty("boss_count"));;
+    }
+
+    public void setWorkerCount() {
+        this.workerCount = Integer.parseInt(prop.getProperty("worker_count"));;
+    }
+
+   /* public int getBossCount() throws IOException {
+
+        String boss_count = prop.getProperty("boss_count");
+        return Integer.parseInt(boss_count);
+    }
+
+    public int getWorkerCount() {
+
+        String worker_count = prop.getProperty("worker_count");
+        return Integer.parseInt(worker_count);
+    }*/
+
 }

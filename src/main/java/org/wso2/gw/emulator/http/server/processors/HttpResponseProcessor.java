@@ -129,7 +129,7 @@ public class HttpResponseProcessor extends AbstractServerProcessor {
             for (Header header : responseContext.getHeaders()) {
                 response.headers().add(header.getName(), header.getValue());
             }
-        }
+        }//not null
         response.headers().set(HttpHeaders.Names.CONTENT_LENGTH, response.content().readableBytes());
     }
 

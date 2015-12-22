@@ -75,6 +75,7 @@ public class HttpRequestInformationProcessor extends AbstractServerProcessor {
 
 
     private void populateQueryParameters(HttpRequest request, HttpRequestContext requestContext) {
+
         QueryStringDecoder queryStringDecoder = new QueryStringDecoder(request.getUri());
         Map<String, List<String>> params = queryStringDecoder.parameters();
         requestContext.setQueryParameters(params);

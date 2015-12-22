@@ -54,6 +54,7 @@ public class HttpRequestContext {
         return queryParameters;
     }
 
+    //set query parameters
     public void setQueryParameters(Map<String, List<String>> queryParameters) {
         this.queryParameters = queryParameters;
     }

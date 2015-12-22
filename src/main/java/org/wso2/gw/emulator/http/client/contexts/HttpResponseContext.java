@@ -30,6 +30,9 @@ public class HttpResponseContext {
     private Map<String, List<String>> headerParameters;
     private Map<String, List<String>> cookieParameters;
     private StringBuffer responseBody;
+    private List<String> headers;
+
+
 
     public void addHeaderParameter(String key, String value) {
         if (headerParameters == null) {

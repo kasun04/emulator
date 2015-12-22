@@ -55,6 +55,7 @@ public class HttpResponseAssertProcessor extends AbstractClientProcessor<HttpCli
             return;
         }
         Map<String, List<String>> receivedHeaders = processorContext.getReceivedResponseContext().getHeaderParameters();
+        //List<Header> headers = processorContext.getExpectedResponse().getHeaders();
 
         Operation operation = processorContext.getClientInformationContext().getRequestContext().getOperations();
         processorContext.getClientInformationContext().getRequestContext().getOperations();
@@ -62,6 +63,10 @@ public class HttpResponseAssertProcessor extends AbstractClientProcessor<HttpCli
 
         boolean value = false;
         if (operation == Operation.AND) {
+
+            for(Map.Entry<String, List<String>> entry : processorContext.getReceivedResponseContext().getHeaderParameters().entrySet()) {
+                entry.getKey();
+            }
 
             for (Header header : processorContext.getExpectedResponse().getHeaders()) {
                 List<String> receivedHeaderValues = receivedHeaders.get(header.getName());
@@ -77,7 +82,6 @@ public class HttpResponseAssertProcessor extends AbstractClientProcessor<HttpCli
 
                 if (receivedHeaderValues == null || receivedHeaderValues.isEmpty() || !receivedHeaderValues.contains(header.getValue())) {
                    ;
-                    // System.out.print("Non of the Headers present");
                 }else{
                     value = true;
                 }
@@ -88,8 +92,6 @@ public class HttpResponseAssertProcessor extends AbstractClientProcessor<HttpCli
                 System.out.print("Non of the Headers present");
             }
         }
-
     }
-
 
 }

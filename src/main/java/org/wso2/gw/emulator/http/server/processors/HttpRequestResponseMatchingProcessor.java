@@ -34,6 +34,7 @@ public class HttpRequestResponseMatchingProcessor extends AbstractServerProcesso
 
         Map<HttpServerRequestBuilderContext, HttpServerResponseBuilderContext> requestResponseCorrelation= processorContext
         .getServerInformationContext().getRequestResponseCorrelation();
+
         HttpRequestContext httpRequestContext = processorContext.getHttpRequestContext();
         for (Map.Entry<HttpServerRequestBuilderContext, HttpServerResponseBuilderContext> entry : requestResponseCorrelation.entrySet()) {
             if (entry.getKey().isMatch(httpRequestContext)) {
