@@ -85,6 +85,7 @@ public class HttpClientHandler extends ChannelInboundHandlerAdapter {
     public void channelReadComplete(ChannelHandlerContext ctx) {
         if (responseAssertProcessor != null && isReadComplete) {
             this.responseAssertProcessor.process(processorContext);
+            this.clientInformationContext.setReceivedResponseProcessContext(processorContext);
         }
         ctx.close();
     }

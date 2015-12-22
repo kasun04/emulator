@@ -31,11 +31,12 @@ public class HttpClientOperationBuilderContext extends AbstractClientOperationBu
     }
 
     @Override
-    public void send() {
+    public HttpClientResponseProcessorContext send() {  //recommanded for a one request only
         try {
             this.httpClientInformationContext.getClientInitializer().initialize();
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return httpClientInformationContext.getReceivedResponseProcessContext();
     }
 }

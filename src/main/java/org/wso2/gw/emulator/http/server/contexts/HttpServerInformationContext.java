@@ -33,7 +33,6 @@ public class HttpServerInformationContext {
 
     public UtilityContext getUtilityContext() {
         return new UtilityContext();
-
     }
 
     public HttpServerConfigBuilderContext getServerConfigBuilderContext() {

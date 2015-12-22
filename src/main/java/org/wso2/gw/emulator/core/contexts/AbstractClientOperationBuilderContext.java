@@ -20,7 +20,9 @@
 
 package org.wso2.gw.emulator.core.contexts;
 
+import org.wso2.gw.emulator.http.client.contexts.HttpClientResponseProcessorContext;
+
 public abstract class AbstractClientOperationBuilderContext extends AbstractOperationBuilderContext {
 
-    public abstract void send();
+    public abstract HttpClientResponseProcessorContext send();
 }

@@ -38,6 +38,7 @@ public class HttpResponseInformationProcessor extends AbstractClientProcessor<Ht
         processorContext.setReceivedResponseContext(httpResponseContext);
         processorContext.setExpectedResponse(processorContext.getClientInformationContext().getExpectedResponse());
         populateRequestHeaders(processorContext);
+
         //populateCookies(processorContext);
 
     }

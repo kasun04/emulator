@@ -33,6 +33,7 @@ import io.netty.util.concurrent.EventExecutor;
 import org.wso2.gw.emulator.core.EmulatorType;
 import org.wso2.gw.emulator.http.ChannelPipelineInitializer;
 import org.wso2.gw.emulator.http.server.contexts.HttpServerInformationContext;
+import sun.rmi.runtime.Log;
 
 public class HttpServerInitializer extends Thread{
     private static final boolean SSL = System.getProperty("ssl") != null;
@@ -40,7 +41,7 @@ public class HttpServerInitializer extends Thread{
     private EventLoopGroup workerGroup;
     private HttpServerInformationContext serverInformationContext;
 
-    public HttpServerInitializer(HttpServerInformationContext serverInformationContext) {
+    public HttpServerInitializer(HttpServerInformationContext serverInformationContext){
         this.serverInformationContext = serverInformationContext;
     }
 

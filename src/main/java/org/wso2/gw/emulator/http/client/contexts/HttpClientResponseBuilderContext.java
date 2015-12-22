@@ -39,6 +39,7 @@ public class HttpClientResponseBuilderContext extends AbstractResponseBuilderCon
     private List<Header> headers;
     private List<Cookie> cookies;
     private String body;
+    private Boolean isIgnored=false;
 
     private static HttpClientResponseBuilderContext getInstance() {
         clientResponseBuilderContext = new HttpClientResponseBuilderContext();
@@ -48,6 +49,8 @@ public class HttpClientResponseBuilderContext extends AbstractResponseBuilderCon
     public static HttpClientResponseBuilderContext response() {
         return getInstance();
     }
+
+
 
     public HttpClientResponseBuilderContext withStatusCode(HttpResponseStatus statusCode) {
         this.statusCode = statusCode;
@@ -97,6 +100,11 @@ public class HttpClientResponseBuilderContext extends AbstractResponseBuilderCon
         return this;
     }
 
+    public HttpClientResponseBuilderContext assertionIgnore() {
+        this.isIgnored = true;
+        return this;
+    }
+
     public HttpClientResponseBuilderContext withBody(File filePath)  {
         try {
             this.body = FileRead.getFileBody(filePath);
@@ -113,6 +121,10 @@ public class HttpClientResponseBuilderContext extends AbstractResponseBuilderCon
 
     public List<Header> getHeaders() {
         return headers;
+    }
+
+    public boolean getAssertionStatus(){
+        return isIgnored;
     }
 
     public List<Cookie> getCookies() {

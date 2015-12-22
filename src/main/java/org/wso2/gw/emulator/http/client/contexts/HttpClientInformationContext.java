@@ -34,6 +34,7 @@ public class HttpClientInformationContext {
     private HttpClientInitializer clientInitializer;
     private HttpClientRequestBuilderContext requestContext;
     private HttpClientResponseBuilderContext expectedResponse;
+    private HttpClientResponseProcessorContext receivedProcessContext;
 
     public HttpClientConfigBuilderContext getClientConfigBuilderContext() {
         return clientConfigBuilderContext;
@@ -77,5 +78,13 @@ public class HttpClientInformationContext {
 
     public void setExpectedResponse(HttpClientResponseBuilderContext expectedResponse) {
         this.expectedResponse = expectedResponse;
+    }
+
+    public void setReceivedResponseProcessContext(HttpClientResponseProcessorContext receivedProcessContext){
+        this.receivedProcessContext = receivedProcessContext;
+    }
+
+    public HttpClientResponseProcessorContext getReceivedResponseProcessContext(){
+        return receivedProcessContext;
     }
 }

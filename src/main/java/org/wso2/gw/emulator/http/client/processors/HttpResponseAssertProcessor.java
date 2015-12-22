@@ -20,6 +20,7 @@
 
 package org.wso2.gw.emulator.http.client.processors;
 
+import io.netty.handler.codec.http.HttpResponse;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientProcessorContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientResponseProcessorContext;
 import org.wso2.gw.emulator.http.params.Cookie;
@@ -32,9 +33,12 @@ public class HttpResponseAssertProcessor extends AbstractClientProcessor<HttpCli
 
     @Override
     public void process(HttpClientResponseProcessorContext processorContext) {
-        assertResponseContent(processorContext);
-        assertHeaderParameters(processorContext);
-        //assertCookieParameters(processorContext);
+        if(!processorContext.getExpectedResponse().getAssertionStatus()){
+            assertResponseContent(processorContext);
+            assertHeaderParameters(processorContext);
+        }else{
+            System.out.println("Assertion ignored");
+        }
     }
 
 
