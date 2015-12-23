@@ -41,14 +41,5 @@ public class HttpRequestResponseMatchingProcessor extends AbstractServerProcesso
                 processorContext.setSelectedResponseContext(entry.getValue());
             }
         }
-
-        /*boolean customProcessor = processorContext.getServerInformationContext().getServerConfigBuilderContext().isCustomProcessor();
-
-        if (customProcessor){
-
-            new HttpResponseCustomProcessor().process()
-            HttpServerResponseBuilderContext selectedResponseContext = processorContext.getSelectedResponseContext();
-        }*/
-
     }
 }

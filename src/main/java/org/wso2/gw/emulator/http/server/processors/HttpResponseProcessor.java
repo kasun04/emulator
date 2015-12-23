@@ -48,8 +48,6 @@ public class HttpResponseProcessor extends AbstractServerProcessor {
             populate404NotFoundResponse(processorContext);
         } else {
            populateResponse(processorContext);
-
-            //methanadi responseCustomProcessor call karanna ona
         }
     }
 
@@ -58,13 +56,11 @@ public class HttpResponseProcessor extends AbstractServerProcessor {
         HttpServerResponseBuilderContext responseContext = processorContext.getSelectedResponseContext();
         boolean keepAlive = requestContext.isKeepAlive();
         Pattern pattern = processorContext.getServerInformationContext().getUtilityContext().getPattern();
-
         //patternMatcher(requestContext,responseContext);
         HttpResponseStatus httpResponseStatus = responseContext.getStatusCode();
         FullHttpResponse response = new DefaultFullHttpResponse(
                 HttpVersion.HTTP_1_1, httpResponseStatus,
                 Unpooled.copiedBuffer(patternMatcher(requestContext,responseContext,pattern), CharsetUtil.UTF_8));
-
         populateHttpHeaders(response, responseContext);
         populateCookies(response, responseContext);
         response.headers().set(HttpHeaders.Names.CONTENT_LENGTH, response.content().readableBytes());
@@ -80,11 +76,9 @@ public class HttpResponseProcessor extends AbstractServerProcessor {
 
         String responseBody = responseContext.getBody();
         String requestBody = requestContext.getRequestBody();
-
         Matcher matcher = pathRegex.matcher(responseBody);
 
         while (matcher.find()) {
-
             String tag = "";
             tag = matcher.group(0);
 
@@ -99,12 +93,9 @@ public class HttpResponseProcessor extends AbstractServerProcessor {
                 String s = split[1];
 
                 List<String> strings = requestContext.getHeaderParameters().get(s);
-
-
                 responseBody = pathRegex.matcher(responseBody).replaceFirst(strings.get(0));
 
             } else if (word.startsWith("query")) {
-                System.out.println("dddd");
             }
         }
         return responseBody;
@@ -129,7 +120,7 @@ public class HttpResponseProcessor extends AbstractServerProcessor {
             for (Header header : responseContext.getHeaders()) {
                 response.headers().add(header.getName(), header.getValue());
             }
-        }//not null
+        }
         response.headers().set(HttpHeaders.Names.CONTENT_LENGTH, response.content().readableBytes());
     }
 

@@ -52,7 +52,6 @@ public class HttpServerInitializer extends Thread{
     private Properties prop;
     private InputStream inputStream;
 
-
     public HttpServerInitializer(HttpServerInformationContext serverInformationContext){
         this.serverInformationContext = serverInformationContext;
         prop = new Properties();
@@ -69,8 +68,6 @@ public class HttpServerInitializer extends Thread{
         setWorkerCount();
     }
 
-
-
     public void run() {
         final SslContext sslCtx = null;
         /*if (SSL) {
@@ -80,7 +77,7 @@ public class HttpServerInitializer extends Thread{
             sslCtx = null;
         }*/
         // Configure the server.
-       ExecutorServiceFactory bossExecutorServiceFactory = new DefaultExecutorServiceFactory("sample-bosses");
+        ExecutorServiceFactory bossExecutorServiceFactory = new DefaultExecutorServiceFactory("sample-bosses");
         bossExecutorServiceFactory.newExecutorService(bossCount);
 
         ExecutorServiceFactory workerExecutorServiceFactory = new DefaultExecutorServiceFactory("sample-workers");

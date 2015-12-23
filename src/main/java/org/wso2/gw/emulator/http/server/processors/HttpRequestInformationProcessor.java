@@ -38,9 +38,6 @@ public class HttpRequestInformationProcessor extends AbstractServerProcessor {
     public void process(HttpServerProcessorContext processorContext) {
         HttpRequest request = processorContext.getHttpRequest();
         HttpRequestContext requestContext = processorContext.getHttpRequestContext();
-
-
-
         populateRequestHeaders(request, requestContext);
         populateQueryParameters(request, requestContext);
         populateRequestContext(request, requestContext);
@@ -51,8 +48,6 @@ public class HttpRequestInformationProcessor extends AbstractServerProcessor {
         if(processorContext.getHttpContent() != null) {
             appendDecoderResult(processorContext.getHttpContent(), requestContext);
         }
-
-
     }
 
     private void populateRequestHeaders(HttpRequest request, HttpRequestContext requestContext) {
@@ -73,9 +68,7 @@ public class HttpRequestInformationProcessor extends AbstractServerProcessor {
         requestContext.appendResponseContent(result.cause());
     }
 
-
     private void populateQueryParameters(HttpRequest request, HttpRequestContext requestContext) {
-
         QueryStringDecoder queryStringDecoder = new QueryStringDecoder(request.getUri());
         Map<String, List<String>> params = queryStringDecoder.parameters();
         requestContext.setQueryParameters(params);

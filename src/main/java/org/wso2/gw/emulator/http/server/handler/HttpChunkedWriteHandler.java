@@ -3,21 +3,18 @@ package org.wso2.gw.emulator.http.server.handler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
 import io.netty.handler.stream.ChunkedWriteHandler;
+import org.apache.log4j.Logger;
 import org.wso2.gw.emulator.http.server.contexts.HttpServerInformationContext;
 
 import java.util.concurrent.*;
 
-/**
- * Created by chamile on 12/21/15.
- */
-public class HttpChunkedWriteHander extends ChunkedWriteHandler {
-
-
+public class HttpChunkedWriteHandler extends ChunkedWriteHandler {
+    private static final Logger log = Logger.getLogger(HttpChunkedWriteHandler.class);
     private final HttpServerInformationContext serverInformationContext;
     private final ScheduledExecutorService scheduledWritingExecutorService;
     private final int corePoolSize = 10;
 
-    public HttpChunkedWriteHander(HttpServerInformationContext serverInformationContext) {
+    public HttpChunkedWriteHandler(HttpServerInformationContext serverInformationContext) {
         this.serverInformationContext = serverInformationContext;
         scheduledWritingExecutorService = Executors.newScheduledThreadPool(corePoolSize);
     }
@@ -36,7 +33,7 @@ public class HttpChunkedWriteHander extends ChunkedWriteHandler {
                     }
                 }, delay, TimeUnit.MILLISECONDS);
         try {
-            System.out.println("result = " + scheduledWaitingFuture.get());
+            log.info("result = " + scheduledWaitingFuture.get());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

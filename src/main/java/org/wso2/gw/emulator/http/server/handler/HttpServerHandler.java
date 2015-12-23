@@ -34,7 +34,6 @@ import org.wso2.gw.emulator.http.server.processors.*;
 import org.wso2.gw.emulator.http.server.contexts.HttpServerProcessorContext;
 import org.wso2.gw.emulator.http.server.contexts.HttpRequestContext;
 import org.wso2.gw.emulator.http.server.contexts.HttpServerInformationContext;
-
 import java.io.IOException;
 import java.util.Random;
 import java.util.concurrent.*;
@@ -63,7 +62,6 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         randomIndexGenerator(serverInformationContext.getServerConfigBuilderContext().isRandomConnectionClose());
-        //randomConnectionClose(ctx,this.index.getIndex(),0);
 
     }
 
@@ -71,7 +69,6 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws IOException {
         if (msg instanceof HttpRequest) {
             randomConnectionClose(ctx,this.index,0);
-            //readingDelay(serverInformationContext.getServerConfigBuilderContext().getReadingDelay(),ctx);
             this.httpRequestInformationProcessor = new HttpRequestInformationProcessor();
             this.httpResponseProcessor = new HttpResponseProcessor();
             this.httpProcessorContext = new HttpServerProcessorContext();
@@ -94,12 +91,10 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
             }
 
             if (msg instanceof LastHttpContent) {
-                //methanata request processor
                 boolean customProcessor = httpProcessorContext.getServerInformationContext().getServerConfigBuilderContext().isCustomProcessor();
                 if (customProcessor){
                     httpProcessorContext = new HttpRequestCustomProcessor().process(httpProcessorContext);
                 }
-
                 this.requestResponseMatchingProcessor = new HttpRequestResponseMatchingProcessor();
                 this.requestResponseMatchingProcessor.process(httpProcessorContext);
                 ctx.fireChannelReadComplete();
@@ -113,16 +108,11 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
             randomConnectionClose(ctx,this.index,1);
             businessLogicDelay(serverInformationContext.getServerConfigBuilderContext().getLogicDelay(),ctx);
             this.httpResponseProcessor.process(httpProcessorContext);
-
             boolean customProcessor = httpProcessorContext.getServerInformationContext().getServerConfigBuilderContext().isCustomProcessor();
-
             if (customProcessor) {
                 httpProcessorContext = new HttpResponseCustomProcessor().process(httpProcessorContext);
             }
             FullHttpResponse response = httpProcessorContext.getFinalResponse();
-
-       //
-            waitingDelay(serverInformationContext.getServerConfigBuilderContext().getWritingDelay(),ctx);
             if (httpProcessorContext.getHttpRequestContext().isKeepAlive()) {
                 randomConnectionClose(ctx,this.index,2);
                 ctx.write(response);
@@ -133,7 +123,6 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
         }
         randomConnectionClose(ctx,this.index,3);
         ctx.flush();
-       // ctx.channel().close();
     }
 
     @Override
@@ -155,32 +144,13 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
                     }
                 }, delay, TimeUnit.MILLISECONDS);
         try {
-            System.out.println("result = " + scheduledFuture.get());
+            log.info("result = " + scheduledFuture.get());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
         scheduledReadingExecutorService.shutdown();
-    }
-
-
-    private void waitingDelay(int delay,ChannelHandlerContext ctx) {
-        ScheduledFuture scheduledWaitingFuture =
-                scheduledWritingExecutorService.schedule(new Callable() {
-                    public Object call() throws Exception {
-                        return "Writing";
-                    }
-                }, delay, TimeUnit.MILLISECONDS);
-        try {
-            System.out.println("result = " + scheduledWaitingFuture.get());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        scheduledWritingExecutorService.shutdown();
-
     }
 
     private void businessLogicDelay(int delay,ChannelHandlerContext ctx) {
@@ -191,7 +161,7 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
                     }
                 }, delay, TimeUnit.MILLISECONDS);
         try {
-            System.out.println("result = " + scheduledLogicFuture.get());
+            log.info("result = " + scheduledLogicFuture.get());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
