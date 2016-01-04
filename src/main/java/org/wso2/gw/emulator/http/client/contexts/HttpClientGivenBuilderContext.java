@@ -34,6 +34,7 @@ public class HttpClientGivenBuilderContext extends AbstractGivenBuilderContext<H
         whenBuilderContextList = new ArrayList<HttpClientWhenBuilderContext>();
         this.httpClientInformationContext = httpClientInformationContext;
     }
+
     @Override
     public HttpClientWhenBuilderContext given(HttpClientConfigBuilderContext configurationContext) {
         this.configurationContext = configurationContext;

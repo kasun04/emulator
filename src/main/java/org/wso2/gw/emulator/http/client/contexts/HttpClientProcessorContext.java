@@ -24,7 +24,6 @@ public class HttpClientProcessorContext {
 
     private HttpClientInformationContext clientInformationContext;
 
-
     public HttpClientInformationContext getClientInformationContext() {
         return clientInformationContext;
     }

@@ -34,18 +34,24 @@ import org.wso2.gw.emulator.http.client.contexts.HttpClientRequestBuilderContext
 import org.wso2.gw.emulator.http.client.contexts.HttpClientRequestProcessorContext;
 import org.wso2.gw.emulator.http.params.Cookie;
 import org.wso2.gw.emulator.http.params.Header;
+import org.wso2.gw.emulator.http.params.QueryParameter;
+
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 public class HttpRequestInformationProcessor extends AbstractClientProcessor<HttpClientRequestProcessorContext> {
 
     @Override
     public void process(HttpClientRequestProcessorContext processorContext) {
+
         HttpClientConfigBuilderContext clientConfigBuilderContext = processorContext.getClientInformationContext()
                 .getClientConfigBuilderContext();
         String uri = getURI(clientConfigBuilderContext.getHost(), clientConfigBuilderContext.getPort(),
                             processorContext.getRequestBuilderContext());
+
         URI requestUri = null;
+
         try {
             requestUri = new URI(uri);
         } catch (URISyntaxException e) {
@@ -56,7 +62,6 @@ public class HttpRequestInformationProcessor extends AbstractClientProcessor<Htt
 
         if (!"http".equalsIgnoreCase(scheme) && !"https".equalsIgnoreCase(scheme)) {
             System.err.println("Only HTTP(S) is supported.");
-            //Need to log
         }
 
         ByteBuf content;
@@ -74,8 +79,6 @@ public class HttpRequestInformationProcessor extends AbstractClientProcessor<Htt
                     HttpVersion.HTTP_1_1, processorContext.getRequestBuilderContext().getMethod(), requestUri.getRawPath());
         }
 
-
-
         processorContext.setRequest(request);
         populateHeader(processorContext);
         populateCookies(processorContext);
@@ -83,12 +86,14 @@ public class HttpRequestInformationProcessor extends AbstractClientProcessor<Htt
     }
 
     private void populateHeader(HttpClientRequestProcessorContext processorContext) {
+
         HttpRequest request = processorContext.getRequest();
         HttpClientRequestBuilderContext requestContext = processorContext.getRequestBuilderContext();
         request.headers().set(HttpHeaders.Names.HOST, processorContext.getClientInformationContext()
                 .getClientConfigBuilderContext().getHost());
         request.headers().set(HttpHeaders.Names.CONNECTION, HttpHeaders.Values.CLOSE);
         request.headers().set(HttpHeaders.Names.ACCEPT_ENCODING, HttpHeaders.Values.GZIP);
+
         if (requestContext.getBody() != null) {
             request.headers().set(HttpHeaders.Names.CONTENT_LENGTH, requestContext.getBody().getBytes()
                     .length);
@@ -101,6 +106,7 @@ public class HttpRequestInformationProcessor extends AbstractClientProcessor<Htt
     }
 
     private void populateCookies(HttpClientRequestProcessorContext processorContext) {
+
         HttpClientRequestBuilderContext requestContext = processorContext.getRequestBuilderContext();
         if (requestContext.getCookies() != null) {
             DefaultCookie[] cookies = new DefaultCookie[requestContext.getCookies().size()];
@@ -114,7 +120,24 @@ public class HttpRequestInformationProcessor extends AbstractClientProcessor<Htt
         }
     }
 
-    private void populateQueryParameters(HttpClientProcessorContext processorContext) {
+    private void populateQueryParameters(HttpClientRequestProcessorContext processorContext) {
+
+        HttpRequest request = processorContext.getRequest();
+        List<QueryParameter> queryParameters = processorContext.getClientInformationContext().getRequestContext().getQueryParameters();
+        String uri = request.getUri();
+
+        String query = "?";
+
+        for (QueryParameter q: queryParameters) {
+            query = query.concat(q.getName());
+            query = query.concat("=");
+            query = query.concat(q.getValue());
+            query = query.concat("&");
+        }
+        query = query.substring(0,query.length()-1);
+        uri = uri.concat(query);
+        request.setUri(uri);
+
 
     }
 

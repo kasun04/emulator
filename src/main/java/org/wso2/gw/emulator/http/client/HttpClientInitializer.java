@@ -77,7 +77,6 @@ public class HttpClientInitializer {
             httpClientRequestProcessorContext.setClientInformationContext(clientInformationContext);
             sendMessage(httpClientRequestProcessorContext);
         }
-
         shutdown();
     }
 

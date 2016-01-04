@@ -27,7 +27,6 @@ import org.wso2.gw.emulator.util.FileRead;
 import org.wso2.gw.emulator.http.params.Cookie;
 import org.wso2.gw.emulator.http.params.Header;
 import org.wso2.gw.emulator.http.params.QueryParameter;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -43,7 +42,6 @@ public class HttpClientRequestBuilderContext extends AbstractRequestBuilderConte
     private List<QueryParameter> queryParameters;
     private List<Cookie> cookies;
     private Operation operations;
-
 
     private static HttpClientRequestBuilderContext getInstance() {
         clientRequest = new HttpClientRequestBuilderContext();
@@ -80,14 +78,12 @@ public class HttpClientRequestBuilderContext extends AbstractRequestBuilderConte
         return this;
     }
 
-
     public HttpClientRequestBuilderContext withHeader(String name, String value) {
-        Header header = new Header(name, value);
 
+        Header header = new Header(name, value);
         if(headers == null) {
             headers = new ArrayList<Header>();
         }
-
         headers.add(header);
         return this;
     }
@@ -105,6 +101,7 @@ public class HttpClientRequestBuilderContext extends AbstractRequestBuilderConte
     }
 
     public HttpClientRequestBuilderContext withQueryParameter(String name, String value) {
+
         QueryParameter queryParameter = new QueryParameter(name, value);
 
         if(queryParameters == null) {
@@ -127,7 +124,8 @@ public class HttpClientRequestBuilderContext extends AbstractRequestBuilderConte
     }
 
     public HttpClientRequestBuilderContext withCookie(String name, String value) {
-       Cookie cookie = new Cookie(name, value);
+
+        Cookie cookie = new Cookie(name, value);
 
         if(cookies == null) {
             cookies = new ArrayList<Cookie>();

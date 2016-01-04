@@ -26,6 +26,8 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpClientCodec;
 import io.netty.handler.codec.http.HttpContentDecompressor;
 import io.netty.handler.codec.http.HttpServerCodec;
+import io.netty.handler.logging.LogLevel;
+import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslContext;
 import org.wso2.gw.emulator.dsl.EmulatorType;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientInformationContext;
@@ -63,6 +65,7 @@ public class ChannelPipelineInitializer extends ChannelInitializer<SocketChannel
         pipeline.addLast(new HttpServerCodec());
         pipeline.addLast(new HttpChunkedWriteHandler(serverInformationContext));
         pipeline.addLast("httpResponseHandler", new HttpServerHandler(serverInformationContext));
+        pipeline.addLast(new LoggingHandler(LogLevel.DEBUG));
     }
 
     private void initializeHttpClientChannel(SocketChannel ch) {
@@ -74,6 +77,7 @@ public class ChannelPipelineInitializer extends ChannelInitializer<SocketChannel
         pipeline.addLast(new HttpClientCodec());
         pipeline.addLast(new HttpContentDecompressor());
         pipeline.addLast(new HttpClientHandler(clientInformationContext));
+        pipeline.addLast(new LoggingHandler(LogLevel.DEBUG));
     }
 
     public void setServerInformationContext(HttpServerInformationContext serverInformationContext) {

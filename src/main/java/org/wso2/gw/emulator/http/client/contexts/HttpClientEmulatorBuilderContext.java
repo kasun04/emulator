@@ -29,6 +29,4 @@ public class HttpClientEmulatorBuilderContext extends AbstractEmulatorBuilderCon
 
     private Map<HttpClientRequestBuilderContext, HttpClientResponseBuilderContext> requestResponseCorelation = new HashMap<HttpClientRequestBuilderContext, HttpClientResponseBuilderContext>();
     private HttpClientConfigBuilderContext clientConfigurationBuilderContext;
-
-    
 }

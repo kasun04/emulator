@@ -40,9 +40,7 @@ public class HttpResponseAssertProcessor extends AbstractClientProcessor<HttpCli
         }
     }
 
-
     private void assertResponseContent(HttpClientResponseProcessorContext processorContext) {
-
 
         if (processorContext.getExpectedResponse().getBody().equalsIgnoreCase(processorContext.getReceivedResponseContext()
                                                                                       .getResponseBody())) {
@@ -54,17 +52,13 @@ public class HttpResponseAssertProcessor extends AbstractClientProcessor<HttpCli
 
     private void assertHeaderParameters(HttpClientResponseProcessorContext processorContext) {
 
-
-
         if(processorContext.getExpectedResponse().getHeaders() == null || processorContext.getExpectedResponse().getHeaders().isEmpty()) {
             return;
         }
         Map<String, List<String>> receivedHeaders = processorContext.getReceivedResponseContext().getHeaderParameters();
-        //List<Header> headers = processorContext.getExpectedResponse().getHeaders();
 
         Operation operation = processorContext.getClientInformationContext().getRequestContext().getOperations();
         processorContext.getClientInformationContext().getRequestContext().getOperations();
-
 
         boolean value = false;
         if (operation == Operation.AND) {
@@ -98,5 +92,7 @@ public class HttpResponseAssertProcessor extends AbstractClientProcessor<HttpCli
             }
         }
     }
+
+
 
 }

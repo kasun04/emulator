@@ -24,7 +24,6 @@ import org.wso2.gw.emulator.dsl.contexts.AbstractConfigurationBuilderContext;
 
 public class HttpClientConfigBuilderContext extends AbstractConfigurationBuilderContext {
 
-
     private static HttpClientConfigBuilderContext clientConfigBuilderContext;
     private String host;
     private int port;
@@ -52,12 +51,10 @@ public class HttpClientConfigBuilderContext extends AbstractConfigurationBuilder
         return this;
     }
 
-
     public HttpClientConfigBuilderContext readingDelay(int readingDelay){
         this.readingDelay = readingDelay;
         return this;
     }
-
 
     public String getHost() {
         return host;

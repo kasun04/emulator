@@ -35,15 +35,14 @@ public class HttpResponseInformationProcessor extends AbstractClientProcessor<Ht
 
     @Override
     public void process(HttpClientResponseProcessorContext processorContext) {
+
         HttpResponseContext httpResponseContext = new HttpResponseContext();
         processorContext.setReceivedResponseContext(httpResponseContext);
         processorContext.setReceivedResponseContext(httpResponseContext);
         processorContext.setExpectedResponse(processorContext.getClientInformationContext().getExpectedResponse());
         populateResponseHeaders(processorContext);
         populateResponseCookies(processorContext);
-
     }
-
 
     private void populateResponseHeaders(HttpClientResponseProcessorContext processorContext) {
         HttpHeaders headers = processorContext.getReceivedResponse().headers();
@@ -67,7 +66,6 @@ public class HttpResponseInformationProcessor extends AbstractClientProcessor<Ht
             }
         }
 */
-
     }
 
     public void appendDecoderResult(HttpResponseContext responseContext, HttpObject httpObject, ByteBuf content) {

@@ -64,17 +64,6 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         randomIndexGenerator(serverInformationContext.getServerConfigBuilderContext().isRandomConnectionClose());
-        try {
-            if (serverInformationContext.getServerConfigBuilderContext().getHost() == null) {
-                throw new Exception("Host is unavailable");
-            }
-
-        }catch(Exception e){
-            System.out.println("Exception: "+e);
-            //System.exit(0);
-            serverOperationBuilderContext.stop();
-        }
-
     }
 
     @Override
@@ -186,7 +175,7 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
         if(randomIndex==pointIndex) {
             log.info("Random close");
             ctx.close();
-        }
+    }
     }
 
     private void randomIndexGenerator(Boolean randomConnectionClose ){
@@ -197,7 +186,4 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
         else
             index = -1;
     }
-
-
-
 }

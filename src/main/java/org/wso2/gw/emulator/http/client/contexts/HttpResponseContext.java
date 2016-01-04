@@ -32,8 +32,6 @@ public class HttpResponseContext {
     private StringBuffer responseBody;
     private List<String> headers;
 
-
-
     public void addHeaderParameter(String key, String value) {
         if (headerParameters == null) {
             this.headerParameters = new HashMap<String, List<String>>();

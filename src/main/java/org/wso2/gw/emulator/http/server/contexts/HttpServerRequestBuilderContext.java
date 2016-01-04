@@ -136,8 +136,8 @@ public class HttpServerRequestBuilderContext extends AbstractRequestBuilderConte
 
     public boolean isMatch(HttpRequestContext requestContext) {
         
-        if (isContextMatch(requestContext) && isHttpMethodMatch(requestContext) && isRequestContentMatch(requestContext) &&
-                isHeadersMatch(requestContext) ) {//&& isQueryParameterMatch(requestContext)
+        if (isContextMatch(requestContext) && isHttpMethodMatch(requestContext) && isQueryParameterMatch(requestContext) && isRequestContentMatch(requestContext) &&
+                isHeadersMatch(requestContext)  ) {//
             return true;
         }
         return false;
@@ -187,6 +187,9 @@ public class HttpServerRequestBuilderContext extends AbstractRequestBuilderConte
 
         if (operation == Operation.OR) {
             for (Header header : headers) {
+                if (headerParameters.get(header.getName()) == null){
+                    return false;
+                }
                 List<String> headerValues = headerParameters.get(header.getName());
                 String value = header.getValue();
 
@@ -276,6 +279,21 @@ public class HttpServerRequestBuilderContext extends AbstractRequestBuilderConte
 
         if ((context == "*") && (path == "*")) {
             return ".*";
+        }
+
+        if (context != null && !context.isEmpty() && path == "*"){
+            fullPath = context;
+
+            if (!fullPath.startsWith("/")) {
+                fullPath = "/" + fullPath;
+            }
+
+            if (!fullPath.endsWith("/")) {
+                fullPath = fullPath + "/";
+            }
+
+            fullPath = fullPath + ".*";
+            return fullPath;
         }
 
         if (context != null && !context.isEmpty()) {

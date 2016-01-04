@@ -25,7 +25,6 @@ import org.wso2.gw.emulator.dsl.contexts.AbstractResponseBuilderContext;
 import org.wso2.gw.emulator.util.FileRead;
 import org.wso2.gw.emulator.http.params.Cookie;
 import org.wso2.gw.emulator.http.params.Header;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -99,7 +98,6 @@ public class HttpClientResponseBuilderContext extends AbstractResponseBuilderCon
     }
 
     public HttpClientResponseBuilderContext withBody(File filePath) {
-
         try {
             this.body = FileRead.getFileBody(filePath);
         } catch (IOException e) {
@@ -115,7 +113,6 @@ public class HttpClientResponseBuilderContext extends AbstractResponseBuilderCon
     public HttpClientResponseBuilderContext assertionIgnore() {
         this.isIgnored = true;
         return this;
-
     }
 
     public HttpResponseStatus getStatusCode() {
