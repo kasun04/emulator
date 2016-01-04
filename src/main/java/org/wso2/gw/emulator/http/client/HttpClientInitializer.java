@@ -28,6 +28,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
+import org.apache.log4j.Logger;
 import org.wso2.gw.emulator.dsl.EmulatorType;
 import org.wso2.gw.emulator.http.ChannelPipelineInitializer;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientConfigBuilderContext;
@@ -42,6 +43,7 @@ import java.util.Map;
 public class HttpClientInitializer {
 
     private HttpClientInformationContext clientInformationContext;
+    private static final Logger log = Logger.getLogger(HttpClientInitializer.class);
     private EventLoopGroup group;
     private Bootstrap bootstrap;
 
@@ -83,9 +85,29 @@ public class HttpClientInitializer {
         new HttpRequestInformationProcessor().process(httpClientProcessorContext);
             HttpClientConfigBuilderContext clientConfigBuilderContext = httpClientProcessorContext.getClientInformationContext()
                     .getClientConfigBuilderContext();
+        if (clientConfigBuilderContext.getHost() != null && clientConfigBuilderContext.getPort() != 0) {
             Channel ch = bootstrap.connect(clientConfigBuilderContext.getHost(), clientConfigBuilderContext.getPort()).sync().channel();
             ch.writeAndFlush(httpClientProcessorContext.getRequest());
             ch.closeFuture().sync();
+        }
+        else{
+            if (clientConfigBuilderContext.getHost() == null) {
+                try {
+                    throw new Exception("Host is not given");
+                } catch (Exception e) {
+                    log.info(e);
+                    System.exit(0);
+                }
+            }
+            else {
+                try {
+                    throw new Exception("Port is not given");
+                } catch (Exception e) {
+                    log.info(e);
+                    System.exit(0);
+                }
+            }
+        }
     }
 
     public void shutdown() {

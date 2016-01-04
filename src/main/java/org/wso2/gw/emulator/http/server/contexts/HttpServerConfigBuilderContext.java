@@ -53,6 +53,11 @@ public class HttpServerConfigBuilderContext extends AbstractConfigurationBuilder
     }
 
     public HttpServerConfigBuilderContext host(String host) {
+        /*if(host == null){
+            try{
+
+            }
+        }else*/
         this.host = host;
         return this;
     }

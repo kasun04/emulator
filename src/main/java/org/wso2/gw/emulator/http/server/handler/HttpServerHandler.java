@@ -30,6 +30,7 @@ import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.LastHttpContent;
 import org.apache.log4j.Logger;
+import org.wso2.gw.emulator.http.server.contexts.HttpServerOperationBuilderContext;
 import org.wso2.gw.emulator.http.server.processors.*;
 import org.wso2.gw.emulator.http.server.contexts.HttpServerProcessorContext;
 import org.wso2.gw.emulator.http.server.contexts.HttpRequestContext;
@@ -50,6 +51,7 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
     private HttpRequestResponseMatchingProcessor requestResponseMatchingProcessor;
     private ScheduledExecutorService scheduledReadingExecutorService,scheduledWritingExecutorService,scheduledLogicExecutorService;
     private int index,corePoolSize = 10;
+    private HttpServerOperationBuilderContext serverOperationBuilderContext;
 
 
     public HttpServerHandler(HttpServerInformationContext serverInformationContext) {
@@ -62,6 +64,16 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         randomIndexGenerator(serverInformationContext.getServerConfigBuilderContext().isRandomConnectionClose());
+        try {
+            if (serverInformationContext.getServerConfigBuilderContext().getHost() == null) {
+                throw new Exception("Host is unavailable");
+            }
+
+        }catch(Exception e){
+            System.out.println("Exception: "+e);
+            //System.exit(0);
+            serverOperationBuilderContext.stop();
+        }
 
     }
 

@@ -31,9 +31,11 @@ import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslContext;
 import io.netty.util.concurrent.DefaultExecutorServiceFactory;
 import io.netty.util.concurrent.ExecutorServiceFactory;
+import org.apache.log4j.Logger;
 import org.wso2.gw.emulator.dsl.EmulatorType;
 import org.wso2.gw.emulator.http.ChannelPipelineInitializer;
 import org.wso2.gw.emulator.http.server.contexts.HttpServerInformationContext;
+import org.wso2.gw.emulator.http.server.contexts.HttpServerOperationBuilderContext;
 import sun.rmi.runtime.Log;
 
 import java.io.FileNotFoundException;
@@ -44,6 +46,7 @@ import java.util.concurrent.ExecutorService;
 
 public class HttpServerInitializer extends Thread{
     private static final boolean SSL = System.getProperty("ssl") != null;
+    private static final Logger log = Logger.getLogger(HttpServerInitializer.class);
     private EventLoopGroup bossGroup;
     private EventLoopGroup workerGroup;
     private HttpServerInformationContext serverInformationContext;
@@ -52,8 +55,9 @@ public class HttpServerInitializer extends Thread{
     private Properties prop;
     private InputStream inputStream;
 
-    public HttpServerInitializer(HttpServerInformationContext serverInformationContext){
+    public HttpServerInitializer(HttpServerInformationContext serverInformationContext/*, HttpServerOperationBuilderContext serverOperationBuilderContext */){
         this.serverInformationContext = serverInformationContext;
+        //this.serverOperationBuilderContext = serverOperationBuilderContext;
         prop = new Properties();
         String propFileName = "server.properties";
         inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
@@ -89,17 +93,39 @@ public class HttpServerInitializer extends Thread{
         try {
             ServerBootstrap serverBootstrap = new ServerBootstrap();
             ChannelPipelineInitializer channelPipelineInitializer = new ChannelPipelineInitializer(sslCtx,
-                                                                                                   EmulatorType.HTTP_SERVER);
+                    EmulatorType.HTTP_SERVER);
             channelPipelineInitializer.setServerInformationContext(serverInformationContext);
             serverBootstrap.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
                     .option(ChannelOption.SO_BACKLOG, 100)
                     .handler(new LoggingHandler(LogLevel.INFO))
                     .childHandler(channelPipelineInitializer);
-            ChannelFuture f = serverBootstrap.bind(serverInformationContext.getServerConfigBuilderContext().getHost()
-                    , serverInformationContext.getServerConfigBuilderContext().getPort())
-                    .sync();
+            if (serverInformationContext.getServerConfigBuilderContext().getHost() != null && serverInformationContext.getServerConfigBuilderContext().getPort() != 0){
+                ChannelFuture f = serverBootstrap.bind(serverInformationContext.getServerConfigBuilderContext().getHost()
+                        , serverInformationContext.getServerConfigBuilderContext().getPort()).sync();
             f.channel().closeFuture().sync();
+
+                }
+            else{
+                if (serverInformationContext.getServerConfigBuilderContext().getHost() == null) {
+                    try {
+                        throw new Exception("Host is not given");
+                    } catch (Exception e) {
+                        log.info(e);
+                        System.exit(0);
+                    }
+                }
+                else {
+                    try {
+                        throw new Exception("Port is not given");
+                    } catch (Exception e) {
+                        log.info(e);
+                        System.exit(0);
+                    }
+                }
+
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }finally {
