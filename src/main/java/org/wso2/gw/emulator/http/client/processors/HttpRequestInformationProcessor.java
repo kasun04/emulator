@@ -128,15 +128,17 @@ public class HttpRequestInformationProcessor extends AbstractClientProcessor<Htt
 
         String query = "?";
 
-        for (QueryParameter q: queryParameters) {
-            query = query.concat(q.getName());
-            query = query.concat("=");
-            query = query.concat(q.getValue());
-            query = query.concat("&");
+        if(queryParameters!=null) {
+            for (QueryParameter q : queryParameters) {
+                query = query.concat(q.getName());
+                query = query.concat("=");
+                query = query.concat(q.getValue());
+                query = query.concat("&");
+            }
+            query = query.substring(0, query.length() - 1);
+            uri = uri.concat(query);
+            request.setUri(uri);
         }
-        query = query.substring(0,query.length()-1);
-        uri = uri.concat(query);
-        request.setUri(uri);
 
 
     }

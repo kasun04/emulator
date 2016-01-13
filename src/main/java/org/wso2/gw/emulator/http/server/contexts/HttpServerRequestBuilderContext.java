@@ -222,39 +222,42 @@ public class HttpServerRequestBuilderContext extends AbstractRequestBuilderConte
 
     private boolean isQueryParameterMatch(HttpRequestContext requestContext) {
         if (queryParameters == null) {
+            //System.out.println("queryParameters"+queryParameters);
             return true;
-        }
-
-        Map<String, List<String>> queryParametersMap = requestContext.getQueryParameters();
-
-        if (operation == Operation.OR) {
-            for (QueryParameter query : queryParameters) {
-                List<String> queryParameterValues = queryParametersMap.get(query.getName());
-                String value = query.getValue();
-
-                if (queryParameterValues.contains(value)) {
-                    return true;
-                }
-            }
         }else {
-            List<String> queryParameterValues = null;
-            String value = null;
+            //System.out.println("test");System.out.println("queryParameters"+queryParameters);
+            Map<String, List<String>> queryParametersMap = requestContext.getQueryParameters();
 
-            for (QueryParameter query : queryParameters) {
-
-                if (queryParametersMap.get(query.getName()) != null){
-                    queryParameterValues = queryParametersMap.get(query.getName());
-                    value = query.getValue();
-                }else {
-                    return false;
+            if (operation == Operation.OR) {
+                for (QueryParameter query : queryParameters) {
+                    List<String> queryParameterValues = queryParametersMap.get(query.getName());
+                    String value = query.getValue();
+                    if (queryParameterValues == null) {
+                        return false;
+                    }
+                    if (queryParameterValues.contains(value)) {
+                        return true;
+                    }
                 }
+            } else {
+                List<String> queryParameterValues = null;
+                String value = null;
 
-                if (!queryParameterValues.contains(value)) {
-                    return false;
+                for (QueryParameter query : queryParameters) {
+
+                    if (queryParametersMap.get(query.getName()) != null) {
+                        queryParameterValues = queryParametersMap.get(query.getName());
+                        value = query.getValue();
+                    } else {
+                        return false;
+                    }
+
+                    if (!queryParameterValues.contains(value)) {
+                        return false;
+                    }
                 }
+                return true;
             }
-            return true;
-        }
 
         /*List<String> queryValues = queryParameters.get(queryParameter.getName());
 
@@ -267,7 +270,8 @@ public class HttpServerRequestBuilderContext extends AbstractRequestBuilderConte
                 return true;
             }
         }*/
-        return false;
+            return false;
+        }
     }
 
     private String buildRegex(String context, String path) {

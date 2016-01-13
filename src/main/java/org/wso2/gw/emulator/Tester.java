@@ -51,9 +51,9 @@ public class Tester {
     public static void main(String[] args) throws Exception {
         HttpServerOperationBuilderContext serverOperationBuilderContext = startHttpEmulator();
         Thread.sleep(1000);
-        //testProducer1();
+        testProducer1();
         //testProducer2();
-        testProducer3();
+        //testProducer3();
         serverOperationBuilderContext.stop();
 
     }
