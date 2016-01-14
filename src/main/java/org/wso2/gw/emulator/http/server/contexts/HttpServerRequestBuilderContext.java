@@ -136,8 +136,11 @@ public class HttpServerRequestBuilderContext extends AbstractRequestBuilderConte
 
     public boolean isMatch(HttpRequestContext requestContext) {
         
-        if (isContextMatch(requestContext) && isHttpMethodMatch(requestContext) && isQueryParameterMatch(requestContext) && isRequestContentMatch(requestContext) &&
-                isHeadersMatch(requestContext)  ) {//
+        if (isContextMatch(requestContext) &&
+                isHttpMethodMatch(requestContext)
+                && isQueryParameterMatch(requestContext)
+                && isRequestContentMatch(requestContext)
+                && isHeadersMatch(requestContext)  ) {//
             return true;
         }
         return false;
@@ -224,7 +227,7 @@ public class HttpServerRequestBuilderContext extends AbstractRequestBuilderConte
         if (queryParameters == null) {
             //System.out.println("queryParameters"+queryParameters);
             return true;
-        }else {
+        }
             //System.out.println("test");System.out.println("queryParameters"+queryParameters);
             Map<String, List<String>> queryParametersMap = requestContext.getQueryParameters();
 
@@ -271,7 +274,7 @@ public class HttpServerRequestBuilderContext extends AbstractRequestBuilderConte
             }
         }*/
             return false;
-        }
+
     }
 
     private String buildRegex(String context, String path) {
@@ -325,7 +328,7 @@ public class HttpServerRequestBuilderContext extends AbstractRequestBuilderConte
                 fullPath = fullPath + "/" + path;
             }
         } else {
-            fullPath = fullPath + ".*";
+            fullPath = fullPath + ".*";                  ////////////////////////////////////////////////////
         }
 
         if (fullPath.endsWith("/")) {
@@ -347,6 +350,7 @@ public class HttpServerRequestBuilderContext extends AbstractRequestBuilderConte
         uri = uri.split("\\?")[0];
         if (!uri.endsWith("/")) {
             uri = uri + "/";
+            //uri = context + uri;
         }
         return uri;
     }

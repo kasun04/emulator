@@ -51,9 +51,10 @@ public class Tester {
     public static void main(String[] args) throws Exception {
         HttpServerOperationBuilderContext serverOperationBuilderContext = startHttpEmulator();
         Thread.sleep(1000);
-        testProducer1();
+        //testProducer1();
         //testProducer2();
         //testProducer3();
+        testProducer4();
         serverOperationBuilderContext.stop();
 
     }
@@ -146,7 +147,7 @@ public class Tester {
                                 Operation.AND,
                                 new Header("header1","value1"),
                                 new Header("header2","value2"))
-                        .withQueryParameter("query1","vlaue1")
+                        .withQueryParameter("query1","value1")
                 )
                 .then(response()
                         .withBody("This is response for @{body} with @{header.name2} @{header.name2}")
@@ -157,7 +158,7 @@ public class Tester {
                 /////////////////////////////////////
                 .when(request()
                         .withMethod(HttpMethod.POST)
-                        .withBody("TestRequest11")
+                        .withBody("TestRequest1")
                         .withHeader("Header1","value1")
                         .withQueryParameter("Query1","value1")
                 )
@@ -166,7 +167,6 @@ public class Tester {
                         .withHeader("Header1","value1")
                         .withStatusCode(HttpResponseStatus.OK)
                 )
-
                 .operation().start();
     }
 
@@ -209,7 +209,7 @@ public class Tester {
                         .withPath("/user/wso2")
                         .withMethod(HttpMethod.POST)
                         .withBody("TestRequest1")
-                        .withHeader("Heeader1","value1")
+                        .withHeader("Header1","value1")
 
                 )
                 .then(HttpClientResponseBuilderContext.response()
@@ -283,12 +283,12 @@ public class Tester {
                         .readingDelay(1000)
                 )
                 .when(HttpClientRequestBuilderContext.request()
-                                .withPath("*")
+                                //.withPath("*")
+                                .withPath("/user/wso2")
                                 .withMethod(HttpMethod.POST)
                                 .withBody("TestRequest1")
-                                .withHeader("Heder1","value1")
-
-                        //.withQueryParameter("q1","q1")
+                                .withHeader("Header1","value1")
+                                .withQueryParameter("Query1","value1")
                 )
                 .then(HttpClientResponseBuilderContext.response()
                         .withBody("TestResponse1")
