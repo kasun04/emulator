@@ -26,19 +26,21 @@ public class HttpChunkedWriteHandler extends ChunkedWriteHandler {
     }
 
     private void waitingDelay(int delay) {
-        ScheduledFuture scheduledWaitingFuture =
-                scheduledWritingExecutorService.schedule(new Callable() {
-                    public Object call() throws Exception {
-                        return "Writing";
-                    }
-                }, delay, TimeUnit.MILLISECONDS);
-        try {
-            log.info("result = " + scheduledWaitingFuture.get());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+        if (delay != 0) {
+            ScheduledFuture scheduledWaitingFuture =
+                    scheduledWritingExecutorService.schedule(new Callable() {
+                        public Object call() throws Exception {
+                            return "Writing";
+                        }
+                    }, delay, TimeUnit.MILLISECONDS);
+            try {
+                log.info("result = " + scheduledWaitingFuture.get());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+            scheduledWritingExecutorService.shutdown();
         }
-        scheduledWritingExecutorService.shutdown();
     }
 }

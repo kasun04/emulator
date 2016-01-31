@@ -72,17 +72,17 @@ public class HttpServerConfigBuilderContext extends AbstractConfigurationBuilder
         return this;
     }
 
-    public HttpServerConfigBuilderContext readingDelay(int readingDelay) {
+    public HttpServerConfigBuilderContext withReadingDelay(int readingDelay) {
         this.readingDelay = readingDelay;
         return this;
     }
 
-    public HttpServerConfigBuilderContext writingDelay(int writingDelay) {
+    public HttpServerConfigBuilderContext withWritingDelay(int writingDelay) {
         this.writingDelay = writingDelay;
         return this;
     }
 
-    public HttpServerConfigBuilderContext logicDelay(int logicDelay) {
+    public HttpServerConfigBuilderContext withLogicDelay(int logicDelay) {
         this.logicDelay = logicDelay;
         return this;
     }

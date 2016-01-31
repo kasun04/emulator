@@ -51,7 +51,7 @@ public class HttpClientConfigBuilderContext extends AbstractConfigurationBuilder
         return this;
     }
 
-    public HttpClientConfigBuilderContext readingDelay(int readingDelay){
+    public HttpClientConfigBuilderContext WithReadingDelay(int readingDelay){
         this.readingDelay = readingDelay;
         return this;
     }

@@ -35,9 +35,11 @@ import org.wso2.gw.emulator.http.server.processors.*;
 import org.wso2.gw.emulator.http.server.contexts.HttpServerProcessorContext;
 import org.wso2.gw.emulator.http.server.contexts.HttpRequestContext;
 import org.wso2.gw.emulator.http.server.contexts.HttpServerInformationContext;
+
 import java.io.IOException;
 import java.util.Random;
 import java.util.concurrent.*;
+
 import static io.netty.handler.codec.http.HttpResponseStatus.CONTINUE;
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
@@ -49,8 +51,8 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
     private HttpServerInformationContext serverInformationContext;
     private HttpServerProcessorContext httpProcessorContext;
     private HttpRequestResponseMatchingProcessor requestResponseMatchingProcessor;
-    private ScheduledExecutorService scheduledReadingExecutorService,scheduledWritingExecutorService,scheduledLogicExecutorService;
-    private int index,corePoolSize = 10;
+    private ScheduledExecutorService scheduledReadingExecutorService, scheduledWritingExecutorService, scheduledLogicExecutorService;
+    private int index, corePoolSize = 10;
     private HttpServerOperationBuilderContext serverOperationBuilderContext;
 
 
@@ -69,7 +71,7 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws IOException {
         if (msg instanceof HttpRequest) {
-            randomConnectionClose(ctx,this.index,0);
+            randomConnectionClose(ctx, this.index, 0);
             this.httpRequestInformationProcessor = new HttpRequestInformationProcessor();
             this.httpResponseProcessor = new HttpResponseProcessor();
             this.httpProcessorContext = new HttpServerProcessorContext();
@@ -82,7 +84,7 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
             }
             httpRequestInformationProcessor.process(httpProcessorContext);
         } else {
-            readingDelay(serverInformationContext.getServerConfigBuilderContext().getReadingDelay(),ctx);
+            readingDelay(serverInformationContext.getServerConfigBuilderContext().getReadingDelay(), ctx);
             if (msg instanceof HttpContent) {
                 HttpContent httpContent = (HttpContent) msg;
                 if (httpContent.content().isReadable()) {
@@ -93,7 +95,7 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
 
             if (msg instanceof LastHttpContent) {
                 boolean customProcessor = httpProcessorContext.getServerInformationContext().getServerConfigBuilderContext().isCustomProcessor();
-                if (customProcessor){
+                if (customProcessor) {
                     httpProcessorContext = new HttpRequestCustomProcessor().process(httpProcessorContext);
                 }
                 this.requestResponseMatchingProcessor = new HttpRequestResponseMatchingProcessor();
@@ -106,8 +108,8 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) throws IOException {
         if (httpResponseProcessor != null) {
-            randomConnectionClose(ctx,this.index,1);
-            businessLogicDelay(serverInformationContext.getServerConfigBuilderContext().getLogicDelay(),ctx);
+            randomConnectionClose(ctx, this.index, 1);
+            businessLogicDelay(serverInformationContext.getServerConfigBuilderContext().getLogicDelay(), ctx);
             this.httpResponseProcessor.process(httpProcessorContext);
             boolean customProcessor = httpProcessorContext.getServerInformationContext().getServerConfigBuilderContext().isCustomProcessor();
             if (customProcessor) {
@@ -115,14 +117,14 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
             }
             FullHttpResponse response = httpProcessorContext.getFinalResponse();
             if (httpProcessorContext.getHttpRequestContext().isKeepAlive()) {
-                randomConnectionClose(ctx,this.index,2);
+                randomConnectionClose(ctx, this.index, 2);
                 ctx.write(response);
             } else {
-                randomConnectionClose(ctx,this.index,2);
+                randomConnectionClose(ctx, this.index, 2);
                 ctx.write(response).addListener(ChannelFutureListener.CLOSE);
             }
         }
-        randomConnectionClose(ctx,this.index,3);
+        randomConnectionClose(ctx, this.index, 3);
         ctx.flush();
     }
 
@@ -137,53 +139,56 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
         ctx.write(response);
     }
 
-    private void readingDelay(int delay,ChannelHandlerContext ctx) {
-        ScheduledFuture scheduledFuture =
-                scheduledReadingExecutorService.schedule(new Callable() {
-                    public Object call() throws Exception {
-                        return "Reading";
-                    }
-                }, delay, TimeUnit.MILLISECONDS);
-        try {
-            log.info("result = " + scheduledFuture.get());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+    private void readingDelay(int delay, ChannelHandlerContext ctx) {
+        if (delay != 0) {
+            ScheduledFuture scheduledFuture =
+                    scheduledReadingExecutorService.schedule(new Callable() {
+                        public Object call() throws Exception {
+                            return "Reading";
+                        }
+                    }, delay, TimeUnit.MILLISECONDS);
+            try {
+                log.info("result = " + scheduledFuture.get());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+            scheduledReadingExecutorService.shutdown();
         }
-        scheduledReadingExecutorService.shutdown();
     }
 
-    private void businessLogicDelay(int delay,ChannelHandlerContext ctx) {
-        ScheduledFuture scheduledLogicFuture =
-                scheduledLogicExecutorService.schedule(new Callable() {
-                    public Object call() throws Exception {
-                        return "Logic delay";
-                    }
-                }, delay, TimeUnit.MILLISECONDS);
-        try {
-            log.info("result = " + scheduledLogicFuture.get());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+    private void businessLogicDelay(int delay, ChannelHandlerContext ctx) {
+        if (delay != 0) {
+            ScheduledFuture scheduledLogicFuture =
+                    scheduledLogicExecutorService.schedule(new Callable() {
+                        public Object call() throws Exception {
+                            return "Logic delay";
+                        }
+                    }, delay, TimeUnit.MILLISECONDS);
+            try {
+                log.info("result = " + scheduledLogicFuture.get());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+            scheduledLogicExecutorService.shutdown();
         }
-        scheduledLogicExecutorService.shutdown();
     }
 
-    private void randomConnectionClose(ChannelHandlerContext ctx,int randomIndex, int pointIndex){
-        if(randomIndex==pointIndex) {
+    private void randomConnectionClose(ChannelHandlerContext ctx, int randomIndex, int pointIndex) {
+        if (randomIndex == pointIndex) {
             log.info("Random close");
             ctx.close();
-    }
+        }
     }
 
-    private void randomIndexGenerator(Boolean randomConnectionClose ){
-        if(randomConnectionClose){
+    private void randomIndexGenerator(Boolean randomConnectionClose) {
+        if (randomConnectionClose) {
             Random rn = new Random();
-            index = (rn.nextInt(100) + 1 )% 6;
-        }
-        else
+            index = (rn.nextInt(100) + 1) % 6;
+        } else
             index = -1;
     }
 }

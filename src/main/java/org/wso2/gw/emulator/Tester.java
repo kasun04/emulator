@@ -22,7 +22,6 @@ package org.wso2.gw.emulator;
 
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpResponseStatus;
-import org.wso2.gw.emulator.dsl.CookieOperation;
 import org.wso2.gw.emulator.dsl.Emulator;
 import org.wso2.gw.emulator.dsl.Operation;
 import org.wso2.gw.emulator.dsl.QueryParameterOperation;
@@ -30,16 +29,11 @@ import org.wso2.gw.emulator.http.client.contexts.HttpClientConfigBuilderContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientRequestBuilderContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientResponseBuilderContext;
 import org.wso2.gw.emulator.http.client.contexts.HttpClientResponseProcessorContext;
-import org.wso2.gw.emulator.http.params.Cookie;
 import org.wso2.gw.emulator.http.params.Header;
 import org.wso2.gw.emulator.http.params.QueryParameter;
 import org.wso2.gw.emulator.http.server.contexts.HttpServerOperationBuilderContext;
-import sun.text.normalizer.NormalizerBase;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 
 import static org.wso2.gw.emulator.http.server.contexts.HttpServerRequestBuilderContext.request;
 import static org.wso2.gw.emulator.http.server.contexts.HttpServerResponseBuilderContext.response;
@@ -54,7 +48,8 @@ public class Tester {
         //testProducer1();
         //testProducer2();
         //testProducer3();
-        testProducer4();
+        //testProducer4();
+        testProducer5();
         serverOperationBuilderContext.stop();
 
     }
@@ -63,60 +58,61 @@ public class Tester {
         return Emulator.getHttpEmulator()
                 .server()
                 .given(configure()
-                        .host("127.0.0.1").port(6065)
-                        .context("/user")
-                        .readingDelay(1000)
-                        .writingDelay(1000)
-                        .randomConnectionClose(false)
-                        .logicDelay(1000)
-                        .withCustomProcessor(true))
-                ////////////////////////////////////test producer1
+                                .host("127.0.0.1")
+                                .port(6065)
+                                .context("/user")
+                                .withReadingDelay(1000)
+                                .withWritingDelay(1000)
+                                .randomConnectionClose(false)
+                        //.withLogicDelay(1000)
+                        //.withCustomProcessor(true)
+                )
+                //test producer1
                 .when(request()
                         .withMethod(HttpMethod.POST)
                         .withBody("TestRequest")
-                        .withHeader("Header1","value1")
+                        .withHeader("Header1", "value1")
                         .withPath("/wso2")
                 )
                 .then(response()
                         .withBody("TestResponse")
-                        .withHeader("Header1","value1")
+                        .withHeader("Header1", "value1")
                         .withStatusCode(HttpResponseStatus.OK)
                 )
-               ////////////////////////////////test producer2
+                //test producer2
                 .when(request()
                         .withMethod(HttpMethod.POST)
                         .withBody("TestRequest1")
-                        .withHeader("Header1","value1")
-                        .withPath("*")
+                        .withHeader("Header1", "value1")
                 )
                 .then(response()
                         .withBody("TestResponse1")
-                        .withHeader("Header1","value1")
+                        .withHeader("Header1", "value1")
                         .withStatusCode(HttpResponseStatus.OK)
-                )/////////////////////////////////////////////////////////////////test producer3
+                )
+                //test producer3
                 .when(request()
                         .withMethod(HttpMethod.POST)
                         .withBody("TestRequest1")
                         .withPath("/wso2")
                         .withHeaders(
                                 Operation.OR,
-                                new Header("Header1","value1"),
-                                new Header("Header2","value2"))
+                                new Header("Header1", "value1"),
+                                new Header("Header2", "value2"))
                         .withQueryParameters(
                                 QueryParameterOperation.OR,
-                                new QueryParameter("Query1","value1"),
-                                new QueryParameter("Query2","value2")
+                                new QueryParameter("Query1", "value1"),
+                                new QueryParameter("Query2", "value2")
 
                         )
                 )
                 .then(response()
                         .withBody("TestResponse1")
                         .withHeaders(
-                                new Header("Header1","value1"),
-                                new Header("Header2","value2"))
+                                new Header("Header1", "value1"),
+                                new Header("Header2", "value2"))
                         .withStatusCode(HttpResponseStatus.OK))
 
-                ///////////////////////////////
                 .when(request()
                         .withMethod(HttpMethod.POST).withBody("test")
                 )
@@ -127,48 +123,56 @@ public class Tester {
                         .withBody("TestRequest1")
                         .withHeaders(
                                 Operation.AND,
-                                new Header("Header1","value1"),
-                                new Header("Header2","value2"))
+                                new Header("Header1", "value1"),
+                                new Header("Header2", "value2"))
                         .withPath("")
 
                 )
                 .then(response()
                         .withBody("TestResponse1")
                         .withHeaders(
-                                new Header("Header1","value1"),
-                                new Header("Header2","value2"))
+                                new Header("Header1", "value1"),
+                                new Header("Header2", "value2"))
                         .withStatusCode(HttpResponseStatus.OK))
 
-                ////////////////////////////////
                 .when(request()
                         .withMethod(HttpMethod.POST)
                         .withBody("TestRequest111")
                         .withHeaders(
                                 Operation.AND,
-                                new Header("header1","value1"),
-                                new Header("header2","value2"))
-                        .withQueryParameter("query1","value1")
+                                new Header("header1", "value1"),
+                                new Header("header2", "value2"))
+                        .withQueryParameter("query1", "value1")
                 )
                 .then(response()
                         .withBody("This is response for @{body} with @{header.name2} @{header.name2}")
                         .withHeaders(
-                                new Header("header1","value1"),
-                                new Header("header2","value2"))
+                                new Header("header1", "value1"),
+                                new Header("header2", "value2"))
                         .withStatusCode(HttpResponseStatus.OK))
-                /////////////////////////////////////
                 .when(request()
                         .withMethod(HttpMethod.POST)
                         .withBody("TestRequest1")
-                        .withHeader("Header1","value1")
-                        .withQueryParameter("Query1","value1")
+                        .withHeader("Header1", "value1")
+                        .withQueryParameter("Query1", "value1")
                 )
                 .then(response()
                         .withBody("TestResponse1")
-                        .withHeader("Header1","value1")
+                        .withHeader("Header1", "value1")
                         .withStatusCode(HttpResponseStatus.OK)
                 )
+                //test producer 5
+                .when(request()
+                        .withMethod(HttpMethod.GET))
+                .then(response().withBody("Test Response1").withStatusCode(HttpResponseStatus.OK))
+                .when(request()
+                        .withPath("/user")
+                        .withMethod(HttpMethod.POST).withBody("test"))
+                .then(response().withBody("Test Response2").withStatusCode(HttpResponseStatus.OK))
+
                 .operation().start();
     }
+
 
     /*private static HttpClientResponseProcessorContext testProducer() {
         return Emulator.getHttpEmulator()
@@ -190,18 +194,18 @@ public class Tester {
                 .given(HttpClientConfigBuilderContext.configure()
                         .host("127.0.0.1")
                         .port(6065)
-                        .readingDelay(1000)
+                        .WithReadingDelay(1000)
                 )
                 .when(HttpClientRequestBuilderContext.request()
                         .withPath("/user/wso2")
                         .withMethod(HttpMethod.POST)
                         .withBody("TestRequest")
-                        .withHeader("Header1","value1")
+                        .withHeader("Header1", "value1")
 
                 )
                 .then(HttpClientResponseBuilderContext.response()
                         .withBody("TestResponse")
-                        .withHeader("Header1","value1")
+                        .withHeader("Header1", "value1")
 
                 )
 
@@ -209,12 +213,12 @@ public class Tester {
                         .withPath("/user/wso2")
                         .withMethod(HttpMethod.POST)
                         .withBody("TestRequest1")
-                        .withHeader("Header1","value1")
+                        .withHeader("Header1", "value1")
 
                 )
                 .then(HttpClientResponseBuilderContext.response()
                         .withBody("TestResponse1")
-                        .withHeader("Header1","value1")
+                        .withHeader("Header1", "value1")
                         .assertionIgnore()
 
                 )
@@ -227,17 +231,17 @@ public class Tester {
                 .given(HttpClientConfigBuilderContext.configure()
                         .host("127.0.0.1")
                         .port(6065)
-                        .readingDelay(1000)
+                        .WithReadingDelay(1000)
                 )
                 .when(HttpClientRequestBuilderContext.request()
                         .withPath("/user/wso2")
                         .withMethod(HttpMethod.POST)
                         .withBody("TestRequest1")
-                        .withHeader("Header1","value1")
+                        .withHeader("Header1", "value1")
                 )
                 .then(HttpClientResponseBuilderContext.response()
                         .withBody("TestResponse1")
-                        .withHeader("Header1","value1")
+                        .withHeader("Header1", "value1")
                 )
                 .operation().send();
     }
@@ -248,7 +252,7 @@ public class Tester {
                 .given(HttpClientConfigBuilderContext.configure()
                         .host("127.0.0.1")
                         .port(6065)
-                        .readingDelay(1000)
+                        .WithReadingDelay(1000)
                 )
                 .when(HttpClientRequestBuilderContext.request()
                                 .withPath("/user/wso2")
@@ -256,11 +260,11 @@ public class Tester {
                                 .withBody("TestRequest1")
                                 .withHeaders(
                                         Operation.OR,
-                                        new Header("Header1","value1"),
-                                        new Header("Header2","value2")
+                                        new Header("Header1", "value1"),
+                                        new Header("Header2", "value2")
                                 ).withQueryParameters(
-                                        new QueryParameter("Query1","value1"),
-                                        new QueryParameter("Query2","value2")
+                                new QueryParameter("Query1", "value1"),
+                                new QueryParameter("Query2", "value2")
                                 )
 
                         //.withQueryParameter("q1","q1")
@@ -268,8 +272,8 @@ public class Tester {
                 .then(HttpClientResponseBuilderContext.response()
                         .withBody("TestResponse1")
                         .withHeaders(
-                                new Header("Header1","value1"),
-                                new Header("Header2","value2"))
+                                new Header("Header1", "value1"),
+                                new Header("Header2", "value2"))
                 )
                 .operation().send();
     }
@@ -280,19 +284,44 @@ public class Tester {
                 .given(HttpClientConfigBuilderContext.configure()
                         .host("127.0.0.1")
                         .port(6065)
-                        .readingDelay(1000)
+                        .WithReadingDelay(1000)
                 )
                 .when(HttpClientRequestBuilderContext.request()
-                                //.withPath("*")
-                                .withPath("/user/wso2")
-                                .withMethod(HttpMethod.POST)
-                                .withBody("TestRequest1")
-                                .withHeader("Header1","value1")
-                                .withQueryParameter("Query1","value1")
+                        .withPath("/user/wso2")
+                        .withMethod(HttpMethod.POST)
+                        .withBody("TestRequest1")
+                        .withHeader("Header1", "value1")
+                        .withQueryParameter("Query1", "value1")
                 )
                 .then(HttpClientResponseBuilderContext.response()
                         .withBody("TestResponse1")
-                        .withHeader("Header1","value1")
+                        .withHeader("Header1", "value1")
+                )
+                .operation().send();
+    }
+
+    private static HttpClientResponseProcessorContext testProducer5() throws FileNotFoundException {
+        return Emulator.getHttpEmulator()
+                .client()
+                .given(HttpClientConfigBuilderContext.configure()
+                                .host("127.0.0.1")
+                                .port(6065)
+                        //.withReadingDelay(1000)
+                )
+                .when(HttpClientRequestBuilderContext.request()
+                        .withPath("/user")
+                        .withMethod(HttpMethod.GET)
+                )
+                .then(HttpClientResponseBuilderContext.response()
+                        .withBody("Test Response1")
+                )
+                .when(HttpClientRequestBuilderContext.request()
+                        .withPath("/user")
+                        .withMethod(HttpMethod.POST)
+                        .withBody("test")
+                )
+                .then(HttpClientResponseBuilderContext.response()
+                        .withBody("Test Response2")
                 )
                 .operation().send();
     }

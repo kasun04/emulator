@@ -88,7 +88,7 @@ public class HttpResponseAssertProcessor extends AbstractClientProcessor<HttpCli
             if (value){
                 System.out.println("Headers are present");
             }else {
-                System.out.print("Non of the Headers present");
+                System.out.println("Non of the Headers present");
             }
         }
     }

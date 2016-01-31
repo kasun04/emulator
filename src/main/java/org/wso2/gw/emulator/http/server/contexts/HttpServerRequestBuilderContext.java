@@ -37,7 +37,6 @@ public class HttpServerRequestBuilderContext extends AbstractRequestBuilderConte
     private QueryParameterOperation queryOperation;
 
 
-
     private static HttpServerRequestBuilderContext getInstance() {
         serverRequest = new HttpServerRequestBuilderContext();
         return serverRequest;
@@ -62,7 +61,7 @@ public class HttpServerRequestBuilderContext extends AbstractRequestBuilderConte
         return this;
     }
 
-    public HttpServerRequestBuilderContext withBody(File filePath)  {
+    public HttpServerRequestBuilderContext withBody(File filePath) {
         try {
             this.body = FileRead.getFileBody(filePath);
         } catch (IOException e) {
@@ -74,7 +73,7 @@ public class HttpServerRequestBuilderContext extends AbstractRequestBuilderConte
 
     public HttpServerRequestBuilderContext withHeader(String name, String value) {
         this.header = new Header(name, value);
-        if(headers == null) {
+        if (headers == null) {
             headers = new ArrayList<Header>();
         }
         headers.add(header);
@@ -98,7 +97,7 @@ public class HttpServerRequestBuilderContext extends AbstractRequestBuilderConte
 
     public HttpServerRequestBuilderContext withQueryParameter(String name, String value) {
         this.queryParameter = new QueryParameter(name, value);
-        if (queryParameters == null){
+        if (queryParameters == null) {
             queryParameters = new ArrayList<QueryParameter>();
         }
         queryParameters.add(queryParameter);
@@ -135,12 +134,12 @@ public class HttpServerRequestBuilderContext extends AbstractRequestBuilderConte
     }
 
     public boolean isMatch(HttpRequestContext requestContext) {
-        
+
         if (isContextMatch(requestContext) &&
                 isHttpMethodMatch(requestContext)
                 && isQueryParameterMatch(requestContext)
                 && isRequestContentMatch(requestContext)
-                && isHeadersMatch(requestContext)  ) {//
+                && isHeadersMatch(requestContext)) {//
             return true;
         }
         return false;
@@ -190,7 +189,7 @@ public class HttpServerRequestBuilderContext extends AbstractRequestBuilderConte
 
         if (operation == Operation.OR) {
             for (Header header : headers) {
-                if (headerParameters.get(header.getName()) == null){
+                if (headerParameters.get(header.getName()) == null) {
                     return false;
                 }
                 List<String> headerValues = headerParameters.get(header.getName());
@@ -200,16 +199,16 @@ public class HttpServerRequestBuilderContext extends AbstractRequestBuilderConte
                     return true;
                 }
             }
-        }else {
+        } else {
             List<String> headerValues = null;
             String value = null;
 
             for (Header header : headers) {
 
-                if (headerParameters.get(header.getName()) != null){
+                if (headerParameters.get(header.getName()) != null) {
                     headerValues = headerParameters.get(header.getName());
                     value = header.getValue();
-                }else {
+                } else {
                     return false;
                 }
 
@@ -228,39 +227,39 @@ public class HttpServerRequestBuilderContext extends AbstractRequestBuilderConte
             //System.out.println("queryParameters"+queryParameters);
             return true;
         }
-            //System.out.println("test");System.out.println("queryParameters"+queryParameters);
-            Map<String, List<String>> queryParametersMap = requestContext.getQueryParameters();
+        //System.out.println("test");System.out.println("queryParameters"+queryParameters);
+        Map<String, List<String>> queryParametersMap = requestContext.getQueryParameters();
 
-            if (operation == Operation.OR) {
-                for (QueryParameter query : queryParameters) {
-                    List<String> queryParameterValues = queryParametersMap.get(query.getName());
-                    String value = query.getValue();
-                    if (queryParameterValues == null) {
-                        return false;
-                    }
-                    if (queryParameterValues.contains(value)) {
-                        return true;
-                    }
+        if (operation == Operation.OR) {
+            for (QueryParameter query : queryParameters) {
+                List<String> queryParameterValues = queryParametersMap.get(query.getName());
+                String value = query.getValue();
+                if (queryParameterValues == null) {
+                    return false;
                 }
-            } else {
-                List<String> queryParameterValues = null;
-                String value = null;
-
-                for (QueryParameter query : queryParameters) {
-
-                    if (queryParametersMap.get(query.getName()) != null) {
-                        queryParameterValues = queryParametersMap.get(query.getName());
-                        value = query.getValue();
-                    } else {
-                        return false;
-                    }
-
-                    if (!queryParameterValues.contains(value)) {
-                        return false;
-                    }
+                if (queryParameterValues.contains(value)) {
+                    return true;
                 }
-                return true;
             }
+        } else {
+            List<String> queryParameterValues = null;
+            String value = null;
+
+            for (QueryParameter query : queryParameters) {
+
+                if (queryParametersMap.get(query.getName()) != null) {
+                    queryParameterValues = queryParametersMap.get(query.getName());
+                    value = query.getValue();
+                } else {
+                    return false;
+                }
+
+                if (!queryParameterValues.contains(value)) {
+                    return false;
+                }
+            }
+            return true;
+        }
 
         /*List<String> queryValues = queryParameters.get(queryParameter.getName());
 
@@ -273,7 +272,7 @@ public class HttpServerRequestBuilderContext extends AbstractRequestBuilderConte
                 return true;
             }
         }*/
-            return false;
+        return false;
 
     }
 
@@ -288,7 +287,7 @@ public class HttpServerRequestBuilderContext extends AbstractRequestBuilderConte
             return ".*";
         }
 
-        if (context != null && !context.isEmpty() && path == "*"){
+        if (context != null && !context.isEmpty() && path == "*") {
             fullPath = context;
 
             if (!fullPath.startsWith("/")) {
@@ -298,7 +297,7 @@ public class HttpServerRequestBuilderContext extends AbstractRequestBuilderConte
             if (!fullPath.endsWith("/")) {
                 fullPath = fullPath + "/";
             }
-
+        } else {//////////////////////////////
             fullPath = fullPath + ".*";
             return fullPath;
         }
@@ -328,13 +327,14 @@ public class HttpServerRequestBuilderContext extends AbstractRequestBuilderConte
                 fullPath = fullPath + "/" + path;
             }
         } else {
-            fullPath = fullPath + ".*";                  ////////////////////////////////////////////////////
+            fullPath = fullPath + ".*";
         }
 
         if (fullPath.endsWith("/")) {
             fullPath = fullPath.substring(0, fullPath.length() - 1);
         }
-        return "^" + fullPath + "/$";
+        //return "^" + fullPath + "/$";
+        return "^" + fullPath + "$";
     }
 
     private String extractContext(String uri) {

@@ -147,9 +147,14 @@ public class HttpRequestInformationProcessor extends AbstractClientProcessor<Htt
         String httpSchema = "http://";
         String path = requestBuilderContext.getPath();
         String uri = host + ":" + port;
-        if (path.startsWith("/")) {
+
+        if (/*path!= null &&*/ path.startsWith("/")) {
             uri = uri + path;
-        } else {
+        }
+        /*else if(path== null){
+            uri = uri + "/";
+        }*/
+        else{
             uri = uri + "/" + path;
         }
 

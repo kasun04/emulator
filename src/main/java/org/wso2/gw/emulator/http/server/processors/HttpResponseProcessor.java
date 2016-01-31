@@ -101,15 +101,15 @@ public class HttpResponseProcessor extends AbstractServerProcessor {
         return responseBody;
     }
 
+
     private void populate404NotFoundResponse(HttpServerProcessorContext processorContext) {
         HttpRequestContext requestContext = processorContext.getHttpRequestContext();
         boolean keepAlive = requestContext.isKeepAlive();
         FullHttpResponse response = new DefaultFullHttpResponse(
                 HttpVersion.HTTP_1_1, NOT_FOUND);
         response.headers().set(HttpHeaders.Names.CONTENT_TYPE, "text/plain; charset=UTF-8");
-
+        response.headers().set(HttpHeaders.Names.CONTENT_LENGTH, response.content().readableBytes());
         if (keepAlive) {
-            //response.headers().set(HttpHeaders.Names.CONTENT_LENGTH, response.content().readableBytes());
             response.headers().set(HttpHeaders.Names.CONNECTION, HttpHeaders.Values.KEEP_ALIVE);
         }
         processorContext.setFinalResponse(response);
