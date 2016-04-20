@@ -46,6 +46,7 @@ public class HttpClientInitializer {
     private static final Logger log = Logger.getLogger(HttpClientInitializer.class);
     private EventLoopGroup group;
     private Bootstrap bootstrap;
+    private HttpClientConfigBuilderContext clientConfigBuilderContext;
 
     public HttpClientInitializer(HttpClientInformationContext clientInformationContext) {
         this.clientInformationContext = clientInformationContext;
@@ -82,9 +83,11 @@ public class HttpClientInitializer {
 
     private void sendMessage(HttpClientRequestProcessorContext httpClientProcessorContext) throws Exception {
         new HttpRequestInformationProcessor().process(httpClientProcessorContext);
-            HttpClientConfigBuilderContext clientConfigBuilderContext = httpClientProcessorContext.getClientInformationContext()
+            /*HttpClientConfigBuilderContext*/ clientConfigBuilderContext = httpClientProcessorContext.getClientInformationContext()
                     .getClientConfigBuilderContext();
-        if (clientConfigBuilderContext.getHost() != null && clientConfigBuilderContext.getPort() != 0) {
+        String host = clientConfigBuilderContext.getHost();
+        //validate();
+        if (/*clientConfigBuilderContext.getHost()*/ host != null && clientConfigBuilderContext.getPort() != 0) {
             Channel ch = bootstrap.connect(clientConfigBuilderContext.getHost(), clientConfigBuilderContext.getPort()).sync().channel();
             ch.writeAndFlush(httpClientProcessorContext.getRequest());
             ch.closeFuture().sync();
@@ -105,6 +108,26 @@ public class HttpClientInitializer {
                     log.info(e);
                     System.exit(0);
                 }
+            }
+        }
+    }
+
+    private void validate() {
+        System.out.println("Host"+clientConfigBuilderContext.getHost());
+        if (clientConfigBuilderContext.getHost() == "null") {
+            try {
+                throw new Exception("Host is not given");
+            } catch (Exception e) {
+                log.info(e);
+                System.exit(0);
+            }
+        }
+        else {
+            try {
+                throw new Exception("Port is not given");
+            } catch (Exception e) {
+                log.info(e);
+                System.exit(0);
             }
         }
     }

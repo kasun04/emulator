@@ -154,7 +154,7 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
-            scheduledReadingExecutorService.shutdown();
+           // scheduledReadingExecutorService..shutdown();
         }
     }
 
@@ -173,7 +173,7 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
-            scheduledLogicExecutorService.shutdown();
+            //scheduledLogicExecutorService.shutdown();
         }
     }
 

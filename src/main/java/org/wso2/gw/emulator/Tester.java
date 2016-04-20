@@ -44,7 +44,7 @@ public class Tester {
 
     public static void main(String[] args) throws Exception {
         HttpServerOperationBuilderContext serverOperationBuilderContext = startHttpEmulator();
-        Thread.sleep(1000);
+        Thread.sleep(10000);
         //testProducer1();
         //testProducer2();
         //testProducer3();
@@ -166,7 +166,7 @@ public class Tester {
                         .withMethod(HttpMethod.GET))
                 .then(response().withBody("Test Response1").withStatusCode(HttpResponseStatus.OK))
                 .when(request()
-                        .withPath("/user")
+                        //.withPath("/user")
                         .withMethod(HttpMethod.POST).withBody("test"))
                 .then(response().withBody("Test Response2").withStatusCode(HttpResponseStatus.OK))
 
