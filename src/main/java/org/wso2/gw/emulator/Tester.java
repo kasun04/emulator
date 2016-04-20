@@ -46,10 +46,10 @@ public class Tester {
         HttpServerOperationBuilderContext serverOperationBuilderContext = startHttpEmulator();
         Thread.sleep(10000);
         //testProducer1();
-        //testProducer2();
+        testProducer2();
         //testProducer3();
         //testProducer4();
-        testProducer5();
+        //testProducer5();
         serverOperationBuilderContext.stop();
 
     }
